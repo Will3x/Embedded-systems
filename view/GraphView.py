@@ -25,4 +25,4 @@ class GraphView:
         self.y2 = self.value_to_y(randint(0, 100))
         self.canvas.create_line(x1, y1, self.x2, self.y2, fill='blue', width=2, tags='temp')
         self.s += 1
-        self.canvas.after(200, self.drawGraph)
+        self.canvas.after(300, self.drawGraph)
