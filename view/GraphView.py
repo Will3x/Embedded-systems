@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, choice
 
 
 class GraphView:
@@ -7,7 +7,9 @@ class GraphView:
         self.canvas = canvas
         self.s = 1
         self.x2 = 50
-        self.y2 = self.value_to_y(randint(0, 100))
+        color = ["red", "orange", "green", "blue", "violet"]
+        self.color = choice(color)
+        self.y2 = self.value_to_y(randint(0, 80))
 
     def value_to_y(self, val):
         return 450 - 5 * val
@@ -22,7 +24,7 @@ class GraphView:
         x1 = self.x2
         y1 = self.y2
         self.x2 = 50 + self.s * 50
-        self.y2 = self.value_to_y(randint(0, 100))
-        self.canvas.create_line(x1, y1, self.x2, self.y2, fill='blue', width=2, tags='temp')
+        self.y2 = self.value_to_y(randint(0, 80))
+        self.canvas.create_line(x1, y1, self.x2, self.y2, fill=self.color, width=2, tags='temp')
         self.s += 1
         self.canvas.after(300, self.drawGraph)

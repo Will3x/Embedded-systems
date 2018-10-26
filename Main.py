@@ -1,3 +1,4 @@
 from view import MainView as window
 
-window.MainView()
+if __name__ == '__main__':
+    window.MainView()
