@@ -15,7 +15,6 @@ class GraphView:
         return 450 - 5 * val
 
     def drawGraph(self):
-        global s, x2, y2
         if self.s == 21:
             # new frame
             self.s = 1
