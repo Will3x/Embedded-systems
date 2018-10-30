@@ -108,7 +108,7 @@ class DashboardView(Tk):
 
     def make_background(self):
         Canvas(self)
-        filename = PhotoImage(file="C:/Users/iiwil/Desktop/bg.png")
+        filename = PhotoImage(file="images/bg.png")
         background_label = Label(self, image=filename)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
         return filename
