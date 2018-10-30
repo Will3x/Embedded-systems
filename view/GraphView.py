@@ -15,6 +15,7 @@ class GraphView:
         return 450 - 5 * val
 
     def drawGraph(self):
+        """ Call Serial controller and ask for data ? """
         if self.s == 21:
             # new frame
             self.s = 1

@@ -59,3 +59,4 @@ class EventController:
             self.view.entry2.config(state=NORMAL)
             self.view.entry3.config(state=NORMAL)
             self.view.entry4.config(state=NORMAL)
+
