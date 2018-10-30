@@ -2,6 +2,7 @@ from tkinter import *
 from functools import partial
 from controller import DashboardController
 from view import MainView
+import time
 
 
 class DashboardView(Tk):
@@ -17,7 +18,13 @@ class DashboardView(Tk):
     def start(self):
         imageref = self.make_background()  # don't delete reference
         self.make_panels()
+        self.tick()
         self.mainloop()
+
+
+    def tick(self):
+        self.controller.get_values()
+        self.after(2000, self.tick)
 
     def set_controller_instance(self, controller):
         self.controller = controller
@@ -44,27 +51,34 @@ class DashboardView(Tk):
             self.mainview.get(index).show_window()
 
     def open_btn(self, value):
-        self.controller.btn_event(value)
+        self.create_instance(value)
 
     def refresh_btn(self, num):
-        # if self.controller.check_if_connected():
-        self.change_btn_state('normal', num)
+        if self.controller.check_if_connected():
+            self.change_btn_state('normal', num)
 
     def change_btn_state(self, state, num):
         color_blue = "dodger blue"
         color_red = '#D60000'
 
         if state == 'normal':
-            exec(f'self.button{num}.config(state=NORMAL, bg=color_blue, text="Open")')
+            exec(f'self.button{num}.config(state=NORMAL, bg=color_blue, text="Settings / Expand")')
 
         elif state == 'disabled':
-            exec(f'self.button{num}.config(state=DISABLED, bg=color_red, text="Not connected")')
+            exec(f'self.button{num}.config(state=DISABLED, bg=color_red, text="Not connected", fg="white")')
             # btn.config(state=DISABLED, bg=color_red, text='Not connected')
 
+    def change_label(self, value):
+        for x in range(1,6):
+            self.labeltemp1.config(text='{} °C'.format(value-1))
+            self.labeltemp2.config(text='{} °C'.format(value))
+            self.labeltemp3.config(text='{} °C'.format(value-2))
+            self.labeltemp4.config(text='{} °C'.format(value+1))
+            self.labeltemp5.config(text='{} °C'.format(value+2))
 
     def make_panels(self):
         x_position = .2  # start position x
-        y_position = .27  # start position y
+        y_position = .37  # start position y
 
         color_grey_ = '#444D5F'
 
@@ -75,36 +89,47 @@ class DashboardView(Tk):
             count += 1
             if count == 4:
                 x_position = .2
-                y_position = .72
+                y_position = .77
 
             entries.insert(0, f'self.labelframe{x} = LabelFrame(self, background="#2B323F", '
                               f'highlightbackground="#1F242D" ,highlightcolor="#1F242D", highlightthickness=1, '
-                              f'borderwidth=0, height=350, width=400)')
+                              f'borderwidth=0, height=300, width=400)')
             entries.insert(1, f'self.labelframe{x}.place(relx={x_position:.2f}, rely={y_position}, anchor=CENTER)')
             entries.insert(2, f'self.button{x} = Button(self, text="Not connected", width=30, height=2,'
                               f'bg="#D60000", fg="white", borderwidth=0, state=DISABLED, '
                               f'command=partial(self.open_btn,{x}))')
-            entries.insert(3, f'self.button{x}.place(relx={x_position+.03:.2f}, rely={y_position+.15}, anchor=CENTER)')
+            entries.insert(3, f'self.button{x}.place(relx={x_position+.03:.2f}, rely={y_position+.13}, anchor=CENTER)')
             entries.insert(4, f'self.refresh{x} = Button(self, text="Refresh", width=10, height=2,'
                               f'bg="#444D5F", fg="white", borderwidth=0, state=NORMAL, '
                               f'command=partial(self.refresh_btn, {x}))')
-            entries.insert(5, f'self.refresh{x}.place(relx={x_position-.08:.2f}, rely={y_position+.15}, anchor=CENTER)')
+            entries.insert(5, f'self.refresh{x}.place(relx={x_position-.08:.2f}, rely={y_position+.13}, anchor=CENTER)')
             entries.insert(6, f'self.label{x} = Label(self, text="Temperatuur: ", background="#2B323F", fg="white")')
             entries.insert(7, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position-.08}, anchor=CENTER)')
-            entries.insert(8, f'self.label{x} = Label(self, text="{x*3} °C", background="#2B323F", fg="dodger blue")')
-            entries.insert(9, f'self.label{x}.place(relx={x_position-.03:.2f}, rely={y_position-.08}, anchor=CENTER)')
+            entries.insert(8, f'self.labeltemp{x} = Label(self, text="{x*3} °C", background="#2B323F", fg="dodger blue")')
+            entries.insert(9, f'self.labeltemp{x}.place(relx={x_position-.03:.2f}, rely={y_position-.08}, anchor=CENTER)')
             entries.insert(10, f'self.label{x} = Label(self, text="Licht: ", background="#2B323F", fg="white")')
             entries.insert(11, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position-.03}, anchor=CENTER)')
             entries.insert(12, f'self.label{x} = Label(self, text="Status: ", background="#2B323F", fg="white")')
             entries.insert(13, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position+.04}, anchor=CENTER)')
             entries.insert(14, f'self.label{x} = Label(self, text="Device {x}", background="#2B323F", fg="white")')
-            entries.insert(15, f'self.label{x}.place(relx={x_position:.2f}, rely={y_position-.16}, anchor=CENTER)')
+            entries.insert(15, f'self.label{x}.place(relx={x_position:.2f}, rely={y_position-.14}, anchor=CENTER)')
 
             x_position += .3
 
             for items in entries:
                 exec(items)
 
+        self.close_all_btn = Button(self, text="Close all", width=30, height=2, bg="#444D5F", fg="white", borderwidth=0, state=NORMAL)
+        self.close_all_btn.place(relx=0.42, rely=0.14, anchor=CENTER)
+        self.open_all_btn = Button(self, text="Open all", width=30, height=2, bg="dodger blue", fg="white", borderwidth=0, state=NORMAL)
+        self.open_all_btn.place(relx=0.58, rely=0.14, anchor=CENTER)
+
+        self.labelframe6 = LabelFrame(self, background="#2B323F", highlightbackground="#1F242D",
+                                      highlightcolor="#1F242D", highlightthickness=1, borderwidth=0,
+                                      height=300, width=400)
+        self.labelframe6.place(relx=x_position, rely=y_position, anchor=CENTER)
+        self.label6 = Label(self, text="v1.0\n\nCreated by IT Works", background="#2B323F", fg="white")
+        self.label6.place(relx=x_position, rely=y_position, anchor=CENTER)
 
     def make_background(self):
         Canvas(self)

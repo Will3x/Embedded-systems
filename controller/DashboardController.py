@@ -1,5 +1,6 @@
 from controller import SerialController as ser
-
+from controller import GraphController
+from random import randint, choice
 
 class DashboardController:
 
@@ -10,15 +11,17 @@ class DashboardController:
 
     def giveinstance(self):
         self.view.set_controller_instance(self)
-        print('giving instance')
         # self.model.getControllerinstance(self)
 
     def check_if_connected(self):
         return ser.SerialController.isOpen
 
     def btn_event(self, value):
-        self.view.create_instance(value)
+        pass
 
+    def get_values(self):
+        value = randint(-10, 30)
+        self.view.change_label(value)
 
 
 

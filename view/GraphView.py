@@ -16,6 +16,7 @@ class GraphView:
 
     def drawGraph(self):
         """ Call Serial controller and ask for data ? """
+        global y2
         if self.s == 21:
             # new frame
             self.s = 1
