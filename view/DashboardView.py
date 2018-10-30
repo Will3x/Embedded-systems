@@ -1,8 +1,6 @@
 from tkinter import *
-from functools import partial
-from controller import DashboardController
+from functools import partial  # This is being used. Don't delete.
 from view import MainView
-import time
 
 
 class DashboardView(Tk):
@@ -21,9 +19,9 @@ class DashboardView(Tk):
         self.tick()
         self.mainloop()
 
-
     def tick(self):
         self.controller.get_values()
+        self.refresh()
         self.after(2000, self.tick)
 
     def set_controller_instance(self, controller):
@@ -41,21 +39,29 @@ class DashboardView(Tk):
     def hide_window(self):
         self.wm_withdraw()
 
-    def show_window(self):
-        self.deiconify()
-
     def create_instance(self, index):
+        """ Creates class instances and saves these in a dictionary """
         if self.mainview[index] == '':
-            self.mainview[index] = MainView.MainView(self)
+            name = 'Device {}'.format(index)
+            self.mainview[index] = MainView.MainView(self, name)
         else:
             self.mainview.get(index).show_window()
 
     def open_btn(self, value):
         self.create_instance(value)
 
-    def refresh_btn(self, num):
-        if self.controller.check_if_connected():
-            self.change_btn_state('normal', num)
+    def refresh(self):
+        """ Called from tick. Will check every 2 seconds if an Arduino connection has been made. """
+        devices = self.controller.check_if_connected()
+
+        for key, device in devices.items():
+            if not device == '':
+                self.change_btn_state('normal', key)
+            else:
+                self.change_btn_state('disabled', key)
+
+        for x in devices:
+            devices[x] = ''
 
     def change_btn_state(self, state, num):
         color_blue = "dodger blue"
@@ -66,10 +72,9 @@ class DashboardView(Tk):
 
         elif state == 'disabled':
             exec(f'self.button{num}.config(state=DISABLED, bg=color_red, text="Not connected", fg="white")')
-            # btn.config(state=DISABLED, bg=color_red, text='Not connected')
 
     def change_label(self, value):
-        for x in range(1,6):
+        for x in range(1, 6):
             self.labeltemp1.config(text='{} °C'.format(value-1))
             self.labeltemp2.config(text='{} °C'.format(value))
             self.labeltemp3.config(text='{} °C'.format(value-2))
@@ -96,23 +101,19 @@ class DashboardView(Tk):
                               f'borderwidth=0, height=300, width=400)')
             entries.insert(1, f'self.labelframe{x}.place(relx={x_position:.2f}, rely={y_position}, anchor=CENTER)')
             entries.insert(2, f'self.button{x} = Button(self, text="Not connected", width=30, height=2,'
-                              f'bg="#D60000", fg="white", borderwidth=0, state=DISABLED, '
+                              f'bg="#D60000", fg="white", disabledforeground="white", borderwidth=0, state=DISABLED, '
                               f'command=partial(self.open_btn,{x}))')
-            entries.insert(3, f'self.button{x}.place(relx={x_position+.03:.2f}, rely={y_position+.13}, anchor=CENTER)')
-            entries.insert(4, f'self.refresh{x} = Button(self, text="Refresh", width=10, height=2,'
-                              f'bg="#444D5F", fg="white", borderwidth=0, state=NORMAL, '
-                              f'command=partial(self.refresh_btn, {x}))')
-            entries.insert(5, f'self.refresh{x}.place(relx={x_position-.08:.2f}, rely={y_position+.13}, anchor=CENTER)')
-            entries.insert(6, f'self.label{x} = Label(self, text="Temperatuur: ", background="#2B323F", fg="white")')
-            entries.insert(7, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position-.08}, anchor=CENTER)')
-            entries.insert(8, f'self.labeltemp{x} = Label(self, text="{x*3} °C", background="#2B323F", fg="dodger blue")')
-            entries.insert(9, f'self.labeltemp{x}.place(relx={x_position-.03:.2f}, rely={y_position-.08}, anchor=CENTER)')
-            entries.insert(10, f'self.label{x} = Label(self, text="Licht: ", background="#2B323F", fg="white")')
-            entries.insert(11, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position-.03}, anchor=CENTER)')
-            entries.insert(12, f'self.label{x} = Label(self, text="Status: ", background="#2B323F", fg="white")')
-            entries.insert(13, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position+.04}, anchor=CENTER)')
-            entries.insert(14, f'self.label{x} = Label(self, text="Device {x}", background="#2B323F", fg="white")')
-            entries.insert(15, f'self.label{x}.place(relx={x_position:.2f}, rely={y_position-.14}, anchor=CENTER)')
+            entries.insert(3, f'self.button{x}.place(relx={x_position+.03:.2f}, rely={y_position+.12}, anchor=CENTER)')
+            entries.insert(4, f'self.label{x} = Label(self, text="Temperature: ", background="#2B323F", fg="white")')
+            entries.insert(5, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position-.08}, anchor=CENTER)')
+            entries.insert(6, f'self.labeltemp{x} = Label(self, text="{x*3} °C", background="#2B323F", fg="dodger blue")')
+            entries.insert(7, f'self.labeltemp{x}.place(relx={x_position-.03:.2f}, rely={y_position-.08}, anchor=CENTER)')
+            entries.insert(8, f'self.label{x} = Label(self, text="Light intesity: ", background="#2B323F", fg="white")')
+            entries.insert(9, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position-.03}, anchor=CENTER)')
+            entries.insert(10, f'self.label{x} = Label(self, text="Status: ", background="#2B323F", fg="white")')
+            entries.insert(11, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position+.04}, anchor=CENTER)')
+            entries.insert(12, f'self.label{x} = Label(self, text="Device {x}", background="#2B323F", fg="white")')
+            entries.insert(13, f'self.label{x}.place(relx={x_position:.2f}, rely={y_position-.14}, anchor=CENTER)')
 
             x_position += .3
 
@@ -132,7 +133,6 @@ class DashboardView(Tk):
         self.label6.place(relx=x_position, rely=y_position, anchor=CENTER)
 
     def make_background(self):
-        Canvas(self)
         filename = PhotoImage(file="images/bg.png")
         background_label = Label(self, image=filename)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
@@ -146,5 +146,5 @@ class DashboardView(Tk):
         screen_height = self.winfo_screenheight()
 
         x = screen_width / 2 - window_width / 2
-        y = screen_height / 2 - window_height / 2
+        y = (screen_height / 2 - window_height / 2) - 40
         self.geometry("%dx%d+%d+%d" % (window_width, window_height, x, y))

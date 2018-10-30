@@ -14,7 +14,8 @@ class DashboardController:
         # self.model.getControllerinstance(self)
 
     def check_if_connected(self):
-        return ser.SerialController.isOpen
+        connections = ser.SerialController.check_connection()
+        return connections
 
     def btn_event(self, value):
         pass

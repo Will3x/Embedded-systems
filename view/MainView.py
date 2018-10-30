@@ -2,22 +2,23 @@ from tkinter import *
 from controller import GraphController, EventController
 
 
-class MainView(Tk):
+class MainView(Toplevel):
 
-    def __init__(self, dashboard):
-        Tk.__init__(self)
-        self.title('GUI Test')
+    def __init__(self, dashboard, name):
+        Toplevel.__init__(self)
+        self.title(name)
         self.resizable(False, False)
         self.make_topmost()
         self.dashboard = dashboard
 
-        self.canv_tempsen = self.create_canvas()
-        self.canv_lightsen = self.create_canvas()
+        # imageref = self.make_background()  # don't delete reference
 
+        self.canv_temp = self.create_canvas()
+        self.canv_light = self.create_canvas()
         self.center_window()
 
-        self.graph_controller = GraphController.GraphController(self.canv_tempsen)
-        self.graph_controller2 = GraphController.GraphController(self.canv_lightsen)
+        self.graph_controller = GraphController.GraphController(self.canv_temp)
+        self.graph_controller2 = GraphController.GraphController(self.canv_light)
 
         self.event_controller = EventController.EventController(self)
         self.addwidgets()
@@ -31,7 +32,6 @@ class MainView(Tk):
 
     def go_back(self):
         self.on_exit()
-        self.dashboard.show_window()
 
     def show_window(self):
         print('opening again :)')
@@ -42,7 +42,6 @@ class MainView(Tk):
         self.graph_controller2.startgraph()
         self.protocol("WM_DELETE_WINDOW", self.on_exit)
         # self.wm_withdraw()
-
 
     def make_topmost(self):
         """Makes this window the topmost window"""
@@ -133,7 +132,13 @@ class MainView(Tk):
 
     @property
     def canvas(self):
-        return self.canv_lightsen, self.canv_tempsen
+        return self.canv_light, self.canv_temp
+
+    def make_background(self):
+        filename = PhotoImage(file="images/bg-device.png")
+        background_label = Label(self, image=filename)
+        background_label.place(x=0, y=0, relwidth=1, relheight=1)
+        return filename
 
     def center_window(self):
         """ Centers the application according to current screen width and height when opening this program. """
@@ -144,6 +149,6 @@ class MainView(Tk):
         screen_height = self.winfo_screenheight()
 
         x = screen_width / 2 - window_width / 2
-        y = screen_height / 2 - window_height / 2
+        y = (screen_height / 2 - window_height / 2) - 40
         self.geometry("%dx%d+%d+%d" % (window_width, window_height, x, y))
 
