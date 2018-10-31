@@ -7,7 +7,7 @@ class SerialController:
 
     arduino_connections = {1: '', 2: '', 3: '', 4: '', 5: ''}
     try:
-        ser = Serial("COM5", 9600)
+        ser = Serial("COM5", 9600, timeout=1)
     except SerialException:
         print('Did not find Arduino.')
 
@@ -26,12 +26,12 @@ class SerialController:
     def check_connection():
         """ Check if Arduino is connected. If so, add to dictionary.
         This function is called every 2 sec from tick(). """
-        myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
+        myports = [tuple(p) for p in list(serial.tools.list_ports.comports()) if p[1] == 'USB Serial Device (COM5)']
 
         count = 1
-        for ports in myports:
-            if ports != '':
-                SerialController.arduino_connections[count] = ports
+        for port in myports:
+            if port != '':
+                SerialController.arduino_connections[count] = port
             else:
                 SerialController.arduino_connections[count] = ''
             count += 1
