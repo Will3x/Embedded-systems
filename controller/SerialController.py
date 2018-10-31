@@ -27,8 +27,8 @@ class SerialController:
         """ RECIEVE INCOMING DATA FROM SERIAL PORT """
         try:
             SerialController.ser.readline()
-        except (AttributeError, SerialException) as e:
-            print('Attempting to connect...')
+        except (AttributeError, SerialException):
+            print('No device detected. Attempting to connect...')
             SerialController.openPort()
             return
 
@@ -47,8 +47,9 @@ class SerialController:
 
                     values = line.split()
 
-                    values_dict = {'temp': values[0], 'ldr': values[1], 'echo': values[2], 'trig': values[3]}
-                    my_dict[count] = values_dict
+                    if len(values) == 4:
+                        values_dict = {'temp': values[0], 'ldr': values[1], 'echo': values[2], 'trig': values[3]}
+                        my_dict[count] = values_dict
 
                     SerialController.ser.flushInput()
                 except SerialException:
