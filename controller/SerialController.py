@@ -11,16 +11,18 @@ class SerialController:
     try:
         ser = Serial("COM5", 9600, timeout=None)
         print('Connected!')
-    except SerialException:
+    except SerialException as e:
+        print(1, e)
         pass
 
     @staticmethod
     def openPort():
         try:
             SerialController.ser = Serial("COM5", 9600, timeout=5)
-            print('Connected!')
-        except SerialException:
-            pass
+        except SerialException as e:
+            print(2, e)
+            return
+        print('Connected!')
 
     @staticmethod
     def read():
@@ -53,7 +55,8 @@ class SerialController:
                         my_dict[count] = values_dict
 
                     SerialController.ser.flushInput()
-                except SerialException:
+                except SerialException as e:
+                    print(3, e)
                     pass
 
         return my_dict
@@ -63,6 +66,7 @@ class SerialController:
         """ Check if Arduino is connected. If so, add to dictionary.
         This function is called every 2 sec from tick(). """
         myports = [tuple(p) for p in list(serial.tools.list_ports.comports()) if p[1] == 'USB Serial Device (COM5)']
+        print('myports: {}'.format(myports))
 
         count = 1
         for port in myports:
