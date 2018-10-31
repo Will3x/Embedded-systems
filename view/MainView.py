@@ -67,7 +67,7 @@ class MainView(Toplevel):
 
         LabelFrame(self, text='Instellingen', height=200, width=1065).place(relx=0.5, rely=0.85, anchor=CENTER)
 
-        label_status = LabelFrame(self, text='Status', height=55, width=800).place(relx=0.38, rely=0.695, anchor=CENTER)
+        LabelFrame(self, text='Status', height=55, width=800).place(relx=0.38, rely=0.695, anchor=CENTER)
 
         LabelFrame(self, text='Handmatig', height=55, width=250).place(relx=0.87, rely=0.695, anchor=CENTER)
 

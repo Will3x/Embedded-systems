@@ -77,6 +77,7 @@ class DashboardView(Tk):
             exec(f'self.btnopen{num}.config(state=DISABLED, bg=color_grey)')
 
     def change_label(self, value):
+        """ Change temperature and light sensor values on Dashboard """
         try:
             for x in value:
                 if value[x] != ():

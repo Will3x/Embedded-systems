@@ -10,6 +10,3 @@ class GraphController:
 
     def startgraph(self):
         self.view.drawGraph()
-
-    def updateview(self):
-        pass
