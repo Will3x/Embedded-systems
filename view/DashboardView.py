@@ -53,7 +53,6 @@ class DashboardView(Tk):
     def refresh(self):
         """ Called from tick. Will check every 2 seconds if an Arduino connection has been made. """
         devices = self.controller.check_if_connected()
-        print('called refresh()')
 
         for key, device in devices.items():
             if not device == '':
@@ -65,7 +64,6 @@ class DashboardView(Tk):
             devices[x] = ''
 
     def change_btn_state(self, state, num):
-        print('called change_btn_state()')
         color_blue = "dodger blue"
         color_red = '#D60000'
         color_grey = '#444D5F'
@@ -79,7 +77,6 @@ class DashboardView(Tk):
             exec(f'self.btnopen{num}.config(state=DISABLED, bg=color_grey)')
 
     def change_label(self, value):
-        print('called change_label()')
         """ Change temperature and light sensor values on Dashboard """
         try:
             for x in value:

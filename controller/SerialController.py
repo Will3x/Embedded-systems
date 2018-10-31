@@ -8,19 +8,21 @@ class SerialController:
     arduino_connections = {1: '', 2: '', 3: '', 4: '', 5: ''}
     arduino_connections2 = {1: '', 2: '', 3: '', 4: '', 5: ''}
     sensor_model = SensordataModel.SensordataModel()
+    com_port = set()
+
     try:
         ser = Serial("COM5", 9600, timeout=None)
         print('Connected!')
     except SerialException as e:
-        print(1, e)
         pass
 
     @staticmethod
     def openPort():
         try:
-            SerialController.ser = Serial("COM5", 9600, timeout=5)
-        except SerialException as e:
-            print(2, e)
+            com = SerialController.com_port.pop()
+            SerialController.ser = Serial(com, 9600, timeout=5)
+            SerialController.com_port.clear()
+        except SerialException:
             return
         print('Connected!')
 
@@ -30,7 +32,7 @@ class SerialController:
         try:
             SerialController.ser.readline()
         except (AttributeError, SerialException):
-            print('No device detected. Attempting to connect...')
+            print('Attempting to connect...')
             SerialController.openPort()
             return
 
@@ -55,8 +57,7 @@ class SerialController:
                         my_dict[count] = values_dict
 
                     SerialController.ser.flushInput()
-                except SerialException as e:
-                    print(3, e)
+                except SerialException:
                     pass
 
         return my_dict
@@ -65,13 +66,13 @@ class SerialController:
     def check_connection():
         """ Check if Arduino is connected. If so, add to dictionary.
         This function is called every 2 sec from tick(). """
-        myports = [tuple(p) for p in list(serial.tools.list_ports.comports()) if p[1] == 'USB Serial Device (COM5)']
-        print('myports: {}'.format(myports))
+        myports = [tuple(p) for p in list(serial.tools.list_ports.comports()) if 'USB Serial Device' in p[1]]
 
         count = 1
         for port in myports:
             if port != '':
                 SerialController.arduino_connections[count] = port
+                SerialController.com_port.add(SerialController.arduino_connections[count][0])
             else:
                 SerialController.arduino_connections[count] = ''
             count += 1
