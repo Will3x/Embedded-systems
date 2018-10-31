@@ -66,7 +66,7 @@ class SerialController:
     def check_connection():
         """ Check if Arduino is connected. If so, add to dictionary.
         This function is called every 2 sec from tick(). """
-        keywords = ['USB Serial Device', 'Serieel']
+        keywords = ['Serial', 'Serieel', 'Arduino']
         myports = [tuple(p) for p in list(serial.tools.list_ports.comports()) for x in keywords if x in p[1]]
 
         count = 1
@@ -83,6 +83,6 @@ class SerialController:
         return SerialController.arduino_connections
 
     @staticmethod
-    def write(cls, data):
+    def write(data):
         """ SEND DATA TO SERIAL PORT """
-        cls.ser.write(data)
+        SerialController.ser.write(data)
