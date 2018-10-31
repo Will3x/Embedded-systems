@@ -7,6 +7,7 @@ class SerialController:
 
     arduino_connections = {1: '', 2: '', 3: '', 4: '', 5: ''}
     arduino_connections2 = {1: '', 2: '', 3: '', 4: '', 5: ''}
+    dict_values = {1: (), 2: (), 3: (), 4: (), 5: (), }
     sensor_model = SensordataModel.SensordataModel()
     com_port = set()
 
@@ -22,7 +23,7 @@ class SerialController:
             com = SerialController.com_port.pop()
             SerialController.ser = Serial(com, 9600, timeout=5)
             SerialController.com_port.clear()
-        except SerialException:
+        except (SerialException, KeyError):
             return
         print('Connected!')
 
@@ -38,7 +39,6 @@ class SerialController:
 
         ports = SerialController.arduino_connections2
         filter = ['Temp', 'LDR', 'Echo', 'Trig', ' : ']
-        my_dict = {1: (), 2: (), 3: (), 4: (), 5: (), }
 
         for count, port in ports.items():
             if port != '':
@@ -50,17 +50,17 @@ class SerialController:
                             line = line.replace(x, '')
 
                     values = line.split()
-                    print(values)
 
                     if len(values) == 4:
                         values_dict = {'temp': values[0], 'ldr': values[1], 'echo': values[2], 'trig': values[3]}
-                        my_dict[count] = values_dict
+                        SerialController.dict_values[count] = values_dict
+                        print(SerialController.dict_values)
 
                     SerialController.ser.flushInput()
                 except SerialException:
                     pass
 
-        return my_dict
+        return SerialController.dict_values
 
     @staticmethod
     def check_connection():

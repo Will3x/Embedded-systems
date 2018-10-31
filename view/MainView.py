@@ -17,29 +17,33 @@ class MainView(Toplevel):
         self.canv_light = self.create_canvas()
         self.center_window()
 
-        self.graph_controller = GraphController.GraphController(self.canv_temp)
-        self.graph_controller2 = GraphController.GraphController(self.canv_light)
+        self.graph_controller = GraphController.GraphController(self.canv_temp, 0)
+        self.graph_controller2 = GraphController.GraphController(self.canv_light, 1)
 
         self.event_controller = EventController.EventController(self)
         self.addwidgets()
         self.start()
 
+    def tick(self):
+        self.graph_controller.updategraph()
+        self.graph_controller2.updategraph()
+
     def on_exit(self):
         self.wm_withdraw()
 
     def close(self):
-        self.wm_withdraw()
+        self.destroy()
 
     def go_back(self):
         self.on_exit()
 
     def show_window(self):
-        print('opening again :)')
+        print('opening window')
         self.deiconify()
 
     def start(self):
-        self.graph_controller.startgraph()
-        self.graph_controller2.startgraph()
+        self.graph_controller.updategraph()
+        self.graph_controller2.updategraph()
         self.protocol("WM_DELETE_WINDOW", self.on_exit)
         # self.wm_withdraw()
 
@@ -65,17 +69,17 @@ class MainView(Toplevel):
         var1 = IntVar(self, 1)
         var2 = IntVar(self, 4)
 
-        LabelFrame(self, text='Instellingen', height=200, width=1065).place(relx=0.5, rely=0.85, anchor=CENTER)
+        LabelFrame(self, text='Settings', height=200, width=1065).place(relx=0.5, rely=0.85, anchor=CENTER)
 
         LabelFrame(self, text='Status', height=55, width=800).place(relx=0.38, rely=0.695, anchor=CENTER)
 
-        LabelFrame(self, text='Handmatig', height=55, width=250).place(relx=0.87, rely=0.695, anchor=CENTER)
+        LabelFrame(self, text='Manual', height=55, width=250).place(relx=0.87, rely=0.695, anchor=CENTER)
 
-        Radiobutton(self, text="Lichtsensor", indicatoron=False, variable=var1, offrelief=GROOVE,
+        Radiobutton(self, text="Light sensor", indicatoron=False, variable=var1, offrelief=GROOVE,
                     command=lambda: self.event_controller.buttonclick_event(var1),
                     value=1, width=17).place(relx=0.440, rely=0.04, anchor=CENTER)
 
-        Radiobutton(self, text="Temperatuursensor", indicatoron=False, variable=var1, offrelief=GROOVE,
+        Radiobutton(self, text="Temperature sensor", indicatoron=False, variable=var1, offrelief=GROOVE,
                     command=lambda: self.event_controller.buttonclick_event(var1),
                     value=2, width=17).place(relx=0.56, rely=0.04, anchor=CENTER)
 

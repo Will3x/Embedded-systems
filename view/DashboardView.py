@@ -22,7 +22,8 @@ class DashboardView(Tk):
     def tick(self):
         self.refresh()
         self.controller.get_values()
-        self.after(3000, self.tick)
+        [exec('x.tick()') for x in self.mainview.values() if x != '']
+        self.after(1000, self.tick)
 
     def set_controller_instance(self, controller):
         self.controller = controller
@@ -45,7 +46,11 @@ class DashboardView(Tk):
             name = 'Device {}'.format(index)
             self.mainview[index] = MainView.MainView(self, name)
         else:
-            self.mainview.get(index).show_window()
+            try:
+                self.mainview.get(index).show_window()
+            except TclError:
+                name = 'Device {}'.format(index)
+                self.mainview[index] = MainView.MainView(self, name)
 
     def open_btn(self, value):
         self.create_instance(value)
@@ -53,6 +58,8 @@ class DashboardView(Tk):
     def refresh(self):
         """ Called from tick. Will check every 2 seconds if an Arduino connection has been made. """
         devices = self.controller.check_if_connected()
+        if not any(devices.values()):
+            [exec('x.close()') for x in self.mainview.values() if x != '']
 
         for key, device in devices.items():
             if not device == '':
@@ -60,8 +67,7 @@ class DashboardView(Tk):
             else:
                 self.change_btn_state('disabled', key)
 
-        for x in devices:
-            devices[x] = ''
+        devices.update(devices.fromkeys(devices, ''))
 
     def change_btn_state(self, state, num):
         color_blue = "dodger blue"
