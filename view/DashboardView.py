@@ -66,12 +66,15 @@ class DashboardView(Tk):
     def change_btn_state(self, state, num):
         color_blue = "dodger blue"
         color_red = '#D60000'
+        color_grey = '#444D5F'
 
         if state == 'normal':
             exec(f'self.button{num}.config(state=NORMAL, bg=color_blue, text="Settings / Expand")')
+            exec(f'self.btnopen{num}.config(state=NORMAL, bg=color_blue)')
 
         elif state == 'disabled':
             exec(f'self.button{num}.config(state=DISABLED, bg=color_red, text="Not connected", fg="white")')
+            exec(f'self.btnopen{num}.config(state=DISABLED, bg=color_grey)')
 
     def change_label(self, value):
         for x in range(1, 6):
@@ -85,7 +88,7 @@ class DashboardView(Tk):
         x_position = .2  # start position x
         y_position = .37  # start position y
 
-        color_grey_ = '#444D5F'
+        color_grey = '#444D5F'
 
         entries = []
         count = 0
@@ -105,10 +108,10 @@ class DashboardView(Tk):
                               f'command=partial(self.open_btn,{x}))')
             entries.insert(3, f'self.button{x}.place(relx={x_position+.06:.2f}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(2, f'self.btnopen{x} = Button(self, text="Open", width=10, height=2,'
-                              f'bg="#444D5F", fg="white", disabledforeground="white", borderwidth=0, state=DISABLED)')
+                              f'bg=color_grey, fg="white", disabledforeground="white", borderwidth=0, state=DISABLED)')
             entries.insert(3, f'self.btnopen{x}.place(relx={x_position-.03:.2f}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(2, f'self.btnclose{x} = Button(self, text="Close", width=10, height=2,'
-                              f'bg="#444D5F", fg="white", disabledforeground="white", borderwidth=0, state=DISABLED)')
+                              f'bg=color_grey, fg="white", disabledforeground="white", borderwidth=0, state=DISABLED)')
             entries.insert(3, f'self.btnclose{x}.place(relx={x_position-.09:.2f}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(4, f'self.label{x} = Label(self, text="Temperature: ", background="#2B323F", fg="white")')
             entries.insert(5, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position-.08}, anchor=CENTER)')
