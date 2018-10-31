@@ -20,9 +20,9 @@ class DashboardView(Tk):
         self.mainloop()
 
     def tick(self):
-        self.controller.get_values()
         self.refresh()
-        self.after(2000, self.tick)
+        self.controller.get_values()
+        self.after(3000, self.tick)
 
     def set_controller_instance(self, controller):
         self.controller = controller
@@ -77,12 +77,17 @@ class DashboardView(Tk):
             exec(f'self.btnopen{num}.config(state=DISABLED, bg=color_grey)')
 
     def change_label(self, value):
-        for x in range(1, 6):
-            self.labeltemp1.config(text='{} °C'.format(value-1))
-            self.labeltemp2.config(text='{} °C'.format(value))
-            self.labeltemp3.config(text='{} °C'.format(value-2))
-            self.labeltemp4.config(text='{} °C'.format(value+1))
-            self.labeltemp5.config(text='{} °C'.format(value+2))
+        try:
+            for x in value:
+                if value[x] != ():
+                    temp = value[x]['temp']
+                    light = value[x]['ldr']
+
+                    exec(f'self.temp{x}.config(text="{temp}°C", fg="dodger blue")')
+                    exec(f'self.light{x}.config(text="{light}", fg="dodger blue")')
+        except TypeError:
+            self.temp1.config(text='NO DATA', fg='#444D5F')
+            self.light1.config(text='NO DATA', fg='#444D5F')
 
     def make_panels(self):
         x_position = .2  # start position x
@@ -102,27 +107,29 @@ class DashboardView(Tk):
             entries.insert(0, f'self.labelframe{x} = LabelFrame(self, background="#2B323F", '
                               f'highlightbackground="#1F242D" ,highlightcolor="#1F242D", highlightthickness=1, '
                               f'borderwidth=0, height=300, width=400)')
-            entries.insert(1, f'self.labelframe{x}.place(relx={x_position:.2f}, rely={y_position}, anchor=CENTER)')
+            entries.insert(1, f'self.labelframe{x}.place(relx={x_position}, rely={y_position}, anchor=CENTER)')
             entries.insert(2, f'self.button{x} = Button(self, text="Not connected", width=20, height=2,'
                               f'bg="#D60000", fg="white", disabledforeground="white", borderwidth=0, state=DISABLED, '
                               f'command=partial(self.open_btn,{x}))')
-            entries.insert(3, f'self.button{x}.place(relx={x_position+.06:.2f}, rely={y_position+.12}, anchor=CENTER)')
+            entries.insert(3, f'self.button{x}.place(relx={x_position+.06}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(2, f'self.btnopen{x} = Button(self, text="Open", width=10, height=2,'
                               f'bg=color_grey, fg="white", disabledforeground="white", borderwidth=0, state=DISABLED)')
-            entries.insert(3, f'self.btnopen{x}.place(relx={x_position-.03:.2f}, rely={y_position+.12}, anchor=CENTER)')
+            entries.insert(3, f'self.btnopen{x}.place(relx={x_position-.03}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(2, f'self.btnclose{x} = Button(self, text="Close", width=10, height=2,'
                               f'bg=color_grey, fg="white", disabledforeground="white", borderwidth=0, state=DISABLED)')
-            entries.insert(3, f'self.btnclose{x}.place(relx={x_position-.09:.2f}, rely={y_position+.12}, anchor=CENTER)')
-            entries.insert(4, f'self.label{x} = Label(self, text="Temperature: ", background="#2B323F", fg="white")')
-            entries.insert(5, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position-.08}, anchor=CENTER)')
-            entries.insert(6, f'self.labeltemp{x} = Label(self, text="{x*3} °C", background="#2B323F", fg="dodger blue")')
-            entries.insert(7, f'self.labeltemp{x}.place(relx={x_position-.03:.2f}, rely={y_position-.08}, anchor=CENTER)')
-            entries.insert(8, f'self.label{x} = Label(self, text="Light intesity: ", background="#2B323F", fg="white")')
-            entries.insert(9, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position-.03}, anchor=CENTER)')
-            entries.insert(10, f'self.label{x} = Label(self, text="Status: ", background="#2B323F", fg="white")')
-            entries.insert(11, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position+.04}, anchor=CENTER)')
-            entries.insert(12, f'self.label{x} = Label(self, text="Device {x}", background="#2B323F", fg="white")')
-            entries.insert(13, f'self.label{x}.place(relx={x_position:.2f}, rely={y_position-.14}, anchor=CENTER)')
+            entries.insert(3, f'self.btnclose{x}.place(relx={x_position-.09}, rely={y_position+.12}, anchor=CENTER)')
+            entries.insert(4, f'self.labelt{x} = Label(self, text="Temperature: ", background="#2B323F", fg="white")')
+            entries.insert(5, f'self.labelt{x}.place(relx={x_position-.07}, rely={y_position-.08}, anchor=CENTER)')
+            entries.insert(6, f'self.temp{x} = Label(self, background="#2B323F", fg="dodger blue")')
+            entries.insert(7, f'self.temp{x}.place(relx={x_position-.04}, rely={y_position-.079}, anchor=W)')
+            entries.insert(8, f'self.labell{x} = Label(self, text="Light intesity: ", background="#2B323F", fg="white")')
+            entries.insert(9, f'self.labell{x}.place(relx={x_position-.07}, rely={y_position-.029}, anchor=CENTER)')
+            entries.insert(10, f'self.light{x} = Label(self, background="#2B323F", fg="dodger blue")')
+            entries.insert(11, f'self.light{x}.place(relx={x_position-.04}, rely={y_position-.0277}, anchor=W)')
+            entries.insert(12, f'self.label{x} = Label(self, text="Status: ", background="#2B323F", fg="white")')
+            entries.insert(13, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position+.04}, anchor=CENTER)')
+            entries.insert(14, f'self.label{x} = Label(self, text="Device {x}", background="#2B323F", fg="white")')
+            entries.insert(15, f'self.label{x}.place(relx={x_position:.2f}, rely={y_position-.14}, anchor=CENTER)')
 
             x_position += .3
 

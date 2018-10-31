@@ -6,35 +6,71 @@ import serial.tools.list_ports
 class SerialController:
 
     arduino_connections = {1: '', 2: '', 3: '', 4: '', 5: ''}
-    try:
-        ser = Serial("COM5", 9600)
-    except SerialException:
-        print('Did not find Arduino.')
-
+    arduino_connections2 = {1: '', 2: '', 3: '', 4: '', 5: ''}
     sensor_model = SensordataModel.SensordataModel()
+    try:
+        ser = Serial("COM5", 9600, timeout=None)
+        print('Connected!')
+    except SerialException:
+        pass
+
+    @staticmethod
+    def openPort():
+        try:
+            SerialController.ser = Serial("COM5", 9600, timeout=5)
+            print('Connected!')
+        except SerialException:
+            pass
 
     @staticmethod
     def read():
         """ RECIEVE INCOMING DATA FROM SERIAL PORT """
-        if SerialController.ser.isOpen:
-            while True:  # maybe niet nodig omdat Graphview (als het goed is) deze data gaat opvragen in een loop.
-                line = SerialController.ser.readline().decode('ascii')
-                # ser.flushInput()
-                print(line)
+        try:
+            SerialController.ser.readline()
+        except (AttributeError, SerialException) as e:
+            print('Attempting to connect...')
+            SerialController.openPort()
+            return
+
+        ports = SerialController.arduino_connections2
+        filter = ['Temp', 'LDR', 'Echo', 'Trig', ' : ']
+        my_dict = {1: (), 2: (), 3: (), 4: (), 5: (), }
+
+        for count, port in ports.items():
+            if port != '':
+                try:
+                    line = SerialController.ser.readline().decode('ascii')
+
+                    for x in filter:
+                        if x in line:
+                            line = line.replace(x, '')
+
+                    values = line.split()
+
+                    values_dict = {'temp': values[0], 'ldr': values[1], 'echo': values[2], 'trig': values[3]}
+                    my_dict[count] = values_dict
+
+                    SerialController.ser.flushInput()
+                except SerialException:
+                    pass
+
+        return my_dict
 
     @staticmethod
     def check_connection():
         """ Check if Arduino is connected. If so, add to dictionary.
         This function is called every 2 sec from tick(). """
-        myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
+        myports = [tuple(p) for p in list(serial.tools.list_ports.comports()) if p[1] == 'USB Serial Device (COM5)']
 
         count = 1
-        for ports in myports:
-            if ports != '':
-                SerialController.arduino_connections[count] = ports
+        for port in myports:
+            if port != '':
+                SerialController.arduino_connections[count] = port
             else:
                 SerialController.arduino_connections[count] = ''
             count += 1
+
+        SerialController.arduino_connections2.update(SerialController.arduino_connections)
 
         return SerialController.arduino_connections
 

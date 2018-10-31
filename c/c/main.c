@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #define F_CPU 16000000UL
 #include <util/delay.h>
+#include "AVR_TTC_scheduler.h"
 
 // distant zaken
 #include <avr/interrupt.h>
