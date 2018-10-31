@@ -21,8 +21,8 @@ class DashboardController:
         pass
 
     def get_values(self):
-        value = randint(-10, 30)
-        self.view.change_label(value)
+        values = ser.SerialController.read()
+        self.view.change_label(values)
 
 
 
