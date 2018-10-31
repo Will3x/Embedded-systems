@@ -12,6 +12,7 @@ class DashboardView(Tk):
         self.center_window()
         self.protocol("WM_DELETE_WINDOW", self.close_all)
         self.mainview = {1: '', 2: '', 3: '', 4: '', 5: ''}
+        self.prev_devices = {1: '', 2: '', 3: '', 4: '', 5: ''}
 
     def start(self):
         imageref = self.make_background()  # don't delete reference
@@ -29,12 +30,10 @@ class DashboardView(Tk):
         self.controller = controller
 
     def close_all(self):
-        for key, value in self.mainview.items():
-            try:
-                self.mainview.get(key).destroy()
-                print('Destroyed instance')
-            except:
-                pass
+        try:
+            [exec('x.close()') for x in self.mainview.values() if x != '']
+        except (TclError, AttributeError) as e:
+            print(e)
         self.destroy()
 
     def hide_window(self):
@@ -58,8 +57,11 @@ class DashboardView(Tk):
     def refresh(self):
         """ Called from tick. Will check every 2 seconds if an Arduino connection has been made. """
         devices = self.controller.check_if_connected()
-        if not any(devices.values()):
-            [exec('x.close()') for x in self.mainview.values() if x != '']
+        try:
+            [exec('x.close()') for x in self.mainview.values()
+             if x != '' for i in devices if devices[i] != self.prev_devices[i]]
+        except Exception as e:
+            print(e)
 
         for key, device in devices.items():
             if not device == '':
@@ -67,6 +69,7 @@ class DashboardView(Tk):
             else:
                 self.change_btn_state('disabled', key)
 
+        self.prev_devices = devices.copy()
         devices.update(devices.fromkeys(devices, ''))
 
     def change_btn_state(self, state, num):
