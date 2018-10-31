@@ -9,7 +9,7 @@ class SerialController:
     try:
         ser = Serial("COM5", 9600)
     except SerialException:
-        print('Error: Could not open port "COM5"')
+        print('Did not find Arduino.')
 
     sensor_model = SensordataModel.SensordataModel()
 

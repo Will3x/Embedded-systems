@@ -100,10 +100,16 @@ class DashboardView(Tk):
                               f'highlightbackground="#1F242D" ,highlightcolor="#1F242D", highlightthickness=1, '
                               f'borderwidth=0, height=300, width=400)')
             entries.insert(1, f'self.labelframe{x}.place(relx={x_position:.2f}, rely={y_position}, anchor=CENTER)')
-            entries.insert(2, f'self.button{x} = Button(self, text="Not connected", width=30, height=2,'
+            entries.insert(2, f'self.button{x} = Button(self, text="Not connected", width=20, height=2,'
                               f'bg="#D60000", fg="white", disabledforeground="white", borderwidth=0, state=DISABLED, '
                               f'command=partial(self.open_btn,{x}))')
-            entries.insert(3, f'self.button{x}.place(relx={x_position+.03:.2f}, rely={y_position+.12}, anchor=CENTER)')
+            entries.insert(3, f'self.button{x}.place(relx={x_position+.06:.2f}, rely={y_position+.12}, anchor=CENTER)')
+            entries.insert(2, f'self.btnopen{x} = Button(self, text="Open", width=10, height=2,'
+                              f'bg="#444D5F", fg="white", disabledforeground="white", borderwidth=0, state=DISABLED)')
+            entries.insert(3, f'self.btnopen{x}.place(relx={x_position-.03:.2f}, rely={y_position+.12}, anchor=CENTER)')
+            entries.insert(2, f'self.btnclose{x} = Button(self, text="Close", width=10, height=2,'
+                              f'bg="#444D5F", fg="white", disabledforeground="white", borderwidth=0, state=DISABLED)')
+            entries.insert(3, f'self.btnclose{x}.place(relx={x_position-.09:.2f}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(4, f'self.label{x} = Label(self, text="Temperature: ", background="#2B323F", fg="white")')
             entries.insert(5, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position-.08}, anchor=CENTER)')
             entries.insert(6, f'self.labeltemp{x} = Label(self, text="{x*3} °C", background="#2B323F", fg="dodger blue")')
@@ -120,9 +126,11 @@ class DashboardView(Tk):
             for items in entries:
                 exec(items)
 
-        self.close_all_btn = Button(self, text="Close all", width=30, height=2, bg="#444D5F", fg="white", borderwidth=0, state=NORMAL)
+        self.close_all_btn = Button(self, text="Close all", width=30, height=2, bg="#444D5F",
+                                    fg="white", borderwidth=0, state=NORMAL)
         self.close_all_btn.place(relx=0.42, rely=0.14, anchor=CENTER)
-        self.open_all_btn = Button(self, text="Open all", width=30, height=2, bg="dodger blue", fg="white", borderwidth=0, state=NORMAL)
+        self.open_all_btn = Button(self, text="Open all", width=30, height=2, bg="dodger blue",
+                                   fg="white", borderwidth=0, state=NORMAL)
         self.open_all_btn.place(relx=0.58, rely=0.14, anchor=CENTER)
 
         self.labelframe6 = LabelFrame(self, background="#2B323F", highlightbackground="#1F242D",
