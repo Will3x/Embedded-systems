@@ -211,3 +211,8 @@ pip-selfcheck.json
 
 
 # End of https://www.gitignore.io/api/python,pycharm
+
+### c Patch ###
+c/.vs/**
+c/.vs
+c/c.atsln
