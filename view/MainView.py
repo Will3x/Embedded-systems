@@ -1,5 +1,6 @@
 from tkinter import *
 from controller import GraphController, EventController
+import fontawesome as fa
 
 
 class MainView(Toplevel):
@@ -9,7 +10,15 @@ class MainView(Toplevel):
         self.title(name)
         self.resizable(False, False)
         self.make_topmost()
+
         self.dashboard = dashboard
+
+        # Styling
+        self.bg_color = '#2E3643'
+        self.fg_color = 'grey90'
+        self.btn_color = 'dodger blue'
+
+        self.config(bg=self.bg_color)
 
         self.canv_temp = self.create_canvas()
         self.canv_light = self.create_canvas()
@@ -56,37 +65,43 @@ class MainView(Toplevel):
     def create_canvas(self):
         """ Creates and adds a canvas. This canvas is used to display a graph, hence two canvases are made in the
         constructor """
-        canvas = Canvas(self, bg='grey90', height=500, width=1100)
+        canvas = Canvas(self, height=480, width=1100, bg='#E4E8EF')
         canvas.create_line(50, 450, 1050, 450, width=2)  # x-axis
         canvas.create_line(50, 450, 50, 50, width=2)  # y-axis
-        canvas.place(relx=0.5, rely=0.36, anchor=CENTER)
+        canvas.place(relx=0.5, rely=0.37, anchor=CENTER)
         return canvas
+
 
     def addwidgets(self):
         """ Creates and adds widgets to the frame, such as buttons, labels, and input fields. """
         var1 = IntVar(self, 1)
         var2 = IntVar(self, 4)
 
-        LabelFrame(self, text='Settings', height=200, width=1065).place(relx=0.5, rely=0.85, anchor=CENTER)
+        LabelFrame(self, text='Settings', height=200, width=1065, fg=self.fg_color,
+                   bg=self.bg_color).place(relx=0.5, rely=0.85, anchor=CENTER)
 
-        LabelFrame(self, text='Status', height=55, width=800).place(relx=0.38, rely=0.695, anchor=CENTER)
+        LabelFrame(self, text='Status', height=55, width=800, fg=self.fg_color,
+                   bg=self.bg_color).place(relx=0.38, rely=0.695, anchor=CENTER)
 
-        LabelFrame(self, text='Manual', height=55, width=250).place(relx=0.87, rely=0.695, anchor=CENTER)
+        LabelFrame(self, text='Manual', height=55, width=250, fg=self.fg_color,
+                   bg=self.bg_color).place(relx=0.87, rely=0.695, anchor=CENTER)
 
-        Radiobutton(self, text="Light sensor", indicatoron=False, variable=var1, offrelief=GROOVE,
-                    command=lambda: self.event_controller.buttonclick_event(var1),
-                    value=1, width=17).place(relx=0.440, rely=0.04, anchor=CENTER)
+        self.radio1 = Radiobutton(self, text="Light sensor", indicatoron=False, variable=var1, borderwidth=0, fg='white',
+                    command=lambda: self.event_controller.buttonclick_event(var1), height=2, selectcolor=self.btn_color,
+                    value=1, width=17)
+        self.radio1.place(relx=0.440, rely=0.05, anchor=CENTER)
 
-        Radiobutton(self, text="Temperature sensor", indicatoron=False, variable=var1, offrelief=GROOVE,
-                    command=lambda: self.event_controller.buttonclick_event(var1),
-                    value=2, width=17).place(relx=0.56, rely=0.04, anchor=CENTER)
+        self.radio2 = Radiobutton(self, text="Temperature sensor", indicatoron=False, variable=var1, borderwidth=0,
+                    command=lambda: self.event_controller.buttonclick_event(var1), height=2, selectcolor=self.btn_color,
+                    value=2, width=17)
+        self.radio2.place(relx=0.56, rely=0.05, anchor=CENTER)
 
         Radiobutton(self, text="AAN", indicatoron=False, variable=var2,
-                    command=lambda: self.event_controller.buttonclick_event(var2), offrelief=GROOVE,
+                    command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0, selectcolor=self.btn_color,
                     value=3, width=10).place(relx=0.865, rely=0.7, anchor=E)
 
         Radiobutton(self, text="UIT", indicatoron=False, variable=var2,
-                    command=lambda: self.event_controller.buttonclick_event(var2), offrelief=GROOVE,
+                    command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0,
                     value=4, width=10).place(relx=0.94, rely=0.7, anchor=E)
 
         y_pos = .778  # start position
@@ -98,7 +113,7 @@ class MainView(Toplevel):
         for x in range(1, 5):
             entries.insert(0, f'self.entry{x} = Entry(self, width=40)')
             entries.insert(1, f'self.entry{x}.place(relx=0.18, rely={y_pos:.2f}, anchor=W)')
-            entries.insert(2, f'self.label{x} = Label(self, text="{labels_text[x-1]}")')
+            entries.insert(2, f'self.label{x} = Label(self, text="{labels_text[x-1]}", bg=self.bg_color, fg=self.fg_color)')
             entries.insert(3, f'self.label{x}.place(relx=0.17, rely={y_pos:.2f}, anchor=E)')
             for i in range(4):
                 exec(entries[i])
@@ -113,24 +128,24 @@ class MainView(Toplevel):
         self.manual2 = Entry(self, width=40, state=DISABLED)
         self.manual2.place(relx=0.83, rely=y_pos, anchor=CENTER)
 
-        self.manual_btn1 = Button(self, text='Uitrollen', width=button_width, relief=GROOVE, state=DISABLED)
+        self.manual_btn1 = Button(self, text='Uitrollen', width=button_width, borderwidth=0, state=DISABLED)
         self.manual_btn1.place(relx=0.8, rely=y_pos+.12, anchor=E)
 
-        self.manual_btn2 = Button(self, text='Oprollen', width=button_width, relief=GROOVE, state=DISABLED)
+        self.manual_btn2 = Button(self, text='Oprollen', width=button_width, borderwidth=0, state=DISABLED)
         self.manual_btn2.place(relx=.942, rely=y_pos+.12, anchor=E)
 
-        self.setbtn2 = Button(self, text='Set', width=button_width, fg='black', bg='gray90', state=DISABLED, relief=GROOVE)
+        self.setbtn2 = Button(self, text='Set', width=button_width, fg='black', bg='gray90', state=DISABLED, borderwidth=0)
         self.setbtn2.place(relx=0.873, rely=y_pos+.04, anchor=CENTER)
 
-        self.setbtn1 = Button(self, text='Set', width=button_width, bg='dodger blue', fg='white', relief=GROOVE)
+        self.setbtn1 = Button(self, text='Set', width=button_width, bg='dodger blue', fg=self.fg_color, borderwidth=0)
         self.setbtn1.place(relx=0.265, rely=y_pos + .16, anchor=W)
 
-        self.status_label = Label(self, text='ROLLUIK IS OPGEROLD', font='Roboto 12 bold' ,fg='green').place(relx=0.4, rely=0.7, anchor=CENTER)
+        self.status_label = Label(self, text='ROLLUIK IS OPGEROLD', font='Roboto 12 bold', fg='green', bg=self.bg_color).place(relx=0.4, rely=0.7, anchor=CENTER)
 
-        self.btn_return = Button(self, text="Return",
+        self.btn_return = Button(self, text="Go back",
                             width=button_width, command=self.hide_window,
-                            bg='dodger blue', fg='white', relief=GROOVE)
-        self.btn_return.place(relx=0.03, rely=0.04, anchor=W)
+                            bg='#515863', fg=self.fg_color, borderwidth=0, height=2)
+        self.btn_return.place(relx=0, rely=0.05, anchor=W)
 
     @property
     def canvas(self):

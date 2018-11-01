@@ -52,11 +52,11 @@ class SerialController:
                             line = line.replace(x, '')
 
                     values = line.split()
+                    print(values)
 
                     if len(values) == 4:
                         values_dict = {'temp': values[0], 'ldr': values[1], 'echo': values[2], 'trig': values[3]}
                         SerialController.dict_values[count] = values_dict
-                        print(SerialController.dict_values)
 
                     SerialController.ser.flushInput()
                 except SerialException:

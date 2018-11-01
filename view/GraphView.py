@@ -18,8 +18,8 @@ class GraphView:
 
     def add_to_canvas(self, sensor, min, max):
         if sensor == 'ldr':
-            self.canvas.create_text((1150 / 2, 570), text="time/steps")
-            self.canvas.create_text((50, 30), text="Light sensitivity")
+            self.canvas.create_text((1150 / 2, 465), text="time/steps")
+            self.canvas.create_text((60, 25), text="Light sensitivity")
             for x in range(min, max+25, 25):
                 self.canvas.create_line(50, x, 1050, x, width=1, fill="grey80")  # x-axis
                 self.canvas.create_text(30, x, text=(-x)+max)  # x-axis
@@ -27,7 +27,7 @@ class GraphView:
         elif sensor == 'temp':
             count = 32
             self.canvas.create_text((1150 / 2, 570), text="time/steps")
-            self.canvas.create_text((50, 30), text="Temperature in °C")
+            self.canvas.create_text((65, 25), text="Temperature in °C")
             for x in range(min, max+25, 25):
                 self.canvas.create_line(50, x, 1050, x, width=1, fill="grey80")  # x-axis
                 self.canvas.create_text(30, x, text=count)  # x-axis
