@@ -1,4 +1,4 @@
-from random import randint, choice
+from random import choice
 import tkinter
 
 
@@ -8,8 +8,6 @@ class GraphView:
         self.canvas = canvas
         self.s = 1
         self.x2 = 50
-        color = ["red", "orange", "green", "blue", "violet"]
-        self.color = choice(color)
         self.y2 = 450
         self.add_to_canvas(sensor, self.x2, self.y2)
 
@@ -17,20 +15,24 @@ class GraphView:
         self.controller = controller
 
     def add_to_canvas(self, sensor, min, max):
+        label_color = 'white'
+        num_color = '#525D6D'
+        sublines_color = '#2D3542'
+
         if sensor == 'ldr':
-            self.canvas.create_text((1150 / 2, 465), text="time/steps")
-            self.canvas.create_text((60, 25), text="Light sensitivity")
+            self.canvas.create_text((1150 / 2, 465), text="time/steps", fill=label_color)
+            self.canvas.create_text((60, 25), text="Light sensitivity", fill=label_color)
             for x in range(min, max+25, 25):
-                self.canvas.create_line(50, x, 1050, x, width=1, fill="grey80")  # x-axis
-                self.canvas.create_text(30, x, text=(-x)+max)  # x-axis
+                self.canvas.create_line(50, x, 1050, x, width=1, fill=sublines_color)  # x-axis
+                self.canvas.create_text(30, x, text=(-x)+max, fill=label_color)  # x-axis
 
         elif sensor == 'temp':
             count = 32
-            self.canvas.create_text((1150 / 2, 570), text="time/steps")
-            self.canvas.create_text((65, 25), text="Temperature in °C")
+            self.canvas.create_text((1150 / 2, 465), text="time/steps", fill=label_color)
+            self.canvas.create_text((65, 25), text="Temperature in °C", fill=label_color)
             for x in range(min, max+25, 25):
-                self.canvas.create_line(50, x, 1050, x, width=1, fill="grey80")  # x-axis
-                self.canvas.create_text(30, x, text=count)  # x-axis
+                self.canvas.create_line(50, x, 1050, x, width=1, fill=sublines_color)  # x-axis
+                self.canvas.create_text(30, x, text=count, fill=label_color)  # x-axis
                 count -= 2
 
     def drawGraph(self):
@@ -44,7 +46,7 @@ class GraphView:
             y1 = self.y2
             self.x2 = 50 + self.s * 50
             self.y2 = self.controller.get_value()
-            self.canvas.create_line(x1, y1, self.x2, self.y2, fill=self.color, width=2, tags='temp')
+            self.canvas.create_line(x1, y1, self.x2, self.y2, fill='#D85700', width=2, tags='temp')
             self.s += 1
         except tkinter.TclError:
             pass

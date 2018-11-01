@@ -64,9 +64,9 @@ class MainView(Toplevel):
     def create_canvas(self):
         """ Creates and adds a canvas. This canvas is used to display a graph, hence two canvases are made in the
         constructor """
-        canvas = Canvas(self, height=480, width=1100, bg='#E4E8EF')
-        canvas.create_line(50, 450, 1050, 450, width=2)  # x-axis
-        canvas.create_line(50, 450, 50, 50, width=2)  # y-axis
+        canvas = Canvas(self, height=480, width=1100, bg='#242A36', highlightthickness=0)
+        canvas.create_line(50, 450, 1050, 450, width=2, fill='#525D6D')  # x-axis
+        canvas.create_line(50, 450, 50, 50, width=2, fill='#525D6D')  # y-axis
         canvas.place(relx=0.5, rely=0.37, anchor=CENTER)
         return canvas
 
