@@ -15,10 +15,11 @@ class SerialController:
         ser = Serial("COM5", 9600, timeout=None)
         print('Connected!')
     except SerialException as e:
-        pass
+        print(e)
 
     @staticmethod
     def openPort():
+        print('Attempting to connect...')
         try:
             com = SerialController.com_port.pop()
             SerialController.ser = Serial(com, 9600, timeout=5)
@@ -30,10 +31,11 @@ class SerialController:
     @staticmethod
     def read():
         """ RECIEVE INCOMING DATA FROM SERIAL PORT """
+
+        # First check if ser has been initialized.
         try:
             SerialController.ser.readline()
         except (AttributeError, SerialException):
-            print('Attempting to connect...')
             SerialController.openPort()
             return
 

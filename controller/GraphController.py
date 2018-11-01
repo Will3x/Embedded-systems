@@ -5,22 +5,20 @@ from controller import SerialController as ser
 
 class GraphController:
 
-    def __init__(self, canvas, num):
+    def __init__(self, canvas, sensor, device):
         self.view = view.GraphView(canvas)
         self.model = model.GraphModel()
-        self.num = num
+        self.sensor = sensor
+        self.device = int(device[7:])
         self.giveinstance()
 
     def giveinstance(self):
         self.view.set_controller_instance(self)
 
     def updategraph(self):
-        """ Called by mainview.tick() """
+        """ Called by MainView.tick() """
         self.view.drawGraph()
 
     def get_value(self):
         values = ser.SerialController.dict_values
-        if self.num == 0:
-            return self.model.calculate_temperature(values[1]['temp'])
-        if self.num == 1:
-            return self.model.calculate_light(values[1]['ldr'])
+        return self.model.calculate(values[self.device][self.sensor], self.sensor)

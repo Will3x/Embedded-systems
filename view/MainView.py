@@ -11,31 +11,31 @@ class MainView(Toplevel):
         self.make_topmost()
         self.dashboard = dashboard
 
-        # imageref = self.make_background()  # don't delete reference
-
         self.canv_temp = self.create_canvas()
         self.canv_light = self.create_canvas()
-        self.center_window()
 
-        self.graph_controller = GraphController.GraphController(self.canv_temp, 0)
-        self.graph_controller2 = GraphController.GraphController(self.canv_light, 1)
+        self.graph_controller = GraphController.GraphController(self.canv_temp, 'temp', name)
+        self.graph_controller2 = GraphController.GraphController(self.canv_light, 'ldr', name)
+
+        self.center_window()
 
         self.event_controller = EventController.EventController(self)
         self.addwidgets()
         self.start()
 
     def tick(self):
+        """ Gets called from Dashboardview.tick() """
         self.graph_controller.updategraph()
         self.graph_controller2.updategraph()
 
-    def on_exit(self):
+    def minimize_window(self):
+        self.iconify()
+
+    def hide_window(self):
         self.wm_withdraw()
 
     def close(self):
         self.destroy()
-
-    def go_back(self):
-        self.on_exit()
 
     def show_window(self):
         print('opening window')
@@ -44,7 +44,7 @@ class MainView(Toplevel):
     def start(self):
         self.graph_controller.updategraph()
         self.graph_controller2.updategraph()
-        self.protocol("WM_DELETE_WINDOW", self.on_exit)
+        self.protocol("WM_DELETE_WINDOW", self.hide_window)
         # self.wm_withdraw()
 
     def make_topmost(self):
@@ -130,7 +130,7 @@ class MainView(Toplevel):
         self.status_label = Label(self, text='ROLLUIK IS OPGEROLD', font='Roboto 12 bold' ,fg='green').place(relx=0.4, rely=0.7, anchor=CENTER)
 
         self.btn_return = Button(self, text="Return",
-                            width=button_width, command=self.go_back,
+                            width=button_width, command=self.hide_window,
                             bg='dodger blue', fg='white', relief=GROOVE)
         self.btn_return.place(relx=0.03, rely=0.04, anchor=W)
 

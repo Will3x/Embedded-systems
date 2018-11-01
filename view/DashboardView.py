@@ -24,7 +24,7 @@ class DashboardView(Tk):
         self.refresh()
         self.controller.get_values()
         [exec('x.tick()') for x in self.mainview.values() if x != '']
-        self.after(1000, self.tick)
+        self.after(2000, self.tick)
 
     def set_controller_instance(self, controller):
         self.controller = controller
@@ -81,7 +81,7 @@ class DashboardView(Tk):
             exec(f'self.button{num}.config(state=NORMAL, bg=color_blue, text="Settings / Expand")')
             exec(f'self.btnopen{num}.config(state=NORMAL, bg=color_blue)')
 
-        elif state == 'disabled':
+        if state == 'disabled':
             exec(f'self.button{num}.config(state=DISABLED, bg=color_red, text="Not connected", fg="white")')
             exec(f'self.btnopen{num}.config(state=DISABLED, bg=color_grey)')
 
