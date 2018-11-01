@@ -1,6 +1,7 @@
 from serial import *
 from model import SensordataModel
 import serial.tools.list_ports
+import re
 
 
 class SerialController:
@@ -40,7 +41,7 @@ class SerialController:
             return
 
         ports = SerialController.arduino_connections2
-        filter = ['Temp', 'LDR', 'Echo', 'Trig', ' : ']
+        filter = ['Temp', 'LDR', 'Afstand', ' : ', ': ']
 
         for count, port in ports.items():
             if port != '':
@@ -54,8 +55,8 @@ class SerialController:
                     values = line.split()
                     print(values)
 
-                    if len(values) == 4:
-                        values_dict = {'temp': values[0], 'ldr': values[1], 'echo': values[2], 'trig': values[3]}
+                    if len(values) == 3:
+                        values_dict = {'temp': values[0], 'ldr': values[1], 'afstand': values[2]}
                         SerialController.dict_values[count] = values_dict
 
                     SerialController.ser.flushInput()
