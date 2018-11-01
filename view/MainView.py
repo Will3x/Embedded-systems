@@ -1,6 +1,5 @@
 from tkinter import *
 from controller import GraphController, EventController
-import fontawesome as fa
 
 
 class MainView(Toplevel):
@@ -86,14 +85,14 @@ class MainView(Toplevel):
         LabelFrame(self, text='Manual', height=55, width=250, fg=self.fg_color,
                    bg=self.bg_color).place(relx=0.87, rely=0.695, anchor=CENTER)
 
-        self.radio1 = Radiobutton(self, text="Light sensor", indicatoron=False, variable=var1, borderwidth=0, fg='black',
-                    command=lambda: self.event_controller.buttonclick_event(var1), height=2, bg=self.btn_color,
+        self.radio1 = Radiobutton(self, text="Light sensor", indicatoron=False, variable=var1, borderwidth=0, fg='white',
+                    command=lambda: self.event_controller.buttonclick_event(var1), height=2, selectcolor=self.btn_color,
                     value=1, width=17)
         self.radio1.place(relx=0.440, rely=0.05, anchor=CENTER)
 
         self.radio2 = Radiobutton(self, text="Temperature sensor", indicatoron=False, variable=var1, borderwidth=0,
-                    command=lambda: self.event_controller.buttonclick_event(var1), height=2, bg=self.btn_color,
-                    value=2, width=17, fg='white')
+                    command=lambda: self.event_controller.buttonclick_event(var1), height=2, selectcolor=self.btn_color,
+                    value=2, width=17)
         self.radio2.place(relx=0.56, rely=0.05, anchor=CENTER)
 
         Radiobutton(self, text="AAN", indicatoron=False, variable=var2,

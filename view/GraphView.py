@@ -8,7 +8,8 @@ class GraphView:
         self.canvas = canvas
         self.s = 1
         self.x2 = 50
-        self.color = 'dodger blue'
+        color = ["red", "orange", "green", "blue", "violet"]
+        self.color = choice(color)
         self.y2 = 450
         self.add_to_canvas(sensor, self.x2, self.y2)
 
@@ -43,7 +44,7 @@ class GraphView:
             y1 = self.y2
             self.x2 = 50 + self.s * 50
             self.y2 = self.controller.get_value()
-            self.canvas.create_line(x1, y1, self.x2, self.y2, fill=self.color, width=3, tags='temp')
+            self.canvas.create_line(x1, y1, self.x2, self.y2, fill=self.color, width=2, tags='temp')
             self.s += 1
         except tkinter.TclError:
             pass

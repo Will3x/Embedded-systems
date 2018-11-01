@@ -10,15 +10,15 @@ class EventController:
     def buttonclick_event(self, var):
         if var.get() == 1:
             print('Showing light sensor canvas')
-            self.view.radio2.config(fg="white")
-            self.view.radio1.config(fg="black")
+            self.view.radio1.config(fg="white")
+            self.view.radio2.config(fg="black")
             self.canv_light.place(relx=0.5, rely=0.37, anchor=CENTER)
             self.canv_temp.place_forget()
 
         elif var.get() == 2:
             print('Showing temperature sensor canvas')
-            self.view.radio2.config(fg="black")
-            self.view.radio1.config(fg="white")
+            self.view.radio1.config(fg="black")
+            self.view.radio2.config(fg="white")
             self.canv_temp.place(relx=0.5, rely=0.37, anchor=CENTER)
             self.canv_light.place_forget()
 

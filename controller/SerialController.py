@@ -1,7 +1,6 @@
 from serial import *
 from model import SensordataModel
 import serial.tools.list_ports
-import re
 
 
 class SerialController:
