@@ -64,7 +64,7 @@ void ldr(){ // licht sensor
 }
 
 void afstand(){ // hc-sr04
-	USART_putstring("Afstand: ");
+	USART_putstring("Afstand : ");
 	PORTD |= _BV(PD3);
 	_delay_us(10);
 	PORTD &= ~_BV(PD3);
