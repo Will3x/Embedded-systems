@@ -1,7 +1,7 @@
 // A0 : TMP36 (middelste van de 3)
 // A1 : LDR (min kant)
-// A2 : Echo
-// A3 : Trig
+// PIND2 : Trig
+// PIND3 : Echo
 //
 // TMP36 rechts = min en links is plus (platte kant voor)
 // LDR plus aangesloten op 3,3 V
