@@ -57,10 +57,8 @@ class MainView(Toplevel):
         """ Creates and adds a canvas. This canvas is used to display a graph, hence two canvases are made in the
         constructor """
         canvas = Canvas(self, bg='grey90', height=500, width=1100)
-        canvas.create_line(50, 450, 1050, 450, width=1)  # x-axis
-        canvas.create_line(50, 450, 50, 50, width=1)  # y-axis
-        canvas.create_text((1150 / 2, 570), text="time/steps")
-        canvas.create_text((50, 30), text="value")
+        canvas.create_line(50, 450, 1050, 450, width=2)  # x-axis
+        canvas.create_line(50, 450, 50, 50, width=2)  # y-axis
         canvas.place(relx=0.5, rely=0.36, anchor=CENTER)
         return canvas
 

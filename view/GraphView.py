@@ -4,19 +4,34 @@ import tkinter
 
 class GraphView:
 
-    def __init__(self, canvas):
+    def __init__(self, canvas, sensor):
         self.canvas = canvas
         self.s = 1
         self.x2 = 50
         color = ["red", "orange", "green", "blue", "violet"]
         self.color = choice(color)
-        self.y2 = self.value_to_y(randint(0, 80))
-
-    def value_to_y(self, val):
-        return 450 - 5 * val
+        self.y2 = 450
+        self.add_to_canvas(sensor, self.x2, self.y2)
 
     def set_controller_instance(self, controller):
         self.controller = controller
+
+    def add_to_canvas(self, sensor, min, max):
+        if sensor == 'ldr':
+            self.canvas.create_text((1150 / 2, 570), text="time/steps")
+            self.canvas.create_text((50, 30), text="Light sensitivity")
+            for x in range(min, max+25, 25):
+                self.canvas.create_line(50, x, 1050, x, width=1, fill="grey80")  # x-axis
+                self.canvas.create_text(30, x, text=(-x)+max)  # x-axis
+
+        elif sensor == 'temp':
+            count = 32
+            self.canvas.create_text((1150 / 2, 570), text="time/steps")
+            self.canvas.create_text((50, 30), text="Temperature in °C")
+            for x in range(min, max+25, 25):
+                self.canvas.create_line(50, x, 1050, x, width=1, fill="grey80")  # x-axis
+                self.canvas.create_text(30, x, text=count)  # x-axis
+                count -= 2
 
     def drawGraph(self):
         try:

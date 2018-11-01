@@ -6,7 +6,7 @@ from controller import SerialController as ser
 class GraphController:
 
     def __init__(self, canvas, sensor, device):
-        self.view = view.GraphView(canvas)
+        self.view = view.GraphView(canvas, sensor)
         self.model = model.GraphModel()
         self.sensor = sensor
         self.device = int(device[7:])
@@ -21,4 +21,7 @@ class GraphController:
 
     def get_value(self):
         values = ser.SerialController.dict_values
-        return self.model.calculate(values[self.device][self.sensor], self.sensor)
+        try:
+            return self.model.calculate(values[self.device][self.sensor], self.sensor)
+        except TypeError:
+            print('waiting for data...')

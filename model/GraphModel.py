@@ -7,9 +7,14 @@ class GraphModel:
         pass
 
     def calculate(self, value, sensor):
-        if sensor == 'temp':
-            return (-((int(value)) ** 1.8)) + 400
-        else:
-            return (-(int(value) / 200) * 100) + 425
+        try:
+            if sensor == 'temp':
+                print(-(int(value)) + 450)
+                return ((32 - float(value)) * 12.5) + 50
+
+            return (-(int(value))) + 450
+
+        except ValueError:
+            print('Something went wrong with reading data')
 
 
