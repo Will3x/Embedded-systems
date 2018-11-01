@@ -94,7 +94,7 @@ class DashboardView(Tk):
                     light = value[x]['ldr']
 
                     exec(f'self.temp{x}.config(text="{temp}°C", fg="dodger blue")')
-                    exec(f'self.light{x}.config(text="{light}", fg="dodger blue")')
+                    exec(f'self.light{x}.config(text="{light} / 100", fg="dodger blue")')
         except TypeError:
             self.temp1.config(text='NO DATA', fg='#444D5F')
             self.light1.config(text='NO DATA', fg='#444D5F')
