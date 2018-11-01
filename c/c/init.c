@@ -39,6 +39,7 @@ void init_scheduler()
 	SCH_Init_T1();
 	SCH_Add_Task(temperatuur,0,1);	// moet 4000 worden@@@
 	SCH_Add_Task(ldr,0,1);			// moet 3000 worden
+	SCH_Add_Task(newRegel,0,1);	
 	SCH_Start();
 }
 

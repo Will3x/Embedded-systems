@@ -18,6 +18,7 @@ void USART_putstring(char* StringPtr);    //Function that sends a string over th
 void temperatuur();
 void ldr();
 void afstand();
+void newRegel();
 uint16_t read_adc(uint8_t channel);    //Function to read an arbitrary analogic channel/pin
 
 
@@ -54,6 +55,7 @@ void temperatuur(){
 void ldr(){ // licht sensor
 	USART_putstring("LDR : ");
 	adc_value = read_adc(1);
+	adc_value = ((((double)adc_value)/1024)*100);
 	itoa(adc_value, buffer, 10);        //Convert the read value to an ascii string
 	USART_putstring(buffer);        //Send the converted value to the terminal
 	
@@ -75,4 +77,9 @@ void afstand(){ // hc-sr04
 	
 	//Some more formatting
 	USART_putstring("  "); 
+}
+
+void newRegel(){
+	USART_send('\r');
+	USART_send('\n');
 }

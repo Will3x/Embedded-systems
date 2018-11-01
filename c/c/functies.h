@@ -14,6 +14,7 @@ void USART_putstring(char* StringPtr);
 void temperatuur();
 void ldr();
 void afstand();
+void newRegel();
 uint16_t read_adc(uint8_t channel);
 
 
