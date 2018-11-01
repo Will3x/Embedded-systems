@@ -16,15 +16,16 @@ class GraphView:
 
     def add_to_canvas(self, sensor, min, max):
         label_color = 'white'
-        num_color = '#525D6D'
         sublines_color = '#2D3542'
 
         if sensor == 'ldr':
+            count = 100
             self.canvas.create_text((1150 / 2, 465), text="time/steps", fill=label_color)
             self.canvas.create_text((60, 25), text="Light sensitivity", fill=label_color)
-            for x in range(min, max+25, 25):
+            for x in range(min, max+25, 40):
                 self.canvas.create_line(50, x, 1050, x, width=1, fill=sublines_color)  # x-axis
-                self.canvas.create_text(30, x, text=(-x)+max, fill=label_color)  # x-axis
+                self.canvas.create_text(30, x, text=count, fill=label_color)  # x-axis
+                count -= 10
 
         elif sensor == 'temp':
             count = 32
