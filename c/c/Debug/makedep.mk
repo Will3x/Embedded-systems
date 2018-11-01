@@ -4,5 +4,9 @@
 
 AVR_TTC_scheduler.c
 
+functies.c
+
+init.c
+
 main.c
 
