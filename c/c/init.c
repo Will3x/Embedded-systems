@@ -39,7 +39,8 @@ void init_scheduler()
 	SCH_Init_T1();
 	SCH_Add_Task(temperatuur,0,1);	// moet 4000 worden@@@
 	SCH_Add_Task(ldr,0,1);			// moet 3000 worden
-	SCH_Add_Task(newRegel,0,1);	
+	SCH_Add_Task(afstand,0,1);
+	SCH_Add_Task(newRegel,0,1);
 	SCH_Start();
 }
 
@@ -52,5 +53,5 @@ void init_adc(){
 
 void init_dist(){
 	DDRD |= _BV(PD3); // Pin 3 Trigger Output
-	DDRD &= ~_BV(PD4); // Pin 4 Echo Input
+	DDRD &= ~_BV(PD2); // Pin 2 Echo Input
 }

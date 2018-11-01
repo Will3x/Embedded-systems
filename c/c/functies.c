@@ -64,15 +64,21 @@ void ldr(){ // licht sensor
 }
 
 void afstand(){ // hc-sr04
-	USART_putstring("Echo : "); // ontvangt het signaal
-	adc_value = read_adc(2);
-	itoa(adc_value, buffer, 10);        //Convert the read value to an ascii string
-	USART_putstring(buffer);
-	USART_putstring("  ");
+	USART_putstring("Afstand: ");
+	PORTD |= _BV(PD3);
+	_delay_us(10);
+	PORTD &= ~_BV(PD3);
+
+	loop_until_bit_is_set(PIND, PD2);
+	TCNT1 = 0;
+	//PORTB |= _BV(PB3);
+	loop_until_bit_is_clear(PIND, PD2);
+	//PORTB &= ~_BV(PB3);
+	uint16_t count = TCNT1;
+	//transmit(count);
+	float distance = ((float)count / 4);
 	
-	USART_putstring("Trig : "); // deze verstuurd een signaal (10us HIGH pulse)
-	adc_echo = read_adc(3);
-	itoa(adc_echo, buffer, 10);        //Convert the read value to an ascii string
+	itoa(distance, buffer, 10);        //Convert the read value to an ascii string
 	USART_putstring(buffer);        //Send the converted value to the terminal
 	
 	//Some more formatting
