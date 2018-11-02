@@ -44,6 +44,7 @@ void init_scheduler()
 	SCH_Add_Task(upDown,0,1);
 	
 	SCH_Add_Task(newRegel,0,1);
+//	SCH_Add_Task(check_input,0,1);
 	SCH_Start();
 }
 

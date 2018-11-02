@@ -16,6 +16,7 @@ void ldr();
 void afstand();
 void newRegel();
 void upDown();
+void check_input();
 uint16_t read_adc(uint8_t channel);
 
 
