@@ -94,14 +94,16 @@ class MainView(Toplevel):
                              value=2, width=20, bg="#444D5F", fg='white')
         radio2.place(relx=0.565, rely=0.05, anchor=CENTER)
 
-        Radiobutton(self, text="AAN", indicatoron=False, variable=var2,
-                    command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0,
-                    selectcolor=self.btn_color,
-                    value=3, width=10).place(relx=0.865, rely=0.7, anchor=E)
+        self.manual1 = Radiobutton(self, text="AAN", indicatoron=False, variable=var2,
+                                   command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0,
+                                   selectcolor=self.btn_color, bg="#444D5F", height=2,
+                                   value=3, width=10)
+        self.manual1.place(relx=0.865, rely=0.7, anchor=E)
 
-        Radiobutton(self, text="UIT", indicatoron=False, variable=var2,
-                    command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0,
-                    value=4, width=10).place(relx=0.94, rely=0.7, anchor=E)
+        self.manual2 = Radiobutton(self, text="UIT", indicatoron=False, variable=var2,
+                                   command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0,
+                                   bg="#444D5F", height=2, value=4, width=10)
+        self.manual2.place(relx=0.94, rely=0.7, anchor=E)
 
         y_pos = .778  # start position
 
@@ -123,24 +125,24 @@ class MainView(Toplevel):
         y_pos = .778  # reset start position
         button_width = 20
 
-        manual1 = Label(self, text='Uitrol afstand', state=DISABLED)
-        manual1.place(relx=0.7, rely=y_pos, anchor=E)
+        self.manual1 = Label(self, text='Uitrol afstand', state=DISABLED)
+        self.manual1.place(relx=0.7, rely=y_pos, anchor=E)
 
-        manual2 = Entry(self, width=40, state=DISABLED)
-        manual2.place(relx=0.83, rely=y_pos, anchor=CENTER)
+        self.manual2 = Entry(self, width=40, state=DISABLED)
+        self.manual2.place(relx=0.83, rely=y_pos, anchor=CENTER)
 
-        manual_btn1 = Button(self, text='Uitrollen', width=button_width, borderwidth=0, state=DISABLED)
-        manual_btn1.place(relx=0.8, rely=y_pos + .12, anchor=E)
+        self. manual_btn1 = Button(self, text='Uitrollen', width=button_width, height=2, borderwidth=0, state=DISABLED)
+        self.manual_btn1.place(relx=0.8, rely=y_pos + .12, anchor=E)
 
-        manual_btn2 = Button(self, text='Oprollen', width=button_width, borderwidth=0, state=DISABLED)
-        manual_btn2.place(relx=.942, rely=y_pos + .12, anchor=E)
+        self.manual_btn2 = Button(self, text='Oprollen', width=button_width, height=2, borderwidth=0, state=DISABLED)
+        self.manual_btn2.place(relx=.942, rely=y_pos + .12, anchor=E)
 
-        setbtn2 = Button(self, text='Set', width=button_width, fg='black', bg='gray90', state=DISABLED,
+        self.setbtn2 = Button(self, text='Set', width=button_width, fg='black', bg='gray90', state=DISABLED,
                          borderwidth=0)
-        setbtn2.place(relx=0.873, rely=y_pos + .04, anchor=CENTER)
+        self.setbtn2.place(relx=0.873, rely=y_pos + .04, anchor=CENTER)
 
-        setbtn1 = Button(self, text='Set', width=button_width, bg='dodger blue', fg=self.fg_color, borderwidth=0)
-        setbtn1.place(relx=0.265, rely=y_pos + .16, anchor=W)
+        self.setbtn1 = Button(self, text='Set', width=button_width, bg='dodger blue', fg=self.fg_color, borderwidth=0)
+        self.setbtn1.place(relx=0.265, rely=y_pos + .16, anchor=W)
 
         status_label = Label(self, text='ROLLUIK IS OPGEROLD', font='Roboto 12 bold', fg='green',
                              bg=self.bg_color).place(relx=0.4, rely=0.7, anchor=CENTER)
