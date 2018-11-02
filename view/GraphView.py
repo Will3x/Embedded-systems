@@ -6,11 +6,11 @@ class GraphView:
 
     def __init__(self, canvas, sensor):
         self.canvas = canvas
-        self.s = 1
+        self.s = 0
         self.x2 = 50
-        self.y2 = 450
+        self.y2 = None
         self.sensor = sensor
-        self.add_to_canvas(sensor, self.x2, self.y2)
+        self.add_to_canvas(sensor, 50, 450)
         self.mean = []
 
     def set_controller_instance(self, controller):
@@ -20,7 +20,7 @@ class GraphView:
         label_color = 'white'
         sublines_color = '#2D3542'
 
-        if sensor == 'ldr':
+        if sensor == 'l':
             count = 100
             self.canvas.create_text((int(self.canvas['width'])/2, 25), text="Light sensitivity every 3s", fill=label_color)
             for y in range(min, max+25, 40):
@@ -28,7 +28,7 @@ class GraphView:
                 self.canvas.create_text(30, y, text=count, fill=label_color)
                 count -= 10
 
-        elif sensor == 'temp':
+        elif sensor == 't':
             count = 32
             self.canvas.create_text((int(self.canvas['width'])/2, 25), text="Temperature in °C every 3s", fill=label_color)
             for y in range(min, max+25, 25):
@@ -47,7 +47,6 @@ class GraphView:
 
     def drawGraph(self):
         try:
-
             if self.s == 21:
                 # new frame
                 self.s = 1
@@ -57,7 +56,7 @@ class GraphView:
             y1 = self.y2
             self.x2 = 50 + self.s * 50
             self.y2 = self.controller.get_value()
-            self.canvas.create_line(x1, y1, self.x2, self.y2, fill='#D85700', width=2, tags='temp')
+            self.canvas.create_line(x1, y1, self.x2, self.y2, fill='#D85700', width=2, tags='t')
             self.s += 1
 
             # if self.sensor == 'temp':

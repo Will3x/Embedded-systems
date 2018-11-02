@@ -1,6 +1,7 @@
 from tkinter import *
 from functools import partial  # This is being used. Don't delete.
 from view import MainView
+from controller import SerialController
 
 
 class DashboardView(Tk):
@@ -15,6 +16,7 @@ class DashboardView(Tk):
         self.prev_devices = {1: '', 2: '', 3: '', 4: '', 5: ''}
 
     def start(self):
+        SerialController.SerialController.setup()
         imageref = self.make_background()  # don't delete reference
         self.make_panels()
         self.tick()
@@ -92,8 +94,8 @@ class DashboardView(Tk):
         try:
             for x in value:
                 if value[x] != ():
-                    temp = value[x]['temp']
-                    light = value[x]['ldr']
+                    temp = value[x]['t']
+                    light = value[x]['l']
 
                     exec(f'self.temp{x}.config(text="{temp}°C", fg="dodger blue")')
                     exec(f'self.light{x}.config(text="{light} / 100", fg="dodger blue")')

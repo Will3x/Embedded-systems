@@ -1,89 +1,80 @@
 from serial import *
 from model import SensordataModel
 import serial.tools.list_ports
+import re
 
 
 class SerialController:
 
-    arduino_connections = {1: '', 2: '', 3: '', 4: '', 5: ''}
-    arduino_connections2 = {1: '', 2: '', 3: '', 4: '', 5: ''}
-    dict_values = {1: (), 2: (), 3: (), 4: (), 5: (), }
-    sensor_model = SensordataModel.SensordataModel()
-    com_port = set()
+    arduino_connections = None
+    dict_values = None
+    ser = None
+    arduino_connections2 = None
 
-    try:
-        ser = Serial("COM5", 9600, timeout=None)
-        print('Connected!')
-    except SerialException as e:
-        print(e)
+    @classmethod
+    def setup(cls):
+        cls.arduino_connections = {1: '', 2: '', 3: '', 4: '', 5: ''}
+        cls.arduino_connections2 = {1: '', 2: '', 3: '', 4: '', 5: ''}
+        cls.dict_values = {1: (), 2: (), 3: (), 4: (), 5: (), }
+        cls.sensor_model = SensordataModel.SensordataModel()
 
-    @staticmethod
-    def openPort():
+        cls.open_port()
+
+    @classmethod
+    def open_port(cls):
         print('Attempting to connect...')
         try:
-            com = SerialController.com_port.pop()
-            SerialController.ser = Serial(com, 9600, timeout=5)
-            SerialController.com_port.clear()
-        except (SerialException, KeyError):
+            com = cls.find_ports()[0][0]
+            cls.ser = Serial(com, 9600, timeout=5)
+        except (SerialException, KeyError, IndexError):
             return
-        print('Connected!')
+        print('Connected to {}!'.format(com))
 
-    @staticmethod
-    def read():
+    @classmethod
+    def read(cls):
         """ RECIEVE INCOMING DATA FROM SERIAL PORT """
-
-        # First check if ser has been initialized.
         try:
-            SerialController.ser.readline()
+            cls.ser.readline()
         except (AttributeError, SerialException):
-            SerialController.openPort()
+            print("Couldn't read from serial")
+            cls.open_port()
             return
 
-        ports = SerialController.arduino_connections2
-        filter = ['Temp', 'LDR', 'Afstand', ' : ', ': ']
+        ports = cls.arduino_connections2
 
         for count, port in ports.items():
             if port != '':
                 try:
-                    line = SerialController.ser.readline().decode('ascii')
+                    line = cls.ser.readline().decode('ascii')
 
-                    for x in filter:
-                        if x in line:
-                            line = line.replace(x, '')
+                    match = re.findall('(\d+)', line)
 
-                    values = line.split()
+                    cls.dict_values[count] = {'t': match[0], 'l': match[1], 'a': match[2]} if len(match) == 3 else None
 
-                    if len(values) == 3:
-                        values_dict = {'temp': values[0], 'ldr': values[1], 'afstand': values[2]}
-                        SerialController.dict_values[count] = values_dict
-                        print(values_dict)
-                    SerialController.ser.flushInput()
+                    cls.ser.flushInput()
                 except SerialException as e:
                     print('SerialController.read(): {}'.format(e))
 
-        return SerialController.dict_values
+        return cls.dict_values
 
-    @staticmethod
-    def check_connection():
+    @classmethod
+    def find_ports(cls):
+        return [tuple(p) for p in list(serial.tools.list_ports.comports()) if 'VID:PID=2341' in p[2]]
+
+    @classmethod
+    def check_connection(cls):
         """ Check if Arduino is connected. If so, add to dictionary.
         This function is called every 2 sec from tick(). """
-        keywords = ['Serial', 'Serieel', 'Arduino']
-        myports = [tuple(p) for p in list(serial.tools.list_ports.comports()) for x in keywords if x in p[1]]
+        my_ports = cls.find_ports()
 
-        count = 1
-        for port in myports:
-            if port != '':
-                SerialController.arduino_connections[count] = port
-                SerialController.com_port.add(SerialController.arduino_connections[count][0])
-            else:
-                SerialController.arduino_connections[count] = ''
-            count += 1
+        for id, port in enumerate(my_ports, 1):
+            cls.arduino_connections[id] = [port if port != '' else '']
 
-        SerialController.arduino_connections2.update(SerialController.arduino_connections)
+        cls.arduino_connections2.update(cls.arduino_connections)
 
-        return SerialController.arduino_connections
+        return cls.arduino_connections
 
-    @staticmethod
-    def write(data):
+    @classmethod
+    def write(cls, data):
         """ SEND DATA TO SERIAL PORT """
-        SerialController.ser.write(data)
+        cls.ser.write(data)

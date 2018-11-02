@@ -22,8 +22,8 @@ class MainView(Toplevel):
         self.canv_temp = self.create_canvas()
         self.canv_light = self.create_canvas()
 
-        self.graph_controller = GraphController.GraphController(self.canv_temp, 'temp', name)
-        self.graph_controller2 = GraphController.GraphController(self.canv_light, 'ldr', name)
+        self.graph_controller = GraphController.GraphController(self.canv_temp, 't', name)
+        self.graph_controller2 = GraphController.GraphController(self.canv_light, 'l', name)
 
         self.center_window()
 
