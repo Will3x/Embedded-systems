@@ -56,7 +56,7 @@ class SerialController:
                     if len(values) == 3:
                         values_dict = {'temp': values[0], 'ldr': values[1], 'afstand': values[2]}
                         SerialController.dict_values[count] = values_dict
-
+                        print(values_dict)
                     SerialController.ser.flushInput()
                 except SerialException as e:
                     print('SerialController.read(): {}'.format(e))
