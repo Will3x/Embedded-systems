@@ -67,7 +67,6 @@ class MainView(Toplevel):
         canvas.place(relx=0.5, rely=0.37, anchor=CENTER)
         return canvas
 
-
     def addwidgets(self):
         """ Creates and adds widgets to the frame, such as buttons, labels, and input fields. """
         var1 = IntVar(self, 1)
@@ -82,18 +81,22 @@ class MainView(Toplevel):
         LabelFrame(self, text='Manual', height=55, width=250, fg=self.fg_color,
                    bg=self.bg_color).place(relx=0.87, rely=0.695, anchor=CENTER)
 
-        self.radio1 = Radiobutton(self, text="Light sensor", indicatoron=False, variable=var1, borderwidth=0, fg='white',
-                    command=lambda: self.event_controller.buttonclick_event(var1), height=2, selectcolor=self.btn_color,
-                    value=1, width=20, bg="#444D5F")
-        self.radio1.place(relx=0.435, rely=0.05, anchor=CENTER)
+        radio1 = Radiobutton(self, text="Light sensor", indicatoron=False, variable=var1, borderwidth=0,
+                             fg='white',
+                             command=lambda: self.event_controller.buttonclick_event(var1), height=2,
+                             selectcolor=self.btn_color,
+                             value=1, width=20, bg="#444D5F")
+        radio1.place(relx=0.435, rely=0.05, anchor=CENTER)
 
-        self.radio2 = Radiobutton(self, text="Temperature sensor", indicatoron=False, variable=var1, borderwidth=0,
-                    command=lambda: self.event_controller.buttonclick_event(var1), height=2, selectcolor=self.btn_color,
-                    value=2, width=20, bg="#444D5F", fg='white')
-        self.radio2.place(relx=0.565, rely=0.05, anchor=CENTER)
+        radio2 = Radiobutton(self, text="Temperature sensor", indicatoron=False, variable=var1, borderwidth=0,
+                             command=lambda: self.event_controller.buttonclick_event(var1), height=2,
+                             selectcolor=self.btn_color,
+                             value=2, width=20, bg="#444D5F", fg='white')
+        radio2.place(relx=0.565, rely=0.05, anchor=CENTER)
 
         Radiobutton(self, text="AAN", indicatoron=False, variable=var2,
-                    command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0, selectcolor=self.btn_color,
+                    command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0,
+                    selectcolor=self.btn_color,
                     value=3, width=10).place(relx=0.865, rely=0.7, anchor=E)
 
         Radiobutton(self, text="UIT", indicatoron=False, variable=var2,
@@ -103,13 +106,15 @@ class MainView(Toplevel):
         y_pos = .778  # start position
 
         entries = []
-        labels_text = ['Uitrol buitentemperatuur', 'Oprol buitentemperatuur', 'Uitrol lichtintensiteit', 'Oprol lichtintensiteit']
+        labels_text = ['Uitrol buitentemperatuur', 'Oprol buitentemperatuur', 'Uitrol lichtintensiteit',
+                       'Oprol lichtintensiteit']
 
         # Adding buttons dynamically.
         for x in range(1, 5):
             entries.insert(0, f'self.entry{x} = Entry(self, width=40)')
             entries.insert(1, f'self.entry{x}.place(relx=0.18, rely={y_pos:.2f}, anchor=W)')
-            entries.insert(2, f'self.label{x} = Label(self, text="{labels_text[x-1]}", bg=self.bg_color, fg=self.fg_color)')
+            entries.insert(2, f'self.label{x} = Label(self, text="{labels_text[x-1]}", bg=self.bg_color, '
+                              f'fg=self.fg_color)')
             entries.insert(3, f'self.label{x}.place(relx=0.17, rely={y_pos:.2f}, anchor=E)')
             for i in range(4):
                 exec(entries[i])
@@ -118,30 +123,32 @@ class MainView(Toplevel):
         y_pos = .778  # reset start position
         button_width = 20
 
-        self.manual1 = Label(self, text='Uitrol afstand', state=DISABLED)
-        self.manual1.place(relx=0.7, rely=y_pos, anchor=E)
+        manual1 = Label(self, text='Uitrol afstand', state=DISABLED)
+        manual1.place(relx=0.7, rely=y_pos, anchor=E)
 
-        self.manual2 = Entry(self, width=40, state=DISABLED)
-        self.manual2.place(relx=0.83, rely=y_pos, anchor=CENTER)
+        manual2 = Entry(self, width=40, state=DISABLED)
+        manual2.place(relx=0.83, rely=y_pos, anchor=CENTER)
 
-        self.manual_btn1 = Button(self, text='Uitrollen', width=button_width, borderwidth=0, state=DISABLED)
-        self.manual_btn1.place(relx=0.8, rely=y_pos+.12, anchor=E)
+        manual_btn1 = Button(self, text='Uitrollen', width=button_width, borderwidth=0, state=DISABLED)
+        manual_btn1.place(relx=0.8, rely=y_pos + .12, anchor=E)
 
-        self.manual_btn2 = Button(self, text='Oprollen', width=button_width, borderwidth=0, state=DISABLED)
-        self.manual_btn2.place(relx=.942, rely=y_pos+.12, anchor=E)
+        manual_btn2 = Button(self, text='Oprollen', width=button_width, borderwidth=0, state=DISABLED)
+        manual_btn2.place(relx=.942, rely=y_pos + .12, anchor=E)
 
-        self.setbtn2 = Button(self, text='Set', width=button_width, fg='black', bg='gray90', state=DISABLED, borderwidth=0)
-        self.setbtn2.place(relx=0.873, rely=y_pos+.04, anchor=CENTER)
+        setbtn2 = Button(self, text='Set', width=button_width, fg='black', bg='gray90', state=DISABLED,
+                         borderwidth=0)
+        setbtn2.place(relx=0.873, rely=y_pos + .04, anchor=CENTER)
 
-        self.setbtn1 = Button(self, text='Set', width=button_width, bg='dodger blue', fg=self.fg_color, borderwidth=0)
-        self.setbtn1.place(relx=0.265, rely=y_pos + .16, anchor=W)
+        setbtn1 = Button(self, text='Set', width=button_width, bg='dodger blue', fg=self.fg_color, borderwidth=0)
+        setbtn1.place(relx=0.265, rely=y_pos + .16, anchor=W)
 
-        self.status_label = Label(self, text='ROLLUIK IS OPGEROLD', font='Roboto 12 bold', fg='green', bg=self.bg_color).place(relx=0.4, rely=0.7, anchor=CENTER)
+        status_label = Label(self, text='ROLLUIK IS OPGEROLD', font='Roboto 12 bold', fg='green',
+                             bg=self.bg_color).place(relx=0.4, rely=0.7, anchor=CENTER)
 
-        self.btn_return = Button(self, text="Go back",
+        btn_return = Button(self, text="Go back",
                             width=button_width, command=self.hide_window,
                             bg='#444D5F', fg=self.fg_color, borderwidth=0, height=2)
-        self.btn_return.place(relx=0, rely=0.05, anchor=W)
+        btn_return.place(relx=0, rely=0.05, anchor=W)
 
     @property
     def canvas(self):
@@ -164,4 +171,3 @@ class MainView(Toplevel):
         x = screen_width / 2 - window_width / 2
         y = (screen_height / 2 - window_height / 2) - 40
         self.geometry("%dx%d+%d+%d" % (window_width, window_height, x, y))
-

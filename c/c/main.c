@@ -33,4 +33,5 @@ void setup(){
 	init_USART();			// Setup the USART
 	init_dist();
 	init_scheduler();
+	init_lampjes();
 }

@@ -1,7 +1,7 @@
 from view import GraphView as view
 from model import GraphModel as model
 from controller import SerialController as ser
-
+import re
 
 class GraphController:
 
@@ -9,7 +9,7 @@ class GraphController:
         self.view = view.GraphView(canvas, sensor)
         self.model = model.GraphModel()
         self.sensor = sensor
-        self.device = int(device[7:])
+        self.device = int(re.findall('(\d)', device)[0])
         self.giveinstance()
 
     def giveinstance(self):
