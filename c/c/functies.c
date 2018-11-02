@@ -16,8 +16,8 @@ char licht_sensor[5];
 char afstand_sensor[5];
 int temp_up = 22;
 int temp_down = 18;
-int licht_up = 60;
-int licht_down = 55;
+int licht_up = 40;
+int licht_down = 10;
 int afstand_up = 10;
 int afstand_down = 5;
 int manual = 0;		// 1 is manual aan
@@ -134,17 +134,17 @@ void upDown(){
 	ls = ls / 10;
 	ts = ts / 10;
 	if((ls >= licht_up || ts >= temp_up) && !manual){
-		goDown();				// warm/licht ga omlaag
+		goDown();				// warm/licht ga omlaag ROOD
 	}
 	else if((ls <= licht_down || ts <= temp_down) && !manual){
-		goUp();					// koud/donker ga omhoog
+		goUp();					// koud/donker ga omhoog GROEN
 	}
 }
 
 void goDown(){
 	int as = atoi(afstand_sensor);	// afstand sensor wordt int
 	PORTB &= ~(1 << PB2); // groen lampje uit
-	while (as > afstand_down){
+	if (as > afstand_down){
 		PORTB |= (1 << PB0); // rood lampje aan
 		_delay_ms(100);
 		PORTB |= (1 << PB1); // geel lampje aan
@@ -160,7 +160,7 @@ void goDown(){
 void goUp(){
 	int as = atoi(afstand_sensor);	// afstand sensor wordt int
 	PORTB &= ~(1 << PB0); // rood lampje uit
-	while (as < afstand_up){
+	if (as < afstand_up){
 		PORTB |= (1 << PB2); // groen lampje aan
 		_delay_ms(100);
 		PORTB |= (1 << PB1); // geel lampje aan
