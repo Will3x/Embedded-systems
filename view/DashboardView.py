@@ -23,8 +23,8 @@ class DashboardView(Tk):
     def tick(self):
         self.refresh()
         self.controller.get_values()
-        [exec('x.tick()') for x in self.mainview.values() if x != '']
-        self.after(2000, self.tick)
+        [x.tick() for x in self.mainview.values() if x != '']
+        self.after(3000, self.tick)
 
     def set_controller_instance(self, controller):
         self.controller = controller
@@ -55,13 +55,13 @@ class DashboardView(Tk):
         self.create_instance(value)
 
     def refresh(self):
-        """ Called from tick. Will check every 2 seconds if an Arduino connection has been made. """
+        """ Called from tick. Will check every x seconds if an Arduino connection has been made. """
         devices = self.controller.check_if_connected()
-        try:
-            [exec('x.close()') for x in self.mainview.values()
-             if x != '' for i in devices if devices[i] != self.prev_devices[i]]
-        except Exception as e:
-            print(e)
+
+        for x in devices.keys():
+            if devices[x] == '' and self.prev_devices[x] != '' and self.mainview[x] != '':
+                self.mainview[x].close()
+                self.mainview[x] = ''
 
         for key, device in devices.items():
             if not device == '':
@@ -78,12 +78,14 @@ class DashboardView(Tk):
         color_grey = '#444D5F'
 
         if state == 'normal':
-            exec(f'self.button{num}.config(state=NORMAL, bg=color_blue, text="Settings / Expand")')
-            exec(f'self.btnopen{num}.config(state=NORMAL, bg=color_blue)')
+            exec(f'self.button{num}.config(state=NORMAL, bg=color_blue, text="View")')
+            exec(f'self.btnopen{num}.config(state=NORMAL)')
+            exec(f'self.btnclose{num}.config(state=NORMAL)')
 
         if state == 'disabled':
             exec(f'self.button{num}.config(state=DISABLED, bg=color_red, text="Not connected", fg="white")')
             exec(f'self.btnopen{num}.config(state=DISABLED, bg=color_grey)')
+            exec(f'self.btnclose{num}.config(state=DISABLED)')
 
     def change_label(self, value):
         """ Change temperature and light sensor values on Dashboard """
@@ -123,10 +125,10 @@ class DashboardView(Tk):
                               f'command=partial(self.open_btn,{x}))')
             entries.insert(3, f'self.button{x}.place(relx={x_position+.06}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(2, f'self.btnopen{x} = Button(self, text="Open", width=10, height=2,'
-                              f'bg=color_grey, fg="white", disabledforeground="white", borderwidth=0, state=DISABLED)')
+                              f'bg=color_grey, fg="white", disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
             entries.insert(3, f'self.btnopen{x}.place(relx={x_position-.03}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(2, f'self.btnclose{x} = Button(self, text="Close", width=10, height=2,'
-                              f'bg=color_grey, fg="white", disabledforeground="white", borderwidth=0, state=DISABLED)')
+                              f'bg=color_grey, fg="white", disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
             entries.insert(3, f'self.btnclose{x}.place(relx={x_position-.09}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(4, f'self.labelt{x} = Label(self, text="Temperature: ", background="#2B323F", fg="white")')
             entries.insert(5, f'self.labelt{x}.place(relx={x_position-.07}, rely={y_position-.08}, anchor=CENTER)')

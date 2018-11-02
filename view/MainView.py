@@ -46,12 +46,9 @@ class MainView(Toplevel):
         self.destroy()
 
     def show_window(self):
-        print('opening window')
         self.deiconify()
 
     def start(self):
-        self.graph_controller.updategraph()
-        self.graph_controller2.updategraph()
         self.protocol("WM_DELETE_WINDOW", self.hide_window)
         # self.wm_withdraw()
 
@@ -87,13 +84,13 @@ class MainView(Toplevel):
 
         self.radio1 = Radiobutton(self, text="Light sensor", indicatoron=False, variable=var1, borderwidth=0, fg='white',
                     command=lambda: self.event_controller.buttonclick_event(var1), height=2, selectcolor=self.btn_color,
-                    value=1, width=17)
-        self.radio1.place(relx=0.440, rely=0.05, anchor=CENTER)
+                    value=1, width=20, bg="#444D5F")
+        self.radio1.place(relx=0.435, rely=0.05, anchor=CENTER)
 
         self.radio2 = Radiobutton(self, text="Temperature sensor", indicatoron=False, variable=var1, borderwidth=0,
                     command=lambda: self.event_controller.buttonclick_event(var1), height=2, selectcolor=self.btn_color,
-                    value=2, width=17)
-        self.radio2.place(relx=0.56, rely=0.05, anchor=CENTER)
+                    value=2, width=20, bg="#444D5F", fg='white')
+        self.radio2.place(relx=0.565, rely=0.05, anchor=CENTER)
 
         Radiobutton(self, text="AAN", indicatoron=False, variable=var2,
                     command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0, selectcolor=self.btn_color,
@@ -143,7 +140,7 @@ class MainView(Toplevel):
 
         self.btn_return = Button(self, text="Go back",
                             width=button_width, command=self.hide_window,
-                            bg='#515863', fg=self.fg_color, borderwidth=0, height=2)
+                            bg='#444D5F', fg=self.fg_color, borderwidth=0, height=2)
         self.btn_return.place(relx=0, rely=0.05, anchor=W)
 
     @property

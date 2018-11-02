@@ -58,8 +58,8 @@ class SerialController:
                         SerialController.dict_values[count] = values_dict
 
                     SerialController.ser.flushInput()
-                except SerialException:
-                    pass
+                except SerialException as e:
+                    print('SerialController.read(): {}'.format(e))
 
         return SerialController.dict_values
 

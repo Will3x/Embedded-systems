@@ -19,9 +19,12 @@ class GraphController:
         """ Called by MainView.tick() """
         self.view.drawGraph()
 
+    def get_raw_values(self):
+        return ser.SerialController.dict_values
+
     def get_value(self):
-        values = ser.SerialController.dict_values
+        values = self.get_raw_values()
         try:
             return self.model.calculate(values[self.device][self.sensor], self.sensor)
         except TypeError:
-            print('waiting for data...')
+            print('waiting for values...')
