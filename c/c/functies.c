@@ -22,6 +22,12 @@ void newRegel();
 uint16_t read_adc(uint8_t channel);    //Function to read an arbitrary analogic channel/pin
 
 
+unsigned char USART_receive(void){
+	
+	while(!(UCSR0A & (1<<RXC0)));
+	return UDR0;
+}
+
 void USART_send(unsigned char data){
 	while(!(UCSR0A & (1<<UDRE0)));
 	UDR0 = data;
@@ -83,6 +89,19 @@ void afstand(){ // hc-sr04
 	
 	//Some more formatting
 	USART_putstring("  "); 
+}
+
+void check_input()
+{
+	char data= USART_receive();
+	char running = '0';
+	char sluiten = '1';
+	char openen = '2';
+	USART_putstring("status: ");
+	if(data == sluiten){USART_putstring("sluiten");}
+	if(data == openen){USART_putstring("openen");}
+	if(data == running){USART_putstring("running");}
+	USART_putstring(" ");
 }
 
 void newRegel(){

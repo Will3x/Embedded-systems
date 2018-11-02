@@ -15,6 +15,7 @@ void temperatuur();
 void ldr();
 void afstand();
 void newRegel();
+void check_input();
 uint16_t read_adc(uint8_t channel);
 
 

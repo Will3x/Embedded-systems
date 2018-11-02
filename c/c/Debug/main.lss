@@ -3,31 +3,31 @@ main.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         0000001e  00800100  00000818  000008ac  2**0
+  0 .data         0000003e  00800100  00000818  000008ac  2**0
                   CONTENTS, ALLOC, LOAD, DATA
   1 .text         00000818  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          0000002c  0080011e  0080011e  000008ca  2**0
+  2 .bss          0000002c  0080013e  0080013e  000008ea  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000008ca  2**0
+  3 .comment      00000030  00000000  00000000  000008ea  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000008fc  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  0000091c  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000100  00000000  00000000  0000093c  2**0
+  5 .debug_aranges 00000110  00000000  00000000  0000095c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000102b  00000000  00000000  00000a3c  2**0
+  6 .debug_info   00001123  00000000  00000000  00000a6c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000a82  00000000  00000000  00001a67  2**0
+  7 .debug_abbrev 00000ac3  00000000  00000000  00001b8f  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000007d0  00000000  00000000  000024e9  2**0
+  8 .debug_line   0000085d  00000000  00000000  00002652  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000208  00000000  00000000  00002cbc  2**2
+  9 .debug_frame  00000230  00000000  00000000  00002eb0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000056a  00000000  00000000  00002ec4  2**0
+ 10 .debug_str    000005d6  00000000  00000000  000030e0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000415  00000000  00000000  0000342e  2**0
+ 11 .debug_loc    00000455  00000000  00000000  000036b6  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000c0  00000000  00000000  00003843  2**0
+ 12 .debug_ranges 000000d0  00000000  00000000  00003b0b  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -77,13 +77,13 @@ Disassembly of section .text:
   7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
   80:	05 90       	lpm	r0, Z+
   82:	0d 92       	st	X+, r0
-  84:	ae 31       	cpi	r26, 0x1E	; 30
+  84:	ae 33       	cpi	r26, 0x3E	; 62
   86:	b1 07       	cpc	r27, r17
   88:	d9 f7       	brne	.-10     	; 0x80 <__do_copy_data+0xc>
 
 0000008a <__do_clear_bss>:
   8a:	21 e0       	ldi	r18, 0x01	; 1
-  8c:	ae e1       	ldi	r26, 0x1E	; 30
+  8c:	ae e3       	ldi	r26, 0x3E	; 62
   8e:	b1 e0       	ldi	r27, 0x01	; 1
   90:	01 c0       	rjmp	.+2      	; 0x94 <.do_clear_bss_start>
 
@@ -91,7 +91,7 @@ Disassembly of section .text:
   92:	1d 92       	st	X+, r1
 
 00000094 <.do_clear_bss_start>:
-  94:	aa 34       	cpi	r26, 0x4A	; 74
+  94:	aa 36       	cpi	r26, 0x6A	; 106
   96:	b2 07       	cpc	r27, r18
   98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
   9a:	0e 94 32 02 	call	0x464	; 0x464 <main>
@@ -101,38 +101,20 @@ Disassembly of section .text:
   a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 000000a6 <SCH_Add_Task>:
-  Task will be first executed at T = 300 ticks, then 1300, 2300, etc.            
- 
--*------------------------------------------------------------------*/
-
-unsigned char SCH_Add_Task(void (*pFunction)(), const unsigned int DELAY, const unsigned int PERIOD)
-{
   a6:	0f 93       	push	r16
   a8:	1f 93       	push	r17
   aa:	cf 93       	push	r28
   ac:	df 93       	push	r29
   ae:	8c 01       	movw	r16, r24
-   unsigned char Index = 0;
-
-   // First find a gap in the array (if there is one)
-   while((SCH_tasks_G[Index].pTask != 0) && (Index < SCH_MAX_TASKS))
-  b0:	80 91 1e 01 	lds	r24, 0x011E	; 0x80011e <__data_end>
-  b4:	90 91 1f 01 	lds	r25, 0x011F	; 0x80011f <__data_end+0x1>
+  b0:	80 91 3e 01 	lds	r24, 0x013E	; 0x80013e <__data_end>
+  b4:	90 91 3f 01 	lds	r25, 0x013F	; 0x80013f <__data_end+0x1>
   b8:	89 2b       	or	r24, r25
   ba:	81 f0       	breq	.+32     	; 0xdc <SCH_Add_Task+0x36>
-  bc:	ee e1       	ldi	r30, 0x1E	; 30
+  bc:	ee e3       	ldi	r30, 0x3E	; 62
   be:	f1 e0       	ldi	r31, 0x01	; 1
   c0:	21 e0       	ldi	r18, 0x01	; 1
   c2:	30 e0       	ldi	r19, 0x00	; 0
-   {
-      Index++;
   c4:	82 2f       	mov	r24, r18
-unsigned char SCH_Add_Task(void (*pFunction)(), const unsigned int DELAY, const unsigned int PERIOD)
-{
-   unsigned char Index = 0;
-
-   // First find a gap in the array (if there is one)
-   while((SCH_tasks_G[Index].pTask != 0) && (Index < SCH_MAX_TASKS))
   c6:	e9 01       	movw	r28, r18
   c8:	a7 81       	ldd	r26, Z+7	; 0x07
   ca:	b0 85       	ldd	r27, Z+8	; 0x08
@@ -141,36 +123,12 @@ unsigned char SCH_Add_Task(void (*pFunction)(), const unsigned int DELAY, const 
   d0:	37 96       	adiw	r30, 0x07	; 7
   d2:	ab 2b       	or	r26, r27
   d4:	b9 f7       	brne	.-18     	; 0xc4 <SCH_Add_Task+0x1e>
-   {
-      Index++;
-   }
-
-   // Have we reached the end of the list?   
-   if(Index == SCH_MAX_TASKS)
   d6:	85 30       	cpi	r24, 0x05	; 5
   d8:	21 f4       	brne	.+8      	; 0xe2 <SCH_Add_Task+0x3c>
   da:	15 c0       	rjmp	.+42     	; 0x106 <SCH_Add_Task+0x60>
-unsigned char SCH_Add_Task(void (*pFunction)(), const unsigned int DELAY, const unsigned int PERIOD)
-{
-   unsigned char Index = 0;
-
-   // First find a gap in the array (if there is one)
-   while((SCH_tasks_G[Index].pTask != 0) && (Index < SCH_MAX_TASKS))
   dc:	c0 e0       	ldi	r28, 0x00	; 0
   de:	d0 e0       	ldi	r29, 0x00	; 0
- 
--*------------------------------------------------------------------*/
-
-unsigned char SCH_Add_Task(void (*pFunction)(), const unsigned int DELAY, const unsigned int PERIOD)
-{
-   unsigned char Index = 0;
   e0:	80 e0       	ldi	r24, 0x00	; 0
-      // Task list is full, return an error code
-      return SCH_MAX_TASKS;  
-   }
-
-   // If we're here, there is a space in the task array
-   SCH_tasks_G[Index].pTask = pFunction;
   e2:	fe 01       	movw	r30, r28
   e4:	ee 0f       	add	r30, r30
   e6:	ff 1f       	adc	r31, r31
@@ -180,22 +138,15 @@ unsigned char SCH_Add_Task(void (*pFunction)(), const unsigned int DELAY, const 
   ee:	ff 1f       	adc	r31, r31
   f0:	ec 1b       	sub	r30, r28
   f2:	fd 0b       	sbc	r31, r29
-  f4:	e2 5e       	subi	r30, 0xE2	; 226
+  f4:	e2 5c       	subi	r30, 0xC2	; 194
   f6:	fe 4f       	sbci	r31, 0xFE	; 254
   f8:	11 83       	std	Z+1, r17	; 0x01
   fa:	00 83       	st	Z, r16
-   SCH_tasks_G[Index].Delay =DELAY;
   fc:	73 83       	std	Z+3, r23	; 0x03
   fe:	62 83       	std	Z+2, r22	; 0x02
-   SCH_tasks_G[Index].Period = PERIOD;
  100:	55 83       	std	Z+5, r21	; 0x05
  102:	44 83       	std	Z+4, r20	; 0x04
-   SCH_tasks_G[Index].RunMe = 0;
  104:	16 82       	std	Z+6, r1	; 0x06
-
-   // return position of task (to allow later deletion)
-   return Index;
-}
  106:	df 91       	pop	r29
  108:	cf 91       	pop	r28
  10a:	1f 91       	pop	r17
@@ -203,56 +154,32 @@ unsigned char SCH_Add_Task(void (*pFunction)(), const unsigned int DELAY, const 
  10e:	08 95       	ret
 
 00000110 <SCH_Delete_Task>:
-unsigned char SCH_Delete_Task(const unsigned char TASK_INDEX)
-{
-   // Return_code can be used for error reporting, NOT USED HERE THOUGH!
-   unsigned char Return_code = 0;
-
-   SCH_tasks_G[TASK_INDEX].pTask = 0;
  110:	27 e0       	ldi	r18, 0x07	; 7
  112:	82 9f       	mul	r24, r18
  114:	c0 01       	movw	r24, r0
  116:	11 24       	eor	r1, r1
  118:	fc 01       	movw	r30, r24
- 11a:	e2 5e       	subi	r30, 0xE2	; 226
+ 11a:	e2 5c       	subi	r30, 0xC2	; 194
  11c:	fe 4f       	sbci	r31, 0xFE	; 254
  11e:	11 82       	std	Z+1, r1	; 0x01
  120:	10 82       	st	Z, r1
-   SCH_tasks_G[TASK_INDEX].Delay = 0;
  122:	13 82       	std	Z+3, r1	; 0x03
  124:	12 82       	std	Z+2, r1	; 0x02
-   SCH_tasks_G[TASK_INDEX].Period = 0;
  126:	15 82       	std	Z+5, r1	; 0x05
  128:	14 82       	std	Z+4, r1	; 0x04
-   SCH_tasks_G[TASK_INDEX].RunMe = 0;
  12a:	16 82       	std	Z+6, r1	; 0x06
-
-   return Return_code;
-}
  12c:	80 e0       	ldi	r24, 0x00	; 0
  12e:	08 95       	ret
 
 00000130 <SCH_Dispatch_Tasks>:
-  This function must be called (repeatedly) from the main loop.
-
--*------------------------------------------------------------------*/
-
-void SCH_Dispatch_Tasks(void)
-{
  130:	ef 92       	push	r14
  132:	ff 92       	push	r15
  134:	1f 93       	push	r17
  136:	cf 93       	push	r28
  138:	df 93       	push	r29
- 13a:	ce e1       	ldi	r28, 0x1E	; 30
+ 13a:	ce e3       	ldi	r28, 0x3E	; 62
  13c:	d1 e0       	ldi	r29, 0x01	; 1
-   unsigned char Index;
-
-   // Dispatches (runs) the next task (if one is ready)
-   for(Index = 0; Index < SCH_MAX_TASKS; Index++)
  13e:	10 e0       	ldi	r17, 0x00	; 0
-   {
-      if((SCH_tasks_G[Index].RunMe > 0) && (SCH_tasks_G[Index].pTask != 0))
  140:	8e 81       	ldd	r24, Y+6	; 0x06
  142:	88 23       	and	r24, r24
  144:	79 f0       	breq	.+30     	; 0x164 <SCH_Dispatch_Tasks+0x34>
@@ -260,41 +187,20 @@ void SCH_Dispatch_Tasks(void)
  148:	f9 81       	ldd	r31, Y+1	; 0x01
  14a:	30 97       	sbiw	r30, 0x00	; 0
  14c:	59 f0       	breq	.+22     	; 0x164 <SCH_Dispatch_Tasks+0x34>
-      {
-         (*SCH_tasks_G[Index].pTask)();  // Run the task
  14e:	09 95       	icall
-         SCH_tasks_G[Index].RunMe -= 1;   // Reset / reduce RunMe flag
  150:	8e 81       	ldd	r24, Y+6	; 0x06
  152:	81 50       	subi	r24, 0x01	; 1
  154:	8e 83       	std	Y+6, r24	; 0x06
-
-         // Periodic tasks will automatically run again
-         // - if this is a 'one shot' task, remove it from the array
-         if(SCH_tasks_G[Index].Period == 0)
  156:	8c 81       	ldd	r24, Y+4	; 0x04
  158:	9d 81       	ldd	r25, Y+5	; 0x05
  15a:	89 2b       	or	r24, r25
  15c:	19 f4       	brne	.+6      	; 0x164 <SCH_Dispatch_Tasks+0x34>
-         {
-            SCH_Delete_Task(Index);
  15e:	81 2f       	mov	r24, r17
  160:	0e 94 88 00 	call	0x110	; 0x110 <SCH_Delete_Task>
-void SCH_Dispatch_Tasks(void)
-{
-   unsigned char Index;
-
-   // Dispatches (runs) the next task (if one is ready)
-   for(Index = 0; Index < SCH_MAX_TASKS; Index++)
  164:	1f 5f       	subi	r17, 0xFF	; 255
  166:	27 96       	adiw	r28, 0x07	; 7
  168:	15 30       	cpi	r17, 0x05	; 5
  16a:	51 f7       	brne	.-44     	; 0x140 <SCH_Dispatch_Tasks+0x10>
-         {
-            SCH_Delete_Task(Index);
-         }
-      }
-   }
-}
  16c:	df 91       	pop	r29
  16e:	cf 91       	pop	r28
  170:	1f 91       	pop	r17
@@ -303,67 +209,29 @@ void SCH_Dispatch_Tasks(void)
  176:	08 95       	ret
 
 00000178 <SCH_Init_T1>:
-  You must call this function before using the scheduler.  
-
--*------------------------------------------------------------------*/
-
-void SCH_Init_T1(void)
-{
  178:	cf 93       	push	r28
-   unsigned char i;
-
-   for(i = 0; i < SCH_MAX_TASKS; i++)
  17a:	c0 e0       	ldi	r28, 0x00	; 0
-   {
-      SCH_Delete_Task(i);
  17c:	8c 2f       	mov	r24, r28
  17e:	0e 94 88 00 	call	0x110	; 0x110 <SCH_Delete_Task>
-
-void SCH_Init_T1(void)
-{
-   unsigned char i;
-
-   for(i = 0; i < SCH_MAX_TASKS; i++)
  182:	cf 5f       	subi	r28, 0xFF	; 255
  184:	c5 30       	cpi	r28, 0x05	; 5
  186:	d1 f7       	brne	.-12     	; 0x17c <SCH_Init_T1+0x4>
-
-   // Set up Timer 1
-   // Values for 1ms and 10ms ticks are provided for various crystals
-
-   // Hier moet de timer periode worden aangepast ....!
-   OCR1A = (uint16_t)625;   		     // 10ms = (256/16.000.000) * 625
  188:	81 e7       	ldi	r24, 0x71	; 113
  18a:	92 e0       	ldi	r25, 0x02	; 2
  18c:	90 93 89 00 	sts	0x0089, r25	; 0x800089 <__TEXT_REGION_LENGTH__+0x7e0089>
  190:	80 93 88 00 	sts	0x0088, r24	; 0x800088 <__TEXT_REGION_LENGTH__+0x7e0088>
-   TCCR1B = (1 << CS12) | (1 << WGM12);  // prescale op 64, top counter = value OCR1A (CTC mode)
  194:	8c e0       	ldi	r24, 0x0C	; 12
  196:	80 93 81 00 	sts	0x0081, r24	; 0x800081 <__TEXT_REGION_LENGTH__+0x7e0081>
-   TIMSK1 = 1 << OCIE1A;   		     // Timer 1 Output Compare A Match Interrupt Enable
  19a:	82 e0       	ldi	r24, 0x02	; 2
  19c:	80 93 6f 00 	sts	0x006F, r24	; 0x80006f <__TEXT_REGION_LENGTH__+0x7e006f>
-}
  1a0:	cf 91       	pop	r28
  1a2:	08 95       	ret
 
 000001a4 <SCH_Start>:
- 
--*------------------------------------------------------------------*/
-
-void SCH_Start(void)
-{
-      sei();
  1a4:	78 94       	sei
  1a6:	08 95       	ret
 
 000001a8 <__vector_11>:
-  determined by the timer settings in SCH_Init_T1().
-
--*------------------------------------------------------------------*/
-
-ISR(TIMER1_COMPA_vect)
-{
  1a8:	1f 92       	push	r1
  1aa:	0f 92       	push	r0
  1ac:	0f b6       	in	r0, 0x3f	; 63
@@ -377,70 +245,36 @@ ISR(TIMER1_COMPA_vect)
  1bc:	bf 93       	push	r27
  1be:	ef 93       	push	r30
  1c0:	ff 93       	push	r31
- 1c2:	ee e1       	ldi	r30, 0x1E	; 30
+ 1c2:	ee e3       	ldi	r30, 0x3E	; 62
  1c4:	f1 e0       	ldi	r31, 0x01	; 1
- 1c6:	21 e4       	ldi	r18, 0x41	; 65
+ 1c6:	21 e6       	ldi	r18, 0x61	; 97
  1c8:	31 e0       	ldi	r19, 0x01	; 1
-   unsigned char Index;
-   for(Index = 0; Index < SCH_MAX_TASKS; Index++)
-   {
-      // Check if there is a task at this location
-      if(SCH_tasks_G[Index].pTask)
  1ca:	80 81       	ld	r24, Z
  1cc:	91 81       	ldd	r25, Z+1	; 0x01
  1ce:	89 2b       	or	r24, r25
  1d0:	91 f0       	breq	.+36     	; 0x1f6 <__vector_11+0x4e>
-      {
-         if(SCH_tasks_G[Index].Delay == 0)
  1d2:	82 81       	ldd	r24, Z+2	; 0x02
  1d4:	93 81       	ldd	r25, Z+3	; 0x03
  1d6:	00 97       	sbiw	r24, 0x00	; 0
  1d8:	59 f4       	brne	.+22     	; 0x1f0 <__vector_11+0x48>
-         {
-            // The task is due to run, Inc. the 'RunMe' flag
-            SCH_tasks_G[Index].RunMe += 1;
  1da:	86 81       	ldd	r24, Z+6	; 0x06
  1dc:	8f 5f       	subi	r24, 0xFF	; 255
  1de:	86 83       	std	Z+6, r24	; 0x06
-
-            if(SCH_tasks_G[Index].Period)
  1e0:	84 81       	ldd	r24, Z+4	; 0x04
  1e2:	95 81       	ldd	r25, Z+5	; 0x05
  1e4:	00 97       	sbiw	r24, 0x00	; 0
  1e6:	39 f0       	breq	.+14     	; 0x1f6 <__vector_11+0x4e>
-            {
-               // Schedule periodic tasks to run again
-               SCH_tasks_G[Index].Delay = SCH_tasks_G[Index].Period;
-               SCH_tasks_G[Index].Delay -= 1;
  1e8:	01 97       	sbiw	r24, 0x01	; 1
  1ea:	93 83       	std	Z+3, r25	; 0x03
  1ec:	82 83       	std	Z+2, r24	; 0x02
  1ee:	03 c0       	rjmp	.+6      	; 0x1f6 <__vector_11+0x4e>
-            }
-         }
-         else
-         {
-            // Not yet ready to run: just decrement the delay
-            SCH_tasks_G[Index].Delay -= 1;
  1f0:	01 97       	sbiw	r24, 0x01	; 1
  1f2:	93 83       	std	Z+3, r25	; 0x03
  1f4:	82 83       	std	Z+2, r24	; 0x02
  1f6:	37 96       	adiw	r30, 0x07	; 7
--*------------------------------------------------------------------*/
-
-ISR(TIMER1_COMPA_vect)
-{
-   unsigned char Index;
-   for(Index = 0; Index < SCH_MAX_TASKS; Index++)
  1f8:	e2 17       	cp	r30, r18
  1fa:	f3 07       	cpc	r31, r19
  1fc:	31 f7       	brne	.-52     	; 0x1ca <__vector_11+0x22>
-            // Not yet ready to run: just decrement the delay
-            SCH_tasks_G[Index].Delay -= 1;
-         }
-      }
-   }
-}
  1fe:	ff 91       	pop	r31
  200:	ef 91       	pop	r30
  202:	bf 91       	pop	r27
@@ -456,91 +290,63 @@ ISR(TIMER1_COMPA_vect)
  216:	18 95       	reti
 
 00000218 <USART_send>:
-void newRegel();
-uint16_t read_adc(uint8_t channel);    //Function to read an arbitrary analogic channel/pin
-
-
-void USART_send(unsigned char data){
-	while(!(UCSR0A & (1<<UDRE0)));
+	USART_putstring("status: ");
+	if(data == sluiten){USART_putstring("sluiten");}
+	if(data == openen){USART_putstring("openen");}
+	if(data == running){USART_putstring("running");}
+	USART_putstring(" ");
+}
  218:	e0 ec       	ldi	r30, 0xC0	; 192
  21a:	f0 e0       	ldi	r31, 0x00	; 0
  21c:	90 81       	ld	r25, Z
  21e:	95 ff       	sbrs	r25, 5
  220:	fd cf       	rjmp	.-6      	; 0x21c <USART_send+0x4>
-	UDR0 = data;
  222:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
  226:	08 95       	ret
 
 00000228 <USART_putstring>:
-}
-
-void USART_putstring(char* StringPtr){
  228:	cf 93       	push	r28
  22a:	df 93       	push	r29
  22c:	ec 01       	movw	r28, r24
-	while(*StringPtr != 0x00){
  22e:	88 81       	ld	r24, Y
  230:	88 23       	and	r24, r24
  232:	31 f0       	breq	.+12     	; 0x240 <USART_putstring+0x18>
  234:	21 96       	adiw	r28, 0x01	; 1
-		USART_send(*StringPtr);
  236:	0e 94 0c 01 	call	0x218	; 0x218 <USART_send>
-	while(!(UCSR0A & (1<<UDRE0)));
-	UDR0 = data;
-}
-
-void USART_putstring(char* StringPtr){
-	while(*StringPtr != 0x00){
  23a:	89 91       	ld	r24, Y+
  23c:	81 11       	cpse	r24, r1
  23e:	fb cf       	rjmp	.-10     	; 0x236 <USART_putstring+0xe>
-		USART_send(*StringPtr);
-	StringPtr++;}
-}
  240:	df 91       	pop	r29
  242:	cf 91       	pop	r28
  244:	08 95       	ret
 
 00000246 <read_adc>:
-
-uint16_t read_adc(uint8_t channel){
-	ADMUX &= 0xF0;                    //Clear the older channel that was read
  246:	ec e7       	ldi	r30, 0x7C	; 124
  248:	f0 e0       	ldi	r31, 0x00	; 0
  24a:	90 81       	ld	r25, Z
  24c:	90 7f       	andi	r25, 0xF0	; 240
  24e:	90 83       	st	Z, r25
-	ADMUX |= channel;                //Defines the new ADC channel to be read
  250:	90 81       	ld	r25, Z
  252:	89 2b       	or	r24, r25
  254:	80 83       	st	Z, r24
-	ADCSRA |= (1<<ADSC);                //Starts a new conversion
  256:	ea e7       	ldi	r30, 0x7A	; 122
  258:	f0 e0       	ldi	r31, 0x00	; 0
  25a:	80 81       	ld	r24, Z
  25c:	80 64       	ori	r24, 0x40	; 64
  25e:	80 83       	st	Z, r24
-	while(ADCSRA & (1<<ADSC));            //Wait until the conversion is done
  260:	80 81       	ld	r24, Z
  262:	86 fd       	sbrc	r24, 6
  264:	fd cf       	rjmp	.-6      	; 0x260 <read_adc+0x1a>
-	return ADCW;                    //Returns the ADC value of the chosen channel
  266:	80 91 78 00 	lds	r24, 0x0078	; 0x800078 <__TEXT_REGION_LENGTH__+0x7e0078>
  26a:	90 91 79 00 	lds	r25, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7e0079>
-}
  26e:	08 95       	ret
 
 00000270 <temperatuur>:
-
-void temperatuur(){
-	USART_putstring("Temp : ");
  270:	80 e0       	ldi	r24, 0x00	; 0
  272:	91 e0       	ldi	r25, 0x01	; 1
  274:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
-	adc_value = read_adc(0);
  278:	80 e0       	ldi	r24, 0x00	; 0
  27a:	0e 94 23 01 	call	0x246	; 0x246 <read_adc>
-	adc_value = (((((double)adc_value / 1024) * 5) - 0.5) * 100); // graden celsius
  27e:	bc 01       	movw	r22, r24
  280:	80 e0       	ldi	r24, 0x00	; 0
  282:	90 e0       	ldi	r25, 0x00	; 0
@@ -568,43 +374,26 @@ void temperatuur(){
  2b8:	0e 94 ab 02 	call	0x556	; 0x556 <__fixunssfsi>
  2bc:	dc 01       	movw	r26, r24
  2be:	cb 01       	movw	r24, r22
- 2c0:	90 93 42 01 	sts	0x0142, r25	; 0x800142 <adc_value+0x1>
- 2c4:	80 93 41 01 	sts	0x0141, r24	; 0x800141 <adc_value>
-    } else if (__radix < 2 || __radix > 36) {
-	*__s = 0;
-	return __s;
-    } else {
-	extern char *__itoa_ncheck (int, char *, unsigned char);
-	return __itoa_ncheck (__val, __s, __radix);
+ 2c0:	90 93 62 01 	sts	0x0162, r25	; 0x800162 <adc_value+0x1>
+ 2c4:	80 93 61 01 	sts	0x0161, r24	; 0x800161 <adc_value>
  2c8:	4a e0       	ldi	r20, 0x0A	; 10
- 2ca:	63 e4       	ldi	r22, 0x43	; 67
+ 2ca:	63 e6       	ldi	r22, 0x63	; 99
  2cc:	71 e0       	ldi	r23, 0x01	; 1
  2ce:	0e 94 d5 03 	call	0x7aa	; 0x7aa <__itoa_ncheck>
-	itoa(adc_value, buffer, 10);        //Convert the read value to an ascii string
-	USART_putstring(buffer);        //Send the converted value to the terminal
- 2d2:	83 e4       	ldi	r24, 0x43	; 67
+ 2d2:	83 e6       	ldi	r24, 0x63	; 99
  2d4:	91 e0       	ldi	r25, 0x01	; 1
  2d6:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
-	
-	//Some more formatting
-	USART_putstring("  "); 
  2da:	88 e0       	ldi	r24, 0x08	; 8
  2dc:	91 e0       	ldi	r25, 0x01	; 1
  2de:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
  2e2:	08 95       	ret
 
 000002e4 <ldr>:
-}
-
-void ldr(){ // licht sensor
-	USART_putstring("LDR : ");
  2e4:	8b e0       	ldi	r24, 0x0B	; 11
  2e6:	91 e0       	ldi	r25, 0x01	; 1
  2e8:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
-	adc_value = read_adc(1);
  2ec:	81 e0       	ldi	r24, 0x01	; 1
  2ee:	0e 94 23 01 	call	0x246	; 0x246 <read_adc>
-	adc_value = ((((double)adc_value)/1024)*100);
  2f2:	bc 01       	movw	r22, r24
  2f4:	80 e0       	ldi	r24, 0x00	; 0
  2f6:	90 e0       	ldi	r25, 0x00	; 0
@@ -622,61 +411,36 @@ void ldr(){ // licht sensor
  314:	0e 94 ab 02 	call	0x556	; 0x556 <__fixunssfsi>
  318:	dc 01       	movw	r26, r24
  31a:	cb 01       	movw	r24, r22
- 31c:	90 93 42 01 	sts	0x0142, r25	; 0x800142 <adc_value+0x1>
- 320:	80 93 41 01 	sts	0x0141, r24	; 0x800141 <adc_value>
+ 31c:	90 93 62 01 	sts	0x0162, r25	; 0x800162 <adc_value+0x1>
+ 320:	80 93 61 01 	sts	0x0161, r24	; 0x800161 <adc_value>
  324:	4a e0       	ldi	r20, 0x0A	; 10
- 326:	63 e4       	ldi	r22, 0x43	; 67
+ 326:	63 e6       	ldi	r22, 0x63	; 99
  328:	71 e0       	ldi	r23, 0x01	; 1
  32a:	0e 94 d5 03 	call	0x7aa	; 0x7aa <__itoa_ncheck>
-	itoa(adc_value, buffer, 10);        //Convert the read value to an ascii string
-	USART_putstring(buffer);        //Send the converted value to the terminal
- 32e:	83 e4       	ldi	r24, 0x43	; 67
+ 32e:	83 e6       	ldi	r24, 0x63	; 99
  330:	91 e0       	ldi	r25, 0x01	; 1
  332:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
-	
-	//Some more formatting
-	USART_putstring("  ");  
  336:	88 e0       	ldi	r24, 0x08	; 8
  338:	91 e0       	ldi	r25, 0x01	; 1
  33a:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
  33e:	08 95       	ret
 
 00000340 <afstand>:
-}
-
-void afstand(){ // hc-sr04
-	USART_putstring("Afstand : ");
  340:	82 e1       	ldi	r24, 0x12	; 18
  342:	91 e0       	ldi	r25, 0x01	; 1
  344:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
-	PORTD |= _BV(PD3);
  348:	5b 9a       	sbi	0x0b, 3	; 11
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
  34a:	85 e3       	ldi	r24, 0x35	; 53
  34c:	8a 95       	dec	r24
  34e:	f1 f7       	brne	.-4      	; 0x34c <afstand+0xc>
  350:	00 00       	nop
-	_delay_us(10);
-	PORTD &= ~_BV(PD3);
  352:	5b 98       	cbi	0x0b, 3	; 11
-
-	loop_until_bit_is_set(PIND, PD2);
  354:	4a 9b       	sbis	0x09, 2	; 9
  356:	fe cf       	rjmp	.-4      	; 0x354 <afstand+0x14>
-	TCNT1 = 0;
  358:	10 92 85 00 	sts	0x0085, r1	; 0x800085 <__TEXT_REGION_LENGTH__+0x7e0085>
  35c:	10 92 84 00 	sts	0x0084, r1	; 0x800084 <__TEXT_REGION_LENGTH__+0x7e0084>
-	//PORTB |= _BV(PB3);
-	loop_until_bit_is_clear(PIND, PD2);
  360:	4a 99       	sbic	0x09, 2	; 9
  362:	fe cf       	rjmp	.-4      	; 0x360 <afstand+0x20>
-	//PORTB &= ~_BV(PB3);
-	uint16_t count = TCNT1;
  364:	60 91 84 00 	lds	r22, 0x0084	; 0x800084 <__TEXT_REGION_LENGTH__+0x7e0084>
  368:	70 91 85 00 	lds	r23, 0x0085	; 0x800085 <__TEXT_REGION_LENGTH__+0x7e0085>
  36c:	80 e0       	ldi	r24, 0x00	; 0
@@ -691,27 +455,18 @@ void afstand(){ // hc-sr04
  384:	dc 01       	movw	r26, r24
  386:	cb 01       	movw	r24, r22
  388:	4a e0       	ldi	r20, 0x0A	; 10
- 38a:	63 e4       	ldi	r22, 0x43	; 67
+ 38a:	63 e6       	ldi	r22, 0x63	; 99
  38c:	71 e0       	ldi	r23, 0x01	; 1
  38e:	0e 94 d5 03 	call	0x7aa	; 0x7aa <__itoa_ncheck>
-	//transmit(count);
-	float distance = ((float)count / 4);
-	
-	itoa(distance, buffer, 10);        //Convert the read value to an ascii string
-	USART_putstring(buffer);        //Send the converted value to the terminal
- 392:	83 e4       	ldi	r24, 0x43	; 67
+ 392:	83 e6       	ldi	r24, 0x63	; 99
  394:	91 e0       	ldi	r25, 0x01	; 1
  396:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
-	
-	//Some more formatting
-	USART_putstring("  "); 
  39a:	88 e0       	ldi	r24, 0x08	; 8
  39c:	91 e0       	ldi	r25, 0x01	; 1
  39e:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
  3a2:	08 95       	ret
 
 000003a4 <newRegel>:
-}
 
 void newRegel(){
 	USART_send('\r');
@@ -797,6 +552,7 @@ void init_scheduler()
  418:	82 ed       	ldi	r24, 0xD2	; 210
  41a:	91 e0       	ldi	r25, 0x01	; 1
  41c:	0e 94 53 00 	call	0xa6	; 0xa6 <SCH_Add_Task>
+//	SCH_Add_Task(check_input,0,1);
 	SCH_Start();
  420:	0e 94 d2 00 	call	0x1a4	; 0x1a4 <SCH_Start>
  424:	08 95       	ret
