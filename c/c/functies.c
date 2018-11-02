@@ -15,7 +15,7 @@ char temp_sensor[5];                //Output of the itoa function
 char licht_sensor[5];
 char afstand_sensor[5];
 int temp_up = 22;
-int temp_down = 20;
+int temp_down = 18;
 int licht_up = 60;
 int licht_down = 55;
 int afstand_up = 10;
@@ -125,17 +125,20 @@ void afstandStil(){ // hc-sr04
 // geel = pb1 : proces naar beneden gaan knipperend lampje
 // groe = pb2 : hij is omhoog
 void upDown(){
-	int ls = atoi(licht_sensor);	// licht sensor wordt int
-	int ts = atoi(temp_sensor);		// temp sensor wordt int
-	
+	int ls = 0;	// licht sensor
+	int ts = 0;	// temperatuur sensor
+	for (int i = 0; i < 10; i++){
+		ls = ls + atoi(licht_sensor); // maakt er int van en stopt het bij ls
+		ts = ts + atoi(temp_sensor);
+	}
+	ls = ls / 10;
+	ts = ts / 10;
 	if((ls >= licht_up || ts >= temp_up) && !manual){
 		goDown();				// warm/licht ga omlaag
 	}
 	else if((ls <= licht_down || ts <= temp_down) && !manual){
 		goUp();					// koud/donker ga omhoog
 	}
-	USART_putstring(" : ");
-	USART_putstring(licht_sensor);
 }
 
 void goDown(){
@@ -151,6 +154,7 @@ void goDown(){
 		afstandStil();
 		as = atoi(afstand_sensor);
 	}
+	PORTB |= (1 << PB0); // rood lampje aan
 }
 
 void goUp(){
@@ -166,6 +170,7 @@ void goUp(){
 		afstandStil();
 		as = atoi(afstand_sensor);
 	}
+	PORTB |= (1 << PB2); // groen lampje aan
 }
 void check_input(){
 	char data= USART_receive();
