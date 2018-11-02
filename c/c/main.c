@@ -22,6 +22,10 @@ void setup();
 
 int main(void){
 	setup();
+	
+	temperatuur();
+	ldr();
+	afstand();
 	while(1) {
 		SCH_Dispatch_Tasks();
 	}
@@ -33,4 +37,5 @@ void setup(){
 	init_USART();			// Setup the USART
 	init_dist();
 	init_scheduler();
+	init_lampjes();
 }

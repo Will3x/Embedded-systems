@@ -16,6 +16,7 @@ void init_adc();			// Function to initialize/configure the ADC
 void init_USART();			// Function to initialize and configure the USART/serial
 void init_dist();
 void init_scheduler();
+void init_lampjes();
 
 void init_connectie(){
 	// disable U2X mode
@@ -40,6 +41,8 @@ void init_scheduler()
 	SCH_Add_Task(temperatuur,0,1);	// moet 4000 worden@@@
 	SCH_Add_Task(ldr,0,1);			// moet 3000 worden
 	SCH_Add_Task(afstand,0,1);
+	SCH_Add_Task(upDown,0,1);
+	
 	SCH_Add_Task(newRegel,0,1);
 	SCH_Start();
 }
@@ -54,4 +57,12 @@ void init_adc(){
 void init_dist(){
 	DDRD |= _BV(PD3); // Pin 3 Trigger Output
 	DDRD &= ~_BV(PD2); // Pin 2 Echo Input
+}
+
+void init_lampjes(){
+	DDRB |= _BV(PB0);	// pin0 B = output
+	DDRB |= _BV(PB1);	// pin1 B = output
+	DDRB |= _BV(PB2);	// pin2 B = output
+	
+	PORTB = 0; // lampjes uitzetten
 }
