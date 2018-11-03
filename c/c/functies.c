@@ -24,6 +24,7 @@ int manual = 0;		// 1 is manual aan
 
 void USART_send(unsigned char data);    //Function that sends a char over the serial port
 void USART_putstring(char* StringPtr);    //Function that sends a string over the serial port
+unsigned char USART_receive(void);
 void temperatuur();
 void ldr();
 void afstand();
@@ -32,11 +33,17 @@ void upDown();
 void goDown();
 void goUp();
 void afstandStil();
+void test();
 uint16_t read_adc(uint8_t channel);    //Function to read an arbitrary analogic channel/pin
 
+void test(){
+	char echodit[5];
+	int a = USART_receive();
+	itoa(a, echodit, 10);
+	USART_putstring(echodit);
+}
 
 unsigned char USART_receive(void){
-	
 	while(!(UCSR0A & (1<<RXC0)));
 	return UDR0;
 }
@@ -134,10 +141,10 @@ void upDown(){
 	ls = ls / 10;
 	ts = ts / 10;
 	if((ls >= licht_up || ts >= temp_up) && !manual){
-		goDown();				// warm/licht ga omlaag ROOD
+		SCH_Add_Task(goDown,0,1);	// warm/licht ga omlaag ROOD
 	}
 	else if((ls <= licht_down || ts <= temp_down) && !manual){
-		goUp();					// koud/donker ga omhoog GROEN
+		SCH_Add_Task(goUp,0,1);				// koud/donker ga omhoog GROEN
 	}
 }
 
@@ -173,6 +180,47 @@ void goUp(){
 	PORTB |= (1 << PB2); // groen lampje aan
 }
 void check_input(){
+	if(recieve() == 0xff){
+		int i = 0;
+		while((i = recieve()) != 0) // wacht tot er nieuwe recieve gevonden is
+		switch(i){
+			case 0x01:
+				USART_putstring(":1:");
+				return;
+			
+			case 0x02:
+				USART_putstring(":2:");
+				return;
+			
+			case 0x03:
+				USART_putstring(":3:");
+				return;
+			
+			case 0x04:
+				USART_putstring(":4:");
+				return;
+			
+			case 0x05:
+				USART_putstring(":5:");
+				return;
+			
+			case 0x06:
+				USART_putstring(":6:");
+				return;
+			
+			case 0x07:
+				USART_putstring(":7:");
+				return;
+			
+			default:
+				return;
+				
+			
+		}
+	}
+	return;
+	
+	
 	char data= USART_receive();
 	char running = '0';
 	char sluiten = '1';
