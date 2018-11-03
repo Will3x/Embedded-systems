@@ -74,7 +74,7 @@ void temperatuur(){
 void ldr(){ // licht sensor
 	USART_putstring("LDR : ");
 	adc_value = read_adc(1);
-	adc_value = ((((double)adc_value)/1024)*100);
+	adc_value = ((((double)adc_value)/1024)*100 *1.5);
 	itoa(adc_value, licht_sensor, 10);        //Convert the read value to an ascii string
 	USART_putstring(licht_sensor);        //Send the converted value to the terminal
 	
@@ -95,7 +95,7 @@ void afstand(){ // hc-sr04
 	//PORTB &= ~_BV(PB3);
 	uint16_t count = TCNT1;
 	//transmit(count);
-	float distance = ((float)count / 4 * 1.5);
+	float distance = ((float)count / 4);
 	
 	itoa(distance, afstand_sensor, 10);        //Convert the read value to an ascii string
 	USART_putstring(afstand_sensor);        //Send the converted value to the terminal
@@ -116,7 +116,7 @@ void afstandStil(){ // hc-sr04
 	//PORTB &= ~_BV(PB3);
 	uint16_t count = TCNT1;
 	//transmit(count);
-	float distance = ((float)count / 4 * 1.5);
+	float distance = ((float)count / 4);
 	
 	itoa(distance, afstand_sensor, 10);        //Convert the read value to an ascii string
 }
