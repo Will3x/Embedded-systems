@@ -25,9 +25,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  10 .debug_str    0000067a  00000000  00000000  00003758  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000745  00000000  00000000  00003dd2  2**0
+ 11 .debug_loc    00000725  00000000  00000000  00003d99  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000f8  00000000  00000000  00004517  2**0
+ 12 .debug_ranges 000000f8  00000000  00000000  000044be  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -408,53 +408,53 @@ Disassembly of section .text:
  30c:	48 ec       	ldi	r20, 0xC8	; 200
  30e:	52 e4       	ldi	r21, 0x42	; 66
  310:	0e 94 75 03 	call	0x6ea	; 0x6ea <__mulsf3>
- 314:	0e 94 b8 02 	call	0x570	; 0x570 <__fixunssfsi>
- 318:	dc 01       	movw	r26, r24
- 31a:	cb 01       	movw	r24, r22
- 31c:	90 93 62 01 	sts	0x0162, r25	; 0x800162 <adc_value+0x1>
- 320:	80 93 61 01 	sts	0x0161, r24	; 0x800161 <adc_value>
- 324:	4a e0       	ldi	r20, 0x0A	; 10
- 326:	6a e6       	ldi	r22, 0x6A	; 106
- 328:	71 e0       	ldi	r23, 0x01	; 1
- 32a:	0e 94 e2 03 	call	0x7c4	; 0x7c4 <__itoa_ncheck>
- 32e:	8a e6       	ldi	r24, 0x6A	; 106
- 330:	91 e0       	ldi	r25, 0x01	; 1
- 332:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
- 336:	88 e0       	ldi	r24, 0x08	; 8
- 338:	91 e0       	ldi	r25, 0x01	; 1
- 33a:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
- 33e:	08 95       	ret
+ 314:	20 e0       	ldi	r18, 0x00	; 0
+ 316:	30 e0       	ldi	r19, 0x00	; 0
+ 318:	40 ec       	ldi	r20, 0xC0	; 192
+ 31a:	5f e3       	ldi	r21, 0x3F	; 63
+ 31c:	0e 94 75 03 	call	0x6ea	; 0x6ea <__mulsf3>
+ 320:	0e 94 b8 02 	call	0x570	; 0x570 <__fixunssfsi>
+ 324:	dc 01       	movw	r26, r24
+ 326:	cb 01       	movw	r24, r22
+ 328:	90 93 62 01 	sts	0x0162, r25	; 0x800162 <adc_value+0x1>
+ 32c:	80 93 61 01 	sts	0x0161, r24	; 0x800161 <adc_value>
+ 330:	4a e0       	ldi	r20, 0x0A	; 10
+ 332:	6a e6       	ldi	r22, 0x6A	; 106
+ 334:	71 e0       	ldi	r23, 0x01	; 1
+ 336:	0e 94 e2 03 	call	0x7c4	; 0x7c4 <__itoa_ncheck>
+ 33a:	8a e6       	ldi	r24, 0x6A	; 106
+ 33c:	91 e0       	ldi	r25, 0x01	; 1
+ 33e:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
+ 342:	88 e0       	ldi	r24, 0x08	; 8
+ 344:	91 e0       	ldi	r25, 0x01	; 1
+ 346:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
+ 34a:	08 95       	ret
 
-00000340 <afstand>:
- 340:	82 e1       	ldi	r24, 0x12	; 18
- 342:	91 e0       	ldi	r25, 0x01	; 1
- 344:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
- 348:	5b 9a       	sbi	0x0b, 3	; 11
- 34a:	85 e3       	ldi	r24, 0x35	; 53
- 34c:	8a 95       	dec	r24
- 34e:	f1 f7       	brne	.-4      	; 0x34c <afstand+0xc>
- 350:	00 00       	nop
- 352:	5b 98       	cbi	0x0b, 3	; 11
- 354:	4a 9b       	sbis	0x09, 2	; 9
- 356:	fe cf       	rjmp	.-4      	; 0x354 <afstand+0x14>
- 358:	10 92 85 00 	sts	0x0085, r1	; 0x800085 <__TEXT_REGION_LENGTH__+0x7e0085>
- 35c:	10 92 84 00 	sts	0x0084, r1	; 0x800084 <__TEXT_REGION_LENGTH__+0x7e0084>
- 360:	4a 99       	sbic	0x09, 2	; 9
- 362:	fe cf       	rjmp	.-4      	; 0x360 <afstand+0x20>
- 364:	60 91 84 00 	lds	r22, 0x0084	; 0x800084 <__TEXT_REGION_LENGTH__+0x7e0084>
- 368:	70 91 85 00 	lds	r23, 0x0085	; 0x800085 <__TEXT_REGION_LENGTH__+0x7e0085>
- 36c:	80 e0       	ldi	r24, 0x00	; 0
- 36e:	90 e0       	ldi	r25, 0x00	; 0
- 370:	0e 94 e7 02 	call	0x5ce	; 0x5ce <__floatunsisf>
- 374:	20 e0       	ldi	r18, 0x00	; 0
- 376:	30 e0       	ldi	r19, 0x00	; 0
- 378:	40 e8       	ldi	r20, 0x80	; 128
- 37a:	5e e3       	ldi	r21, 0x3E	; 62
- 37c:	0e 94 75 03 	call	0x6ea	; 0x6ea <__mulsf3>
+0000034c <afstand>:
+ 34c:	82 e1       	ldi	r24, 0x12	; 18
+ 34e:	91 e0       	ldi	r25, 0x01	; 1
+ 350:	0e 94 14 01 	call	0x228	; 0x228 <USART_putstring>
+ 354:	5b 9a       	sbi	0x0b, 3	; 11
+ 356:	85 e3       	ldi	r24, 0x35	; 53
+ 358:	8a 95       	dec	r24
+ 35a:	f1 f7       	brne	.-4      	; 0x358 <afstand+0xc>
+ 35c:	00 00       	nop
+ 35e:	5b 98       	cbi	0x0b, 3	; 11
+ 360:	4a 9b       	sbis	0x09, 2	; 9
+ 362:	fe cf       	rjmp	.-4      	; 0x360 <afstand+0x14>
+ 364:	10 92 85 00 	sts	0x0085, r1	; 0x800085 <__TEXT_REGION_LENGTH__+0x7e0085>
+ 368:	10 92 84 00 	sts	0x0084, r1	; 0x800084 <__TEXT_REGION_LENGTH__+0x7e0084>
+ 36c:	4a 99       	sbic	0x09, 2	; 9
+ 36e:	fe cf       	rjmp	.-4      	; 0x36c <afstand+0x20>
+ 370:	60 91 84 00 	lds	r22, 0x0084	; 0x800084 <__TEXT_REGION_LENGTH__+0x7e0084>
+ 374:	70 91 85 00 	lds	r23, 0x0085	; 0x800085 <__TEXT_REGION_LENGTH__+0x7e0085>
+ 378:	80 e0       	ldi	r24, 0x00	; 0
+ 37a:	90 e0       	ldi	r25, 0x00	; 0
+ 37c:	0e 94 e7 02 	call	0x5ce	; 0x5ce <__floatunsisf>
  380:	20 e0       	ldi	r18, 0x00	; 0
  382:	30 e0       	ldi	r19, 0x00	; 0
- 384:	40 ec       	ldi	r20, 0xC0	; 192
- 386:	5f e3       	ldi	r21, 0x3F	; 63
+ 384:	40 e8       	ldi	r20, 0x80	; 128
+ 386:	5e e3       	ldi	r21, 0x3E	; 62
  388:	0e 94 75 03 	call	0x6ea	; 0x6ea <__mulsf3>
  38c:	0e 94 b1 02 	call	0x562	; 0x562 <__fixsfsi>
  390:	dc 01       	movw	r26, r24
@@ -546,7 +546,7 @@ void init_scheduler()
  40e:	50 e0       	ldi	r21, 0x00	; 0
  410:	62 e0       	ldi	r22, 0x02	; 2
  412:	70 e0       	ldi	r23, 0x00	; 0
- 414:	80 ea       	ldi	r24, 0xA0	; 160
+ 414:	86 ea       	ldi	r24, 0xA6	; 166
  416:	91 e0       	ldi	r25, 0x01	; 1
  418:	0e 94 53 00 	call	0xa6	; 0xa6 <SCH_Add_Task>
 	// SCH_Add_Task(upDown,3,100);		
