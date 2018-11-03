@@ -173,3 +173,4 @@ class MainView(Toplevel):
         x = screen_width / 2 - window_width / 2
         y = (screen_height / 2 - window_height / 2) - 40
         self.geometry("%dx%d+%d+%d" % (window_width, window_height, x, y))
+        #test
