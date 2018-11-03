@@ -17,10 +17,6 @@ class DashboardController:
         connections = ser.SerialController.check_connection()
         return connections
 
-    def btn_event(self, value):
-        """ Idk what to do here yet """
-        pass
-
     def get_values(self):
         values = ser.SerialController.read()
         self.view.change_label(values)

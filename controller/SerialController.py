@@ -25,10 +25,12 @@ class SerialController:
         print('Attempting to connect...')
         try:
             com = cls.find_ports()[0][0]
-            cls.ser = Serial(com, 9600, timeout=5)
+            cls.ser = Serial(com, 9600, timeout=2)
+            cls.ser.flushInput()
         except (SerialException, KeyError, IndexError):
             return
         print('Connected to {}!'.format(com))
+
 
     @classmethod
     def read(cls):
@@ -46,10 +48,11 @@ class SerialController:
             if port != '':
                 try:
                     line = cls.ser.readline().decode('ascii')
+                    cls.ser.flushInput()
+                    print('reading... {}'.format(line))
 
                     match = re.findall('(\d+)', line)
                     cls.dict_values[count] = {'t': match[0], 'l': match[1], 'a': match[2]} if len(match) == 3 else None
-                    cls.ser.flushInput()
                 except SerialException as e:
                     print('SerialController.read(): {}'.format(e))
 
