@@ -38,12 +38,12 @@ void init_USART(){
 void init_scheduler()
 {
 	SCH_Init_T1();
-	SCH_Add_Task(temperatuur,0,1);	// moet 4000 worden@@@
-	SCH_Add_Task(ldr,0,1);			// moet 3000 worden
-	SCH_Add_Task(afstand,0,1);
-	SCH_Add_Task(upDown,0,1);		
-	//	SCH_Add_Task(check_input,0,1);
-	SCH_Add_Task(newRegel,0,1);
+	SCH_Add_Task(temperatuur,0,100);	// moet 4000 worden@@@
+	SCH_Add_Task(ldr,1,100);			// moet 3000 worden
+	SCH_Add_Task(afstand,2,100);
+	// SCH_Add_Task(upDown,3,100);		
+	// SCH_Add_Task(check_input,4,1);
+	SCH_Add_Task(newRegel,5,100);
 	SCH_Start();
 }
 
