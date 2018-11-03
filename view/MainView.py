@@ -74,16 +74,16 @@ class MainView(Toplevel):
 
         button_width = 15
 
-        Button(self, width=75, disabledforeground='white', bg='#242B37', fg=self.fg_color, state=DISABLED, borderwidth=0, height=2).place(relx=0.11, rely=0.7, anchor=W)
-        Button(self, text="Status", width=button_width, disabledforeground='white', bg='#1B1F28', fg=self.fg_color, state=DISABLED, borderwidth=0, height=2).place(relx=0.03, rely=0.7, anchor=W)
+        Button(self, width=75, disabledforeground='white', bg='#29303C', fg=self.fg_color, state=DISABLED, borderwidth=0, height=2).place(relx=0.11, rely=0.7, anchor=W)
+        Button(self, text="Status", width=button_width, disabledforeground='white', bg='#242A36', fg=self.fg_color, state=DISABLED, borderwidth=0, height=2).place(relx=0.03, rely=0.7, anchor=W)
 
-        Button(self, text="Manual mode", width=button_width, disabledforeground='white', bg='#1B1F28', fg=self.fg_color, state=DISABLED, borderwidth=0, height=2).place(relx=0.801, rely=0.7, anchor=E)
+        Button(self, text="Manual mode", width=button_width, disabledforeground='white', bg='#242A36', fg=self.fg_color, state=DISABLED, borderwidth=0, height=2).place(relx=0.801, rely=0.7, anchor=E)
 
-        Button(self, width=68, disabledforeground='white', bg='#242B37', fg=self.fg_color, state=DISABLED, borderwidth=0, height=12).place(relx=0.11, rely=0.86, anchor=W)
-        Button(self, text="Settings\nauto", width=button_width, disabledforeground='white', bg='#1B1F28', fg=self.fg_color, state=DISABLED, borderwidth=0, height=12).place(relx=0.03, rely=0.86, anchor=W)
+        Button(self, width=63, disabledforeground='white', bg='#29303C', fg=self.fg_color, state=DISABLED, borderwidth=0, height=12).place(relx=0.11, rely=0.86, anchor=W)
+        Button(self, text="Settings\nauto", width=button_width, disabledforeground='white', bg='#242A36', fg=self.fg_color, state=DISABLED, borderwidth=0, height=12).place(relx=0.03, rely=0.86, anchor=W)
 
-        Button(self, width=45, disabledforeground='white', bg='#242B37', fg=self.fg_color, state=DISABLED, borderwidth=0, height=12).place(relx=0.97, rely=0.86, anchor=E)
-        Button(self, text="Settings\nmanual", width=button_width, disabledforeground='white', bg='#1B1F28', fg=self.fg_color, state=DISABLED, borderwidth=0, height=12).place(relx=0.7, rely=0.86, anchor=E)
+        Button(self, width=50, disabledforeground='white', bg='#29303C', fg=self.fg_color, state=DISABLED, borderwidth=0, height=12).place(relx=0.97, rely=0.86, anchor=E)
+        Button(self, text="Settings\nmanual", width=button_width, disabledforeground='white', bg='#242A36', fg=self.fg_color, state=DISABLED, borderwidth=0, height=12).place(relx=0.65, rely=0.86, anchor=E)
 
         radio1 = Radiobutton(self, text="Light sensor", indicatoron=False, variable=var1, borderwidth=0,
                              fg='white',
@@ -117,38 +117,38 @@ class MainView(Toplevel):
 
         # Adding buttons dynamically.
         for x in range(1, 5):
-            entries.insert(0, f'self.entry{x} = Entry(self, width=40)')
+            entries.insert(0, f'self.entry{x} = Entry(self, width=33)')
             entries.insert(1, f'self.entry{x}.place(relx=0.3, rely={y_pos:.4f}, anchor=W)')
-            entries.insert(2, f'self.label{x} = Label(self, text="{labels_text[x-1]}", bg="#242B37", '
+            entries.insert(2, f'self.label{x} = Label(self, text="{labels_text[x-1]}", bg="#29303C", '
                               f'fg=self.fg_color)')
             entries.insert(3, f'self.label{x}.place(relx=0.28, rely={y_pos:.4f}, anchor=E)')
             for i in range(4):
                 exec(entries[i])
             y_pos += .035
 
-        y_pos = .778  # reset start position
+        y_pos = .785  # reset start position
 
-        self.manual1 = Label(self, text='Uitrol afstand', state=DISABLED)
-        self.manual1.place(relx=0.7, rely=y_pos, anchor=E)
+        self.manual1 = Label(self, text='Uitrol afstand', bg='#29303C', fg='white', state=DISABLED)
+        self.manual1.place(relx=0.75, rely=y_pos, anchor=E)
 
-        self.manual2 = Entry(self, width=40, state=DISABLED)
-        self.manual2.place(relx=0.83, rely=y_pos, anchor=CENTER)
+        self.manual2 = Entry(self, width=33, state=DISABLED)
+        self.manual2.place(relx=0.94, rely=y_pos, anchor=E)
 
-        self.manual_btn1 = Button(self, text='Uitrollen', width=button_width, height=2, borderwidth=0, state=DISABLED)
-        self.manual_btn1.place(relx=0.8, rely=y_pos + .12, anchor=E)
+        self.manual_btn1 = Button(self, text='Uitrollen', bg='#444D5F', fg='white', width=button_width, height=2, borderwidth=0, state=DISABLED)
+        self.manual_btn1.place(relx=0.83, rely=y_pos + .14, anchor=E)
 
-        self.manual_btn2 = Button(self, text='Oprollen', width=button_width, height=2, borderwidth=0, state=DISABLED)
-        self.manual_btn2.place(relx=.942, rely=y_pos + .12, anchor=E)
+        self.manual_btn2 = Button(self, text='Oprollen', bg='#444D5F', fg='white', width=button_width, height=2, borderwidth=0, state=DISABLED)
+        self.manual_btn2.place(relx=.94, rely=y_pos + .14, anchor=E)
 
-        self.setbtn2 = Button(self, text='Set', width=button_width, fg='black', bg='gray90', state=DISABLED,
+        self.setbtn2 = Button(self, text='Set', width=button_width, bg='#444D5F', fg='white', state=DISABLED,
                          borderwidth=0)
-        self.setbtn2.place(relx=0.873, rely=y_pos + .04, anchor=CENTER)
+        self.setbtn2.place(relx=0.94, rely=y_pos + .04, anchor=E)
 
-        self.setbtn1 = Button(self, text='Set', width=button_width, bg='dodger blue', fg=self.fg_color, borderwidth=0)
-        self.setbtn1.place(relx=0.524, rely=y_pos + .16, anchor=E)
+        self.setbtn1 = Button(self, text='Set', width=button_width, bg=self.btn_color, fg='white', borderwidth=0)
+        self.setbtn1.place(relx=0.383, rely=y_pos + .15, anchor=W)
 
         status_label = Label(self, text='Working...', fg='#D85700',
-                             bg='#242B37').place(relx=0.4, rely=0.7, anchor=CENTER)
+                             bg='#29303C').place(relx=0.15, rely=0.7, anchor=W)
 
         btn_return = Button(self, text="Go back",
                             width=button_width, command=self.hide_window,
