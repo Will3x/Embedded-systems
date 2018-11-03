@@ -3,9 +3,7 @@ from controller import DashboardController
 from model import SensordataModel
 
 if __name__ == '__main__':
-    dashboardview = DashboardView.DashboardView()
-    dashboardcontroller = DashboardController.DashboardController(dashboardview, SensordataModel.SensordataModel())
+    dashboard_view = DashboardView.DashboardView()
+    dashboard_controller = DashboardController.DashboardController(dashboard_view, SensordataModel.SensordataModel())
 
-    dashboardview.start()
-
-
+    dashboard_view.start()

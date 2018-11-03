@@ -76,6 +76,17 @@ class SerialController:
         return cls.arduino_connections
 
     @classmethod
-    def write(cls, data):
+    def write(cls, instruction, value):
         """ SEND DATA TO SERIAL PORT """
-        cls.ser.write(data)
+        if isinstance(value, tuple) and isinstance(instruction, list):
+            for x in range(len(instruction)):
+                print('writing instruction {} with value {} to serial.'.format(instruction[x], value[x]))
+                cls.ser.write(str(instruction[x]).encode())
+                cls.ser.write(value[x].encode())
+                cls.ser.write(b'/')
+
+        else:
+            print('writing instruction {} with value {} to serial.'.format(instruction, value[0]))
+            cls.ser.write(str(instruction).encode())
+            cls.ser.write(value[0].encode())
+            cls.ser.write(b'/')

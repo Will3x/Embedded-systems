@@ -73,13 +73,13 @@ class MainView(Toplevel):
         Button(self, width=92, disabledforeground=st.fg_white, bg=st.panel_bg, state=DISABLED, borderwidth=0, height=2).place(relx=0.11, rely=0.7, anchor=W)
         Button(self, text="Status", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg, state=DISABLED, borderwidth=0, height=2).place(relx=0.03, rely=0.7, anchor=W)
 
-        Button(self, text="Manual mode", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg, fg=st.fg_white, state=DISABLED, borderwidth=0, height=2).place(relx=0.831, rely=0.7, anchor=E)
+        Button(self, text="Manual mode", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg, state=DISABLED, borderwidth=0, height=2).place(relx=0.831, rely=0.7, anchor=E)
 
         Button(self, width=63, disabledforeground=st.fg_white, bg=st.panel_bg, fg=st.fg_white, state=DISABLED, borderwidth=0, height=12).place(relx=0.11, rely=0.86, anchor=W)
-        Button(self, text="Settings\nauto", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg, fg=st.fg_white, state=DISABLED, borderwidth=0, height=12).place(relx=0.03, rely=0.86, anchor=W)
+        Button(self, text="Settings\nauto", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg, state=DISABLED, borderwidth=0, height=12).place(relx=0.03, rely=0.86, anchor=W)
 
         Button(self, width=50, disabledforeground=st.fg_white, bg=st.panel_bg, fg=st.fg_white, state=DISABLED, borderwidth=0, height=12).place(relx=0.97, rely=0.86, anchor=E)
-        Button(self, text="Settings\nmanual", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg, fg=st.fg_white, state=DISABLED, borderwidth=0, height=12).place(relx=0.65, rely=0.86, anchor=E)
+        Button(self, text="Settings\nmanual", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg, state=DISABLED, borderwidth=0, height=12).place(relx=0.65, rely=0.86, anchor=E)
 
         radio1 = Radiobutton(self, text="Light sensor", indicatoron=False, variable=var1, borderwidth=0,
                              fg=st.fg_white,
@@ -110,25 +110,33 @@ class MainView(Toplevel):
         entries = []
         labels_text = ['Uitrol buitentemperatuur', 'Oprol buitentemperatuur', 'Uitrol lichtintensiteit',
                        'Oprol lichtintensiteit']
+        default_values = [50, 120, 33, 9]
+
 
         # Adding buttons dynamically.
-        for x in range(1, 5):
-            entries.insert(0, f'self.entry{x} = Entry(self, width=33)')
-            entries.insert(1, f'self.entry{x}.place(relx=0.3, rely={y_pos:.4f}, anchor=W)')
-            entries.insert(2, f'self.label{x} = Label(self, text="{labels_text[x-1]}", bg=st.panel_bg, '
-                              f'fg=st.fg_white)')
-            entries.insert(3, f'self.label{x}.place(relx=0.28, rely={y_pos:.4f}, anchor=E)')
-            for i in range(4):
+        for x in range(1, len(labels_text)+1):
+            entries.insert(0, f'self.entry{x} = Entry(self, width=33, borderwidth=0)')
+            entries.insert(1, f'self.entry{x}.insert(0, default_values[{x-1}])')
+            entries.insert(2, f'self.entry{x}.place(relx=0.3, rely={y_pos:.4f}, anchor=W)')
+            entries.insert(3, f'self.entry{x}.config(disabledbackground=st.btn_bg_grey)')
+            entries.insert(4, f'self.label{x} = Label(self, text="{labels_text[x-1]}", bg=st.panel_bg, '
+                              f'fg=st.fg_white, disabledforeground=st.btn_bg_grey)')
+            entries.insert(5, f'self.label{x}.place(relx=0.28, rely={y_pos:.4f}, anchor=E)')
+            for i in range(len(entries)):
                 exec(entries[i])
+
             y_pos += .035
 
         y_pos = .785  # reset start position
 
-        self.manual1 = Label(self, text='Uitrol afstand', bg=st.panel_bg, fg=st.fg_white, state=DISABLED)
+        self.manual1 = Label(self, text='Uitrol afstand', disabledforeground=st.btn_bg_grey, bg=st.panel_bg, fg=st.fg_white, state=DISABLED)
         self.manual1.place(relx=0.75, rely=y_pos, anchor=E)
 
-        self.manual2 = Entry(self, width=33, state=DISABLED)
+        self.manual2 = Entry(self, width=33, borderwidth=0)
+        self.manual2.insert(0, '0')
+        self.manual2.config(disabledbackground=st.btn_bg_grey, state=DISABLED)
         self.manual2.place(relx=0.94, rely=y_pos, anchor=E)
+
 
         self.manual_btn_on = Button(self, text='Uitrollen', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width, height=2, borderwidth=0, state=DISABLED)
         self.manual_btn_on.place(relx=0.83, rely=y_pos + .14, anchor=E)
@@ -136,12 +144,13 @@ class MainView(Toplevel):
         self.manual_btn2 = Button(self, text='Oprollen', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width, height=2, borderwidth=0, state=DISABLED)
         self.manual_btn2.place(relx=.94, rely=y_pos + .14, anchor=E)
 
-        self.setbtn2 = Button(self, text='Set', width=button_width, bg=st.btn_bg_grey, fg=st.fg_white, state=DISABLED,
-                         borderwidth=0)
-        self.setbtn2.place(relx=0.94, rely=y_pos + .04, anchor=E)
-
-        self.setbtn1 = Button(self, text='Set', width=button_width, bg=st.btn_bg_blue, fg=st.fg_white, borderwidth=0)
+        self.setbtn1 = Button(self, text='Set', width=button_width, bg=st.btn_bg_blue, fg=st.fg_white,
+                              borderwidth=0, command=lambda: self.event_controller.write([3, 4, 5, 6], self.entry1.get(), self.entry2.get(), self.entry3.get(), self.entry4.get()))
         self.setbtn1.place(relx=0.383, rely=y_pos + .15, anchor=W)
+
+        self.setbtn2 = Button(self, text='Set', width=button_width, bg=st.btn_bg_grey, fg=st.fg_white, state=DISABLED,
+                         borderwidth=0, command=lambda: self.event_controller.write(7, self.manual2.get()))
+        self.setbtn2.place(relx=0.94, rely=y_pos + .04, anchor=E)
 
         status_label = Label(self, text='Working...', fg=st.orange,
                              bg=st.panel_bg).place(relx=0.15, rely=0.7, anchor=W)

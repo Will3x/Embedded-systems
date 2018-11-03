@@ -3,6 +3,7 @@ from model import GraphModel as model
 from controller import SerialController as ser
 import re
 
+
 class GraphController:
 
     def __init__(self, canvas, sensor, device):
