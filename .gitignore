@@ -282,3 +282,5 @@ dkms.conf
 
 #User Specific Files
 *.atsuo
+c/.vs/c/v14/.atsuo
+c/c/Debug/main.lss
