@@ -49,7 +49,7 @@ class SerialController:
                 try:
                     line = cls.ser.readline().decode('ascii')
                     cls.ser.flushInput()
-                    print('reading... {}'.format(line))
+                    print(line, end='')
 
                     match = re.findall('(\d+)', line)
                     cls.dict_values[count] = {'t': match[0], 'l': match[1], 'a': match[2]} if len(match) == 3 else None

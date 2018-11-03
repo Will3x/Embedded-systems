@@ -1,4 +1,5 @@
 from tkinter import *
+import Style as st
 
 
 class EventController:
@@ -21,10 +22,10 @@ class EventController:
             self.view.manual1.config(state=NORMAL)
             self.view.manual2.config(state=NORMAL)
 
-            self.view.manual_btn1.config(state=NORMAL)
+            self.view.manual_btn_on.config(state=NORMAL)
             self.view.manual_btn2.config(state=NORMAL)
 
-            self.view.setbtn2.config(state=NORMAL, bg='dodger blue')
+            self.view.setbtn2.config(state=NORMAL, bg=st.btn_bg_blue)
             self.view.setbtn1.config(state=DISABLED, bg="#444D5F")
 
             self.view.label1.config(state=DISABLED)
@@ -42,11 +43,11 @@ class EventController:
             self.view.manual1.config(state=DISABLED)
             self.view.manual2.config(state=DISABLED)
 
-            self.view.manual_btn1.config(state=DISABLED)
+            self.view.manual_btn_on.config(state=DISABLED)
             self.view.manual_btn2.config(state=DISABLED)
 
             self.view.setbtn2.config(state=DISABLED, bg="#444D5F")
-            self.view.setbtn1.config(state=NORMAL, bg='dodger blue')
+            self.view.setbtn1.config(state=NORMAL, bg=st.btn_bg_blue)
 
             self.view.label1.config(state=NORMAL)
             self.view.label2.config(state=NORMAL)
