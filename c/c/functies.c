@@ -196,22 +196,6 @@ void check_input(){
 				USART_putstring(":3:");
 				return;
 			
-			case 0x04:
-				USART_putstring(":4:");
-				return;
-			
-			case 0x05:
-				USART_putstring(":5:");
-				return;
-			
-			case 0x06:
-				USART_putstring(":6:");
-				return;
-			
-			case 0x07:
-				USART_putstring(":7:");
-				return;
-			
 			default:
 				return;
 				
