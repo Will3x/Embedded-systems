@@ -72,14 +72,18 @@ class MainView(Toplevel):
         var1 = IntVar(self, 1)
         var2 = IntVar(self, 4)
 
-        LabelFrame(self, text='Settings', height=200, width=1065, fg=self.fg_color,
-                   bg=self.bg_color).place(relx=0.5, rely=0.85, anchor=CENTER)
+        button_width = 15
 
-        LabelFrame(self, text='Status', height=55, width=800, fg=self.fg_color,
-                   bg=self.bg_color).place(relx=0.38, rely=0.695, anchor=CENTER)
+        Button(self, width=75, disabledforeground='white', bg='#242B37', fg=self.fg_color, state=DISABLED, borderwidth=0, height=2).place(relx=0.11, rely=0.7, anchor=W)
+        Button(self, text="Status", width=button_width, disabledforeground='white', bg='#1B1F28', fg=self.fg_color, state=DISABLED, borderwidth=0, height=2).place(relx=0.03, rely=0.7, anchor=W)
 
-        LabelFrame(self, text='Manual', height=55, width=250, fg=self.fg_color,
-                   bg=self.bg_color).place(relx=0.87, rely=0.695, anchor=CENTER)
+        Button(self, text="Manual mode", width=button_width, disabledforeground='white', bg='#1B1F28', fg=self.fg_color, state=DISABLED, borderwidth=0, height=2).place(relx=0.801, rely=0.7, anchor=E)
+
+        Button(self, width=68, disabledforeground='white', bg='#242B37', fg=self.fg_color, state=DISABLED, borderwidth=0, height=12).place(relx=0.11, rely=0.86, anchor=W)
+        Button(self, text="Settings\nauto", width=button_width, disabledforeground='white', bg='#1B1F28', fg=self.fg_color, state=DISABLED, borderwidth=0, height=12).place(relx=0.03, rely=0.86, anchor=W)
+
+        Button(self, width=45, disabledforeground='white', bg='#242B37', fg=self.fg_color, state=DISABLED, borderwidth=0, height=12).place(relx=0.97, rely=0.86, anchor=E)
+        Button(self, text="Settings\nmanual", width=button_width, disabledforeground='white', bg='#1B1F28', fg=self.fg_color, state=DISABLED, borderwidth=0, height=12).place(relx=0.7, rely=0.86, anchor=E)
 
         radio1 = Radiobutton(self, text="Light sensor", indicatoron=False, variable=var1, borderwidth=0,
                              fg='white',
@@ -94,18 +98,18 @@ class MainView(Toplevel):
                              value=2, width=20, bg="#444D5F", fg='white')
         radio2.place(relx=0.565, rely=0.05, anchor=CENTER)
 
-        self.manual1 = Radiobutton(self, text="AAN", indicatoron=False, variable=var2,
+        self.manual_btn1 = Radiobutton(self, text="ON", indicatoron=False, variable=var2,
                                    command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0,
-                                   selectcolor=self.btn_color, bg="#444D5F", height=2,
+                                   selectcolor=self.btn_color, fg='white', bg="#444D5F", height=2,
                                    value=3, width=10)
-        self.manual1.place(relx=0.865, rely=0.7, anchor=E)
+        self.manual_btn1.place(relx=0.871, rely=0.7, anchor=E)
 
-        self.manual2 = Radiobutton(self, text="UIT", indicatoron=False, variable=var2,
+        self.manual_btn2 = Radiobutton(self, text="OFF", indicatoron=False, variable=var2,
                                    command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0,
-                                   bg="#444D5F", height=2, value=4, width=10)
-        self.manual2.place(relx=0.94, rely=0.7, anchor=E)
+                                   selectcolor=self.btn_color, fg='white', bg="#444D5F", height=2, value=4, width=10)
+        self.manual_btn2.place(relx=0.94, rely=0.7, anchor=E)
 
-        y_pos = .778  # start position
+        y_pos = .785  # start position
 
         entries = []
         labels_text = ['Uitrol buitentemperatuur', 'Oprol buitentemperatuur', 'Uitrol lichtintensiteit',
@@ -114,16 +118,15 @@ class MainView(Toplevel):
         # Adding buttons dynamically.
         for x in range(1, 5):
             entries.insert(0, f'self.entry{x} = Entry(self, width=40)')
-            entries.insert(1, f'self.entry{x}.place(relx=0.18, rely={y_pos:.2f}, anchor=W)')
-            entries.insert(2, f'self.label{x} = Label(self, text="{labels_text[x-1]}", bg=self.bg_color, '
+            entries.insert(1, f'self.entry{x}.place(relx=0.3, rely={y_pos:.4f}, anchor=W)')
+            entries.insert(2, f'self.label{x} = Label(self, text="{labels_text[x-1]}", bg="#242B37", '
                               f'fg=self.fg_color)')
-            entries.insert(3, f'self.label{x}.place(relx=0.17, rely={y_pos:.2f}, anchor=E)')
+            entries.insert(3, f'self.label{x}.place(relx=0.28, rely={y_pos:.4f}, anchor=E)')
             for i in range(4):
                 exec(entries[i])
-            y_pos += .04
+            y_pos += .035
 
         y_pos = .778  # reset start position
-        button_width = 20
 
         self.manual1 = Label(self, text='Uitrol afstand', state=DISABLED)
         self.manual1.place(relx=0.7, rely=y_pos, anchor=E)
@@ -131,7 +134,7 @@ class MainView(Toplevel):
         self.manual2 = Entry(self, width=40, state=DISABLED)
         self.manual2.place(relx=0.83, rely=y_pos, anchor=CENTER)
 
-        self. manual_btn1 = Button(self, text='Uitrollen', width=button_width, height=2, borderwidth=0, state=DISABLED)
+        self.manual_btn1 = Button(self, text='Uitrollen', width=button_width, height=2, borderwidth=0, state=DISABLED)
         self.manual_btn1.place(relx=0.8, rely=y_pos + .12, anchor=E)
 
         self.manual_btn2 = Button(self, text='Oprollen', width=button_width, height=2, borderwidth=0, state=DISABLED)
@@ -142,10 +145,10 @@ class MainView(Toplevel):
         self.setbtn2.place(relx=0.873, rely=y_pos + .04, anchor=CENTER)
 
         self.setbtn1 = Button(self, text='Set', width=button_width, bg='dodger blue', fg=self.fg_color, borderwidth=0)
-        self.setbtn1.place(relx=0.265, rely=y_pos + .16, anchor=W)
+        self.setbtn1.place(relx=0.524, rely=y_pos + .16, anchor=E)
 
-        status_label = Label(self, text='ROLLUIK IS OPGEROLD', font='Roboto 12 bold', fg='green',
-                             bg=self.bg_color).place(relx=0.4, rely=0.7, anchor=CENTER)
+        status_label = Label(self, text='Working...', fg='#D85700',
+                             bg='#242B37').place(relx=0.4, rely=0.7, anchor=CENTER)
 
         btn_return = Button(self, text="Go back",
                             width=button_width, command=self.hide_window,
@@ -173,4 +176,3 @@ class MainView(Toplevel):
         x = screen_width / 2 - window_width / 2
         y = (screen_height / 2 - window_height / 2) - 40
         self.geometry("%dx%d+%d+%d" % (window_width, window_height, x, y))
-        #test

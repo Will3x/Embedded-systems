@@ -26,7 +26,7 @@ class DashboardView(Tk):
         self.refresh()
         self.controller.get_values()
         [x.tick() for x in self.mainview.values() if x != '']
-        self.after(1000, self.tick)
+        self.after(3000, self.tick)
 
     def set_controller_instance(self, controller):
         self.controller = controller
