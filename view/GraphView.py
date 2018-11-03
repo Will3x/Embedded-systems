@@ -1,4 +1,3 @@
-from random import choice
 import tkinter
 import Style as st
 
