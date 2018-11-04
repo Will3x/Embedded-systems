@@ -40,7 +40,7 @@ class SerialController:
         except (AttributeError, SerialException):
             print("Couldn't read from serial")
             cls.open_port()
-            return
+            return {1: (), 2: (), 3: (), 4: (), 5: (), }
 
         ports = cls.arduino_connections2
 
@@ -52,7 +52,8 @@ class SerialController:
                     print(line, end='')
 
                     match = re.findall('(\d+)', line)
-                    cls.dict_values[count] = {'t': match[0], 'l': match[1], 'a': match[2]} if len(match) == 3 else None
+                    if len(match) == 3:
+                        cls.dict_values[count] = {'t': match[0], 'l': match[1], 'a': match[2]}
                 except SerialException as e:
                     print('SerialController.read(): {}'.format(e))
 
