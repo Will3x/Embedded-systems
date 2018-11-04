@@ -6,18 +6,12 @@ import re
 
 class SerialController:
 
-    arduino_connections = None
-    dict_values = None
-    ser = None
-    arduino_connections2 = None
-
     @classmethod
     def setup(cls):
         cls.arduino_connections = {1: '', 2: '', 3: '', 4: '', 5: ''}
         cls.arduino_connections2 = {1: '', 2: '', 3: '', 4: '', 5: ''}
         cls.dict_values = {1: (), 2: (), 3: (), 4: (), 5: (), }
         cls.sensor_model = SensordataModel.SensordataModel()
-
         cls.open_port()
 
     @classmethod
@@ -70,7 +64,7 @@ class SerialController:
         my_ports = cls.find_ports()
 
         for id, port in enumerate(my_ports, 1):
-            cls.arduino_connections[id] = [port if port != '' else '']
+            cls.arduino_connections[id] = port
 
         cls.arduino_connections2.update(cls.arduino_connections)
 
@@ -85,7 +79,6 @@ class SerialController:
                 cls.ser.write(str(instruction[x]).encode())
                 cls.ser.write(value[x].encode())
                 cls.ser.write(b'/')
-
         else:
             print('writing instruction {} with value {} to serial.'.format(instruction, value[0]))
             cls.ser.write(str(instruction).encode())

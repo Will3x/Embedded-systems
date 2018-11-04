@@ -1,9 +1,9 @@
 class InstructionModel:
 
-    @staticmethod
-    def getinstruction(id):
-        """ Best function EU. I'll just leave this here for now lol """
-        return id
+    # @staticmethod
+    # def getinstruction(id):
+    #     """ Best function EU. I'll just leave this here for now lol """
+    #     return id
 
     @staticmethod
     def check_value(id, *value):
