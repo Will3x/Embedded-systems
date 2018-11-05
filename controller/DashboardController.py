@@ -19,7 +19,6 @@ class DashboardController:
     def write(self, id, value):
         try:
             if instr.InstructionModel.check_value(id, value):
-                # instruction = instr.InstructionModel.getinstruction(id)
                 ser.SerialController.write(id, value)
             else:
                 print('value entered not in range!')

@@ -10,10 +10,9 @@ class EventController:
         self.view = view
         self.canv_light, self.canv_temp = view.canvas
 
-    def write(self, id, *value):
+    def write(self, device, id, *value):
         if instr.InstructionModel.check_value(id, value):
-            # instruction = instr.InstructionModel.getinstruction(id)
-            ser.SerialController.write(id, value)
+            ser.SerialController.write(device, id, value)
 
     def buttonclick_event(self, var):
         if var.get() == 1:

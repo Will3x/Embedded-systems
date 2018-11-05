@@ -16,7 +16,7 @@ class InstructionModel:
                 uitrol_licht = int(value[2])
                 oprol_licht = int(value[3])
 
-                if not uitrol_temp > oprol_temp or uitrol_licht > oprol_licht:
+                if not uitrol_temp > oprol_temp or not uitrol_licht > oprol_licht:
                     errors.append('Value for Uitrol is bigger than value for Oprol.')
 
                 for x in range(len(id)):
@@ -29,7 +29,7 @@ class InstructionModel:
 
         if len(errors) > 0:
             for num, error in enumerate(errors, 1):
-                print(num, error)
+                print('Error {}: {}'.format(num, error))
             errors.clear()
             return False
 
