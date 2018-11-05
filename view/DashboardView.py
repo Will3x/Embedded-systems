@@ -93,12 +93,15 @@ class DashboardView(Tk):
             elif self.prev_devices[x] != '' and value[x] != ():
                 temp = value[x]['t']
                 light = value[x]['l']
-                status = ''.join(['closed' if int(value[x]['a']) < 10 else
-                                  'open' if 10 <= int(value[x]['a']) else None])
+                status = ''.join(['Closed' if int(value[x]['a']) < 10 else
+                                  'Open ({}cm)'.format(value[x]['a']) if 10 <= int(value[x]['a']) else None])
 
                 exec(f'self.temp{x}.config(text="{temp}°C", fg=st.btn_bg_blue)')
                 exec(f'self.light{x}.config(text="{light} / 100", fg=st.btn_bg_blue)')
-                exec(f'self.status{x}.config(text="{status}", fg=st.btn_bg_blue)')
+                exec(f'self.status{x}.config(text="{status}")')
+                exec(f'self.status{x}.config(fg=st.btn_bg_red)') if status == 'Closed' \
+                    else exec(f'self.status{x}.config(fg=st.btn_bg_blue)')
+
             else:
                 exec(f'self.temp{x}.config(text="NO DATA", fg=st.btn_bg_grey)')
                 exec(f'self.light{x}.config(text="NO DATA", fg=st.btn_bg_grey)')
@@ -142,7 +145,7 @@ class DashboardView(Tk):
             entries.insert(12, f'self.labels{x} = Label(self, text="Status: ", background=st.panel_bg, fg=st.fg_white)')
             entries.insert(13, f'self.labels{x}.place(relx={x_position-.04:.2f}, rely={y_position+.04}, anchor=E)')
             entries.insert(12, f'self.status{x} = Label(self, background=st.panel_bg, text="NO DATA", fg=st.btn_bg_grey)')
-            entries.insert(13, f'self.status{x}.place(relx={x_position-.04:.2f}, rely={y_position+.042}, anchor=W)')
+            entries.insert(13, f'self.status{x}.place(relx={x_position-.04:.2f}, rely={y_position+.0415}, anchor=W)')
             entries.insert(14,
                            f'self.titel{x} = Label(self, text="Device {x}", background=st.panel_bg, fg=st.fg_white)')
             entries.insert(15, f'self.titel{x}.place(relx={x_position:.2f}, rely={y_position-.14}, anchor=CENTER)')

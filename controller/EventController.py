@@ -11,15 +11,9 @@ class EventController:
         self.canv_light, self.canv_temp = view.canvas
 
     def write(self, id, *value):
-        try:
-            if instr.InstructionModel.check_value(id, value):
-                # instruction = instr.InstructionModel.getinstruction(id)
-                ser.SerialController.write(id, value)
-            else:
-                print('value entered not in range!')
-        except ValueError:
-            print('Please enter an integer')
-
+        if instr.InstructionModel.check_value(id, value):
+            # instruction = instr.InstructionModel.getinstruction(id)
+            ser.SerialController.write(id, value)
 
     def buttonclick_event(self, var):
         if var.get() == 1:
