@@ -13,7 +13,7 @@ class DashboardController:
         self.view.set_controller_instance(self)
 
     def check_if_connected(self):
-        connections = ser.SerialController.check_connection()
+        connections = ser.SerialController.check_connection(ser.SerialController.connections)
         return connections
 
     def write(self, id, value):
@@ -25,8 +25,12 @@ class DashboardController:
         except ValueError:
             print('Please enter an integer')
 
+    def read_from_serial(self):
+        ser.SerialController.read()
+        self.get_values()
+
     def get_values(self):
-        values = ser.SerialController.read()
+        values = ser.SerialController.current_values()
         self.view.change_label(values)
 
 

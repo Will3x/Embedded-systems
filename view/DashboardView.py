@@ -25,7 +25,7 @@ class DashboardView(Tk):
 
     def tick(self):
         self.refresh()
-        self.controller.get_values()
+        self.controller.read_from_serial()
         [x.tick() for x in self.mainview.values() if x != '']
         self.after(2000, self.tick)
 
@@ -74,7 +74,7 @@ class DashboardView(Tk):
 
     def change_btn_state(self, state, num):
         if state == 'normal':
-            exec(f"self.button{num}.config(state=NORMAL, bg=st.btn_bg_blue, text=\"View\")")
+            exec(f"self.button{num}.config(state=NORMAL, bg=st.btn_bg_blue, text='View')")
             exec(f'self.btnopen{num}.config(state=NORMAL)')
             exec(f'self.btnclose{num}.config(state=NORMAL)')
 
