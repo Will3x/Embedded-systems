@@ -284,3 +284,5 @@ dkms.conf
 *.atsuo
 c/.vs/c/v14/.atsuo
 c/c/Debug/main.lss
+*.lss
+*.o
