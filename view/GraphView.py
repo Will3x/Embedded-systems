@@ -4,17 +4,16 @@ import Style as st
 
 class GraphView:
 
-    def __init__(self, canvas, sensor):
+    def __init__(self, canvas, sensor, controller):
         self.canvas = canvas
         self.s = 0
         self.x2 = 50
         self.y2 = None
+        self.line_t, self.line_l, self.txt_l, self.txt_t = None, None, None, None
         self.sensor = sensor
+        self.controller = controller
         self.add_to_canvas(sensor, 50, 450)
         self.mean = []
-
-    def set_controller_instance(self, controller):
-        self.controller = controller
 
     def add_to_canvas(self, sensor, min, max):
         if sensor == 'l':
@@ -35,14 +34,27 @@ class GraphView:
                 self.canvas.create_text(30, y, text=count, fill=st.label_white)
                 count -= 2
 
-        self.draw_borders()
+        self.draw_guidelines()
 
-    def draw_borders(self, min=360, max=180):
-        border = {'min (roll back in)': min, 'max (roll out)': max}
+    def draw_borders(self, sensor, min, max):
+        if self.line_l is not None and self.txt_l is not None:
+            [self.canvas.delete(x) for x in self.line_l]
+            [self.canvas.delete(x) for x in self.txt_l]
+        if self.line_t is not None and self.txt_t is not None:
+            [self.canvas.delete(x) for x in self.line_t]
+            [self.canvas.delete(x) for x in self.txt_t]
 
+        border = {'Roll in': min, 'Roll out': max}
+
+        if sensor == 'l':
+            self.line_l = [self.canvas.create_line(50, x, 1050, x, width=1, fill=st.border_blue) for x in border.values()]
+            self.txt_l = [self.canvas.create_text(1020, y-10, text=x, fill=st.border_blue) for x, y in border.items()]
+        elif sensor == 't':
+            self.line_t = [self.canvas.create_line(50, x, 1050, x, width=1, fill=st.border_blue) for x in border.values()]
+            self.txt_t = [self.canvas.create_text(1020, y - 10, text=x, fill=st.border_blue) for x, y in border.items()]
+
+    def draw_guidelines(self):
         [self.canvas.create_line(50 + x * 50, 450, 50 + x * 50, 50, width=1, fill=st.guide_lines) for x in range(21)]
-        [self.canvas.create_line(50, x, 1050, x, width=1, fill=st.border_blue) for x in border.values()]
-        [self.canvas.create_text(1000, y-10, text=x, fill=st.border_blue) for x, y in border.items()]
 
     def drawGraph(self):
         try:

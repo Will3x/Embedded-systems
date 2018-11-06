@@ -15,17 +15,17 @@ class DashboardView(Tk):
         self.protocol("WM_DELETE_WINDOW", self.close_all)
         self.mainview = {1: '', 2: '', 3: '', 4: '', 5: ''}
         self.prev_devices = {1: '', 2: '', 3: '', 4: '', 5: ''}
+        SerialController.SerialController.setup()
 
     def start(self):
-        SerialController.SerialController.setup()
         imageref = self.make_background()  # don't delete reference
         self.make_panels()
         self.tick()
         self.mainloop()
 
     def tick(self):
-        self.refresh()
         self.controller.read_from_serial()
+        self.refresh()
         [x.tick() for x in self.mainview.values() if x != '']
         self.after(2000, self.tick)
 
@@ -60,37 +60,44 @@ class DashboardView(Tk):
     def refresh(self):
         """ Called from tick. Will check every x seconds if an Arduino connection has been made. """
         devices = self.controller.check_if_connected()
+        self.update_instances(devices, self.prev_devices)
 
-        for x in devices.keys():
-            if devices[x] == '' and self.prev_devices[x] != '' and self.mainview[x] != '':
-                self.mainview[x].close()
-                self.mainview[x] = ''
-
-            [self.change_btn_state('normal', key) if not device == ''
-             else self.change_btn_state('disabled', key) for key, device in devices.items()]
+        [self.change_btn_state('normal', key) if device != '' else self.change_btn_state('disabled', key)
+         for key, device in devices.items()]
 
         self.prev_devices = devices.copy()
         devices.update(devices.fromkeys(devices, ''))
 
+    def update_instances(self, devices, prev_devices):
+        for x in devices.keys():
+            if devices[x] == '' and prev_devices[x] != '' and self.mainview[x] != '':
+                print('closing view...')
+                self.mainview[x].close()
+                self.mainview[x] = ''
+
     def change_btn_state(self, state, num):
-        if state == 'normal':
-            exec(f"self.button{num}.config(state=NORMAL, bg=st.btn_bg_blue, text='View')")
-            exec(f'self.btnopen{num}.config(state=NORMAL)')
-            exec(f'self.btnclose{num}.config(state=NORMAL)')
+        try:
+            if state == 'normal':
+                exec(f"self.button{num}.config(state=NORMAL, bg=st.btn_bg_blue, text='View')")
+                exec(f'self.btnopen{num}.config(state=NORMAL)')
+                exec(f'self.btnclose{num}.config(state=NORMAL)')
 
-        if state == 'disabled':
-            exec(f'self.button{num}.config(state=DISABLED, bg=st.btn_bg_red, text="Not connected", fg=st.fg_white)')
-            exec(f'self.btnopen{num}.config(state=DISABLED, bg=st.btn_bg_grey)')
-            exec(f'self.btnclose{num}.config(state=DISABLED)')
+            if state == 'disabled':
+                exec(f'self.button{num}.config(state=DISABLED, bg=st.btn_bg_red, text="Not connected", fg=st.fg_white)')
+                exec(f'self.btnopen{num}.config(state=DISABLED, bg=st.btn_bg_grey)')
+                exec(f'self.btnclose{num}.config(state=DISABLED)')
+        except AttributeError:
+            print('buttons not found')
+            pass
 
-    def change_label(self, value):
+    def change_label(self, devices, value):
         """ Change temperature and light sensor values on Dashboard """
         for x in value:
-            if self.prev_devices[x] != '' and value[x] == ():
+            if devices[x] != '' and value[x] == ():
                 exec(f'self.temp{x}.config(text="FETCHING DATA...", fg=st.btn_bg_blue)')
                 exec(f'self.light{x}.config(text="FETCHING DATA...", fg=st.btn_bg_blue)')
                 exec(f'self.status{x}.config(text="FETCHING DATA...", fg=st.btn_bg_blue)')
-            elif self.prev_devices[x] != '' and value[x] != ():
+            elif devices[x] != '' and value[x] != ():
                 temp = value[x]['t']
                 light = value[x]['l']
                 status = ''.join(['Closed' if int(value[x]['a']) < 10 else
@@ -128,10 +135,10 @@ class DashboardView(Tk):
                               f'bg="#D60000", fg=st.fg_white, disabledforeground="white", borderwidth=0, state=DISABLED, '
                               f'command=partial(self.open_btn,{x}))')
             entries.insert(3, f'self.button{x}.place(relx={x_position+.06}, rely={y_position+.12}, anchor=CENTER)')
-            entries.insert(2, f'self.btnopen{x} = Button(self, text="Open", width=10, height=2,'
+            entries.insert(2, f'self.btnopen{x} = Button(self, text="Roll down", width=10, height=2,'
                               f'bg=st.btn_bg_grey, fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
             entries.insert(3, f'self.btnopen{x}.place(relx={x_position-.03}, rely={y_position+.12}, anchor=CENTER)')
-            entries.insert(2, f'self.btnclose{x} = Button(self, text="Close", width=10, height=2,'
+            entries.insert(2, f'self.btnclose{x} = Button(self, text="Roll up", width=10, height=2,'
                               f'bg=st.btn_bg_grey, fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
             entries.insert(3, f'self.btnclose{x}.place(relx={x_position-.09}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(4, f'self.labelt{x} = Label(self, text="Temperature: ", background=st.panel_bg, fg=st.fg_white)')
@@ -155,10 +162,10 @@ class DashboardView(Tk):
             for items in entries:
                 exec(items)
 
-        self.close_all_btn = Button(self, text="Close all", width=30, height=2, bg=st.btn_bg_grey,
+        self.close_all_btn = Button(self, text="Roll all up", width=30, height=2, bg=st.btn_bg_grey,
                                     fg=st.fg_white, borderwidth=0, state=NORMAL)
         self.close_all_btn.place(relx=0.42, rely=0.14, anchor=CENTER)
-        self.open_all_btn = Button(self, text="Open all", width=30, height=2, bg=st.btn_bg_grey,
+        self.open_all_btn = Button(self, text="Roll all down", width=30, height=2, bg=st.btn_bg_grey,
                                    fg=st.fg_white, borderwidth=0, state=NORMAL)
         self.open_all_btn.place(relx=0.58, rely=0.14, anchor=CENTER)
 

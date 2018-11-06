@@ -25,6 +25,7 @@ class MainView(Toplevel):
 
         self.event_controller = EventController.EventController(self)
         self.addwidgets()
+
         self.start()
 
     def tick(self):
@@ -45,6 +46,8 @@ class MainView(Toplevel):
         self.deiconify()
 
     def start(self):
+        self.graph_controller.draw_borders(self.entry2.get(), self.entry1.get())
+        self.graph_controller2.draw_borders(self.entry4.get(), self.entry3.get())
         self.protocol("WM_DELETE_WINDOW", self.hide_window)
         # self.wm_withdraw()
 
@@ -62,6 +65,12 @@ class MainView(Toplevel):
         canvas.create_line(50, 450, 50, 50, width=2, fill=st.canv_line)  # y-axis
         canvas.place(relx=0.5, rely=0.37, anchor=CENTER)
         return canvas
+
+    def button_click(self):
+        self.event_controller.write(int(self.wm_title()[7:8]), [3, 4, 5, 6], self.entry1.get(), self.entry2.get(),
+                                    self.entry3.get(), self.entry4.get())
+        self.graph_controller.draw_borders(self.entry2.get(), self.entry1.get())
+        self.graph_controller2.draw_borders(self.entry4.get(), self.entry3.get())
 
     def addwidgets(self):
         """ Creates and adds widgets to the frame, such as buttons, labels, and input fields. """
@@ -108,9 +117,9 @@ class MainView(Toplevel):
         y_pos = .785  # start position
 
         entries = []
-        labels_text = ['Uitrol buitentemperatuur', 'Oprol buitentemperatuur', 'Uitrol lichtintensiteit',
-                       'Oprol lichtintensiteit']
-        default_values = [50, 120, 33, 9]
+        labels_text = ['Roll down on temperature', 'Roll up on temperature', 'Roll out on lightintensity',
+                       'Roll up on lightintensity']
+        default_values = [24, 16, 60, 20]
 
 
         # Adding buttons dynamically.
@@ -145,7 +154,7 @@ class MainView(Toplevel):
         self.manual_btn2.place(relx=.94, rely=y_pos + .14, anchor=E)
 
         self.setbtn1 = Button(self, text='Set', width=button_width, bg=st.btn_bg_blue, fg=st.fg_white,
-                              borderwidth=0, command=lambda: self.event_controller.write(int(self.wm_title()[7:8]), [3, 4, 5, 6], self.entry1.get(), self.entry2.get(), self.entry3.get(), self.entry4.get()))
+                              borderwidth=0, command=self.button_click)
         self.setbtn1.place(relx=0.383, rely=y_pos + .15, anchor=W)
 
         self.setbtn2 = Button(self, text='Set', width=button_width, bg=st.btn_bg_grey, fg=st.fg_white, state=DISABLED,

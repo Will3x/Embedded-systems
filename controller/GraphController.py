@@ -7,14 +7,11 @@ import re
 class GraphController:
 
     def __init__(self, canvas, sensor, device):
-        self.view = view.GraphView(canvas, sensor)
-        self.model = model.GraphModel()
         self.sensor = sensor
         self.device = int(re.findall('(\d)', device)[0])
-        self.giveinstance()
+        self.model = model.GraphModel()
+        self.view = view.GraphView(canvas, sensor, self)
 
-    def giveinstance(self):
-        self.view.set_controller_instance(self)
 
     def updategraph(self):
         """ Called by MainView.tick() """
@@ -23,8 +20,16 @@ class GraphController:
     def get_raw_values(self):
         return ser.SerialController.current_values()
 
+    def draw_borders(self, min, max):
+        min = self.model.calc(min, self.sensor)
+        max = self.model.calc(max, self.sensor)
+
+        if min is not None and max is not None:
+            self.view.draw_borders(self.sensor, min, max)
+
     def get_value(self):
         values = self.get_raw_values()
+
         try:
             return self.model.calculate(values[self.device][self.sensor], self.sensor)
         except TypeError:
