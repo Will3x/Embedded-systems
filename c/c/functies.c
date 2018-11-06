@@ -1,5 +1,7 @@
 #include <avr/io.h>
 #include <stdlib.h>
+#include <time.h>
+#include <stdio.h>
 #define F_CPU 16000000UL
 #include <util/delay.h>
 
@@ -7,6 +9,10 @@
 #include "main.h"
 #include "functies.h"
 #include "init.h"
+
+// timer
+int msec = 0, trigger = 100; // 100 milliseconden
+clock_t before;
 
 // variables
 uint16_t adc_value;            //Variable used to store the value read from the ADC
@@ -32,13 +38,18 @@ void upDown();
 void goDown();
 void goUp();
 void afstandStil();
+void manual_uit();
 uint16_t read_adc(uint8_t channel);    //Function to read an arbitrary analogic channel/pin
 
 
 unsigned char USART_receive(void){
-	
-	while(!(UCSR0A & (1<<RXC0)));
-	return UDR0;
+	do {
+		clock_t difference = clock() - before;
+		msec = difference * 1000 / CLOCKS_PER_SEC;
+		// iterations++;
+		if(!(UCSR0A & (1<<RXC0)));
+		return UDR0;
+	} while(1);
 }
 
 void USART_send(unsigned char data){
@@ -68,7 +79,7 @@ void temperatuur(){
 	USART_putstring(temp_sensor);        //Send the converted value to the terminal
 	
 	//Some more formatting
-	USART_putstring("  "); 
+	USART_putstring("  ");
 }
 
 void ldr(){ // licht sensor
@@ -79,7 +90,7 @@ void ldr(){ // licht sensor
 	USART_putstring(licht_sensor);        //Send the converted value to the terminal
 	
 	//Some more formatting
-	USART_putstring("  ");  
+	USART_putstring("  ");
 }
 
 void afstand(){ // hc-sr04
@@ -101,7 +112,7 @@ void afstand(){ // hc-sr04
 	USART_putstring(afstand_sensor);        //Send the converted value to the terminal
 	
 	//Some more formatting
-	USART_putstring("  "); 
+	USART_putstring("  ");
 }
 
 void afstandStil(){ // hc-sr04
@@ -172,16 +183,73 @@ void goUp(){
 	}
 	PORTB |= (1 << PB2); // groen lampje aan
 }
+
+void manual_uit(){
+	manual = 1;
+	afstand_up = 20;
+	afstand_down = 5;
+}
+
 void check_input(){
-	char data= USART_receive();
-	char running = '0';
-	char sluiten = '1';
-	char openen = '2';
-	USART_putstring("status: ");
-	if(data == sluiten){USART_putstring("sluiten");}
-	if(data == openen){USART_putstring("openen");}
-	if(data == running){USART_putstring("running");}
-	USART_putstring(" ");
+	unsigned char data= USART_receive();
+	if(data != 0){
+		switch(data){
+			// 1 = rolluik uitrollen
+			case '1':
+			
+				USART_putstring("jeej");
+				manual = 1;
+				goUp();
+				return;
+			
+			// 2 = rolluik oprollen
+			case '2':
+				manual = 1;
+				goDown();
+				return;
+			
+			// 3 = uitrol temp grens
+			case '3':
+				manual_uit();
+				temp_down = USART_receive();
+				return;
+			
+			// 4 = uitrol licht grens
+			case '4':
+				manual_uit();
+				licht_down = USART_receive();
+				return;
+			
+			// 5 = oprol temp grens
+			case '5':
+				manual_uit();
+				temp_up = USART_receive();
+				return;
+			
+			// 6 = oprol licht grens
+			case '6':
+				manual_uit();
+				licht_up = USART_receive();
+				return;
+			
+			// 7 = uit-/oprol afstand
+			case '7':
+				manual = 1;
+				int uitoprol = USART_receive();
+				afstand_up = uitoprol;
+				afstand_down = uitoprol;
+				goDown();
+				return;
+			
+			// 8 = set manual
+			case '8':
+				manual = 1;
+				return;
+			
+			default:
+				return;
+		}
+	}
 }
 
 void newRegel(){
