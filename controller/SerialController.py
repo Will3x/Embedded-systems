@@ -29,10 +29,20 @@ class SerialController:
 
     @classmethod
     def update_ports(cls):
-        """ Opens all COM ports that have been scanned and found. """
+        """ Opens all COM ports that have been scanned and found and closes all that do not respond,
+        thus lost connection. """
         cls.check_connection(cls.connections)
         connections = cls.current_connections()
+
+        for num, con in cls.ser.items():
+            try:
+                [con.read() if con != '' else None]
+            except serial.serialutil.SerialException:
+                cls.ser[num] = ''
+                cls.close_port(con)
+
         [cls.open_port(num, connections[num][0]) for num in connections if connections[num] != '']
+
         return connections
 
     @classmethod
@@ -47,7 +57,8 @@ class SerialController:
             pass
 
     @classmethod
-    def close_port(cls, port, com):
+    def close_port(cls, port, com='COM'):
+        print("Lost connection!")
         print('Closing {}'.format(com))
         port.close()
 
@@ -93,10 +104,14 @@ class SerialController:
     def write(cls, device, instruction, value):
         """ SEND DATA TO SERIAL PORT """
         if isinstance(value, tuple):
-            cls.ser[device].write(str(instruction).encode())
+            # cls.ser[device].write(str(instruction).encode())
             print('writing instruction {} with value {} from device {} to serial.'.format(instruction, value, device))
-            for x in range(len(value)):
-                cls.ser[device].write(value[x].encode())
+            for num in range(len(value)):
+                int_val = [int(d) for d in value[num]]
+                if len(int_val) < 2:
+                    int_val.insert(0, 0)
+                for d in int_val:
+                    cls.ser[device].write(str(d).encode())
         else:
             print('writing instruction {} with value {} from device {} to serial.'.format(instruction, value[0], device))
             cls.ser[device].write(str(instruction).encode())
