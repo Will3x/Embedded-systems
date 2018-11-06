@@ -195,6 +195,9 @@ void newRegel(){
 	USART_send('\n');
 }
 
+int unsigned combine(unsigned y, unsigned x){
+	return (x * 10) + y;
+}
 ISR ( USART_RX_vect ){
 	unsigned char ReceivedByte;
 	ReceivedByte = UDR0 ; // Fetch the received byte value into the variable " ByteReceived "
@@ -215,12 +218,12 @@ ISR ( USART_RX_vect ){
 		// 3 = set
 		case '3':
 			manual_uit();
-			temp_down = USART_receive();
-			temp_up = USART_receive();
-			licht_down = USART_receive();
-			licht_up = USART_receive();
+			temp_down = combine((int)USART_receive()-48, (int) USART_receive()-48);
+			temp_up = combine((int)USART_receive()-48, (int) USART_receive()-48);;
+			licht_down = combine((int)USART_receive()-48, (int) USART_receive()-48);;
+			licht_up = combine((int)USART_receive()-48, (int) USART_receive()-48);;
 			
-			if (temp_up == '16'){
+			if (temp_up == 16){
 				_delay_ms(100);
 				PORTB |= (1 << PB1); // geel lampje aan
 				_delay_ms(100);
