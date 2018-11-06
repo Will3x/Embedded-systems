@@ -60,10 +60,11 @@ class DashboardView(Tk):
     def refresh(self):
         """ Called from tick. Will check every x seconds if an Arduino connection has been made. """
         devices = self.controller.check_if_connected()
-        self.update_instances(devices, self.prev_devices)
 
         [self.change_btn_state('normal', key) if device != '' else self.change_btn_state('disabled', key)
          for key, device in devices.items()]
+
+        self.update_instances(devices, self.prev_devices)
 
         self.prev_devices = devices.copy()
         devices.update(devices.fromkeys(devices, ''))
