@@ -13,7 +13,7 @@ class DashboardController:
         self.view.set_controller_instance(self)
 
     def check_if_connected(self):
-        connections = ser.SerialController.check_connection(ser.SerialController.connections)
+        connections = ser.SerialController.current_connections()
         return connections
 
     def write(self, id, value):
@@ -31,7 +31,8 @@ class DashboardController:
 
     def get_values(self):
         values = ser.SerialController.current_values()
-        self.view.change_label(values)
+        devices = ser.SerialController.current_connections()
+        self.view.change_label(devices, values)
 
 
 

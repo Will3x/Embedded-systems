@@ -20,9 +20,18 @@ class SerialController:
         cls.dict_values = values.copy()
 
     @classmethod
+    def current_connections(cls, values=None):
+        """ Returns all current values. If new values are added as parameter: update the values.
+        Acts as a getter for accessing values """
+        if values is None:
+            return cls.connections
+        cls.connections = values.copy()
+
+    @classmethod
     def update_ports(cls):
         """ Opens all COM ports that have been scanned and found. """
-        connections = cls.check_connection(cls.connections)
+        cls.check_connection(cls.connections)
+        connections = cls.current_connections()
         [cls.open_port(num, connections[num][0]) for num in connections if connections[num] != '']
         return connections
 
@@ -74,21 +83,23 @@ class SerialController:
         """ Check if Arduino is connected. If so, add to dictionary.
         This function is called every 2 sec from tick(). """
         my_ports = cls.find_ports()
-        con_dict.update({id, port} for id, port in enumerate(my_ports, 1))
 
-        return con_dict
+        for id, port in enumerate(my_ports, 1):
+            con_dict[id] = port
+
+        cls.current_connections(con_dict)
 
     @classmethod
     def write(cls, device, instruction, value):
         """ SEND DATA TO SERIAL PORT """
         if isinstance(value, tuple) and isinstance(instruction, list):
             for x in range(len(instruction)):
-                print('writing instruction {} with value {} from device {} to serial.'.format(device, instruction[x], value[x]))
+                print('writing instruction {} with value {} from device {} to serial.'.format(instruction[x], value[x], device))
                 cls.ser[device].write(str(instruction[x]).encode())
                 cls.ser[device].write(value[x].encode())
                 cls.ser[device].write(b'/')
         else:
-            print('writing instruction {} with value {} from device {} to serial.'.format(device, instruction, value[0]))
+            print('writing instruction {} with value {} from device {} to serial.'.format(instruction, value[0], device))
             cls.ser[device].write(str(instruction).encode())
             cls.ser[device].write(value[0].encode())
             cls.ser[device].write(b'/')

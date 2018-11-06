@@ -1,6 +1,7 @@
 from tkinter import *
 from controller import GraphController, EventController
 import Style as st
+import Base_values as ba
 
 
 class MainView(Toplevel):
@@ -25,12 +26,14 @@ class MainView(Toplevel):
 
         self.event_controller = EventController.EventController(self)
         self.addwidgets()
+
         self.start()
 
     def tick(self):
         """ Gets called from Dashboardview.tick() """
         self.graph_controller.updategraph()
         self.graph_controller2.updategraph()
+        self.update_label()
 
     def minimize_window(self):
         self.iconify()
@@ -45,6 +48,8 @@ class MainView(Toplevel):
         self.deiconify()
 
     def start(self):
+        self.graph_controller.draw_borders(self.entry2.get(), self.entry1.get())
+        self.graph_controller2.draw_borders(self.entry4.get(), self.entry3.get())
         self.protocol("WM_DELETE_WINDOW", self.hide_window)
         # self.wm_withdraw()
 
@@ -62,6 +67,16 @@ class MainView(Toplevel):
         canvas.create_line(50, 450, 50, 50, width=2, fill=st.canv_line)  # y-axis
         canvas.place(relx=0.5, rely=0.37, anchor=CENTER)
         return canvas
+
+    def button_click(self):
+        self.event_controller.write(int(self.wm_title()[7:8]), [3, 4, 5, 6], self.entry1.get(), self.entry2.get(),
+                                    self.entry3.get(), self.entry4.get())
+        self.graph_controller.draw_borders(self.entry2.get(), self.entry1.get())
+        self.graph_controller2.draw_borders(self.entry4.get(), self.entry3.get())
+
+    def update_label(self):
+        values = self.event_controller.get_values()
+        self.status_label.config(text='{}cm'.format(values[int(self.wm_title()[7:8])]['a']))
 
     def addwidgets(self):
         """ Creates and adds widgets to the frame, such as buttons, labels, and input fields. """
@@ -108,9 +123,9 @@ class MainView(Toplevel):
         y_pos = .785  # start position
 
         entries = []
-        labels_text = ['Uitrol buitentemperatuur', 'Oprol buitentemperatuur', 'Uitrol lichtintensiteit',
-                       'Oprol lichtintensiteit']
-        default_values = [50, 120, 33, 9]
+        labels_text = ['Roll out on temperature', 'Roll in on temperature', 'Roll out on lightintensity',
+                       'Roll in on lightintensity']
+        default_values = [ba.temp_rollo, ba.temp_rolli, ba.light_rollo, ba.temp_rolli]
 
 
         # Adding buttons dynamically.
@@ -133,27 +148,27 @@ class MainView(Toplevel):
         self.manual1.place(relx=0.75, rely=y_pos, anchor=E)
 
         self.manual2 = Entry(self, width=33, borderwidth=0)
-        self.manual2.insert(0, '0')
+        self.manual2.insert(0, ba.roll_out_dist)
         self.manual2.config(disabledbackground=st.btn_bg_grey, state=DISABLED)
         self.manual2.place(relx=0.94, rely=y_pos, anchor=E)
 
 
-        self.manual_btn_on = Button(self, text='Uitrollen', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width, height=2, borderwidth=0, state=DISABLED)
+        self.manual_btn_on = Button(self, text='Roll out', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width, height=2, borderwidth=0, state=DISABLED)
         self.manual_btn_on.place(relx=0.83, rely=y_pos + .14, anchor=E)
 
-        self.manual_btn2 = Button(self, text='Oprollen', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width, height=2, borderwidth=0, state=DISABLED)
+        self.manual_btn2 = Button(self, text='Roll in', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width, height=2, borderwidth=0, state=DISABLED)
         self.manual_btn2.place(relx=.94, rely=y_pos + .14, anchor=E)
 
         self.setbtn1 = Button(self, text='Set', width=button_width, bg=st.btn_bg_blue, fg=st.fg_white,
-                              borderwidth=0, command=lambda: self.event_controller.write(int(self.wm_title()[7:8]), [3, 4, 5, 6], self.entry1.get(), self.entry2.get(), self.entry3.get(), self.entry4.get()))
+                              borderwidth=0, command=self.button_click)
         self.setbtn1.place(relx=0.383, rely=y_pos + .15, anchor=W)
 
         self.setbtn2 = Button(self, text='Set', width=button_width, bg=st.btn_bg_grey, fg=st.fg_white, state=DISABLED,
                          borderwidth=0, command=lambda: self.event_controller.write(int(self.wm_title()[7:8]), [7], self.manual2.get()))
         self.setbtn2.place(relx=0.94, rely=y_pos + .04, anchor=E)
 
-        status_label = Label(self, text='Working...', fg=st.orange,
-                             bg=st.panel_bg).place(relx=0.15, rely=0.7, anchor=W)
+        self.status_label = Label(self, fg=st.btn_bg_blue, bg=st.panel_bg)
+        self.status_label.place(relx=0.15, rely=0.7, anchor=W)
 
         btn_return = Button(self, text="Go back",
                             width=button_width, command=self.hide_window,
