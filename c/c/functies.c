@@ -16,10 +16,10 @@ uint16_t adc_echo;            //Variable used to store the value read from the A
 char temp_sensor[5];                //Output of the itoa function
 char licht_sensor[5];
 char afstand_sensor[5];
-int temp_up = 22;
-int temp_down = 18;
-int licht_up = 40;
-int licht_down = 10;
+int temp_down = 24;
+int temp_up = 16;
+int licht_down = 60;
+int licht_up = 16;
 int afstand_up = 10;
 int afstand_down = 5;
 int manual = 0;		// 1 is manual aan
@@ -200,25 +200,125 @@ ISR ( USART_RX_vect ){
 	ReceivedByte = UDR0 ; // Fetch the received byte value into the variable " ByteReceived "
 	
 	switch(ReceivedByte){
-		// 1 = rolluik uitrollen
+		// 1 = rolluik UITrollen // Rood
 		case '1':
 			manual = 1;
-			goUp();
+			goDown();
 			return;
 			
-		// 2 = rolluik oprollen
+		// 2 = rolluik OProllen // Groen
 		case '2':
 			manual = 1;
-			goDown();
+			goUp();
 			return;
 			
 		// 3 = set
 		case '3':
 			manual_uit();
 			temp_down = USART_receive();
-			licht_down = USART_receive();
 			temp_up = USART_receive();
+			licht_down = USART_receive();
 			licht_up = USART_receive();
+			
+			if (temp_up == '16'){
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				_delay_ms(100);
+				PORTB |= (1 << PB1); // geel lampje aan
+				_delay_ms(100);
+				PORTB &= ~(1 << PB1); // geel lampje uit
+				
+			}
 			return;
 			
 		// 7 = uit-/oprol afstand
