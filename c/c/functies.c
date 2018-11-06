@@ -184,12 +184,6 @@ void manual_uit(){
 	afstand_down = 5;
 }
 
-void check_input(unsigned char data){
-	USART_putstring(" jeej functie! ");
-	// USART_receive();
-	
-}
-
 void newRegel(){
 	USART_send('\r');
 	USART_send('\n');
@@ -198,6 +192,11 @@ void newRegel(){
 int unsigned combine(unsigned y, unsigned x){
 	return (x * 10) + y;
 }
+
+int unsigned combine3(unsigned z, unsigned y, unsigned x){
+	return (z * 100) + ((x * 10) + y);
+}
+
 ISR ( USART_RX_vect ){
 	unsigned char ReceivedByte;
 	ReceivedByte = UDR0 ; // Fetch the received byte value into the variable " ByteReceived "
@@ -219,115 +218,15 @@ ISR ( USART_RX_vect ){
 		case '3':
 			manual_uit();
 			temp_down = combine((int)USART_receive()-48, (int) USART_receive()-48);
-			temp_up = combine((int)USART_receive()-48, (int) USART_receive()-48);;
-			licht_down = combine((int)USART_receive()-48, (int) USART_receive()-48);;
-			licht_up = combine((int)USART_receive()-48, (int) USART_receive()-48);;
-			
-			if (temp_up == 16){
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				_delay_ms(100);
-				PORTB |= (1 << PB1); // geel lampje aan
-				_delay_ms(100);
-				PORTB &= ~(1 << PB1); // geel lampje uit
-				
-			}
+			temp_up = combine((int)USART_receive()-48, (int) USART_receive()-48);
+			licht_down = combine((int)USART_receive()-48, (int) USART_receive()-48);
+			licht_up = combine((int)USART_receive()-48, (int) USART_receive()-48);
 			return;
 			
 		// 7 = uit-/oprol afstand
 		case '7':
 			manual = 1;
-			int uitoprol = USART_receive();
+			int uitoprol = combine3((int)USART_receive()-48, (int)USART_receive()-48, (int) USART_receive()-48);
 			afstand_up = uitoprol;
 			afstand_down = uitoprol;
 			goDown();
