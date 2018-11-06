@@ -69,7 +69,7 @@ class MainView(Toplevel):
         return canvas
 
     def button_click(self):
-        self.event_controller.write(int(self.wm_title()[7:8]), [3, 4, 5, 6], self.entry1.get(), self.entry2.get(),
+        self.event_controller.write(int(self.wm_title()[7:8]), 3, self.entry1.get(), self.entry2.get(),
                                     self.entry3.get(), self.entry4.get())
         self.graph_controller.draw_borders(self.entry2.get(), self.entry1.get())
         self.graph_controller2.draw_borders(self.entry4.get(), self.entry3.get())
@@ -152,7 +152,6 @@ class MainView(Toplevel):
         self.manual2.config(disabledbackground=st.btn_bg_grey, state=DISABLED)
         self.manual2.place(relx=0.94, rely=y_pos, anchor=E)
 
-
         self.manual_btn_on = Button(self, text='Roll out', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width, height=2, borderwidth=0, state=DISABLED)
         self.manual_btn_on.place(relx=0.83, rely=y_pos + .14, anchor=E)
 
@@ -164,7 +163,7 @@ class MainView(Toplevel):
         self.setbtn1.place(relx=0.383, rely=y_pos + .15, anchor=W)
 
         self.setbtn2 = Button(self, text='Set', width=button_width, bg=st.btn_bg_grey, fg=st.fg_white, state=DISABLED,
-                         borderwidth=0, command=lambda: self.event_controller.write(int(self.wm_title()[7:8]), [7], self.manual2.get()))
+                         borderwidth=0, command=lambda: self.event_controller.write(int(self.wm_title()[7:8]), 7, self.manual2.get()))
         self.setbtn2.place(relx=0.94, rely=y_pos + .04, anchor=E)
 
         self.status_label = Label(self, fg=st.btn_bg_blue, bg=st.panel_bg)
