@@ -212,27 +212,12 @@ ISR ( USART_RX_vect ){
 			goDown();
 			return;
 			
-		// 3 = uitrol temp grens
+		// 3 = set
 		case '3':
 			manual_uit();
 			temp_down = USART_receive();
-			return;
-			
-		// 4 = uitrol licht grens
-		case '4':
-			manual_uit();
 			licht_down = USART_receive();
-			return;
-			
-		// 5 = oprol temp grens
-		case '5':
-			manual_uit();
 			temp_up = USART_receive();
-			return;
-			
-		// 6 = oprol licht grens
-		case '6':
-			manual_uit();
 			licht_up = USART_receive();
 			return;
 			
