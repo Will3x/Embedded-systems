@@ -1,18 +1,14 @@
 #include <avr/io.h>
 #include <stdlib.h>
-#include <time.h>
 #include <stdio.h>
 #define F_CPU 16000000UL
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 #include "AVR_TTC_scheduler.h"
 #include "main.h"
 #include "functies.h"
 #include "init.h"
-
-// timer
-int msec = 0, trigger = 100; // 100 milliseconden
-clock_t before;
 
 // variables
 uint16_t adc_value;            //Variable used to store the value read from the ADC
@@ -27,6 +23,7 @@ int licht_down = 10;
 int afstand_up = 10;
 int afstand_down = 5;
 int manual = 0;		// 1 is manual aan
+int teller = 0;
 
 void USART_send(unsigned char data);    //Function that sends a char over the serial port
 void USART_putstring(char* StringPtr);    //Function that sends a string over the serial port
@@ -39,17 +36,14 @@ void goDown();
 void goUp();
 void afstandStil();
 void manual_uit();
+void check_input(unsigned char data);
+ISR ( USART_RX_vect );
 uint16_t read_adc(uint8_t channel);    //Function to read an arbitrary analogic channel/pin
 
 
 unsigned char USART_receive(void){
-	do {
-		clock_t difference = clock() - before;
-		msec = difference * 1000 / CLOCKS_PER_SEC;
-		// iterations++;
-		if(!(UCSR0A & (1<<RXC0)));
-		return UDR0;
-	} while(1);
+	while(!(UCSR0A & (1<<RXC0)));
+	return UDR0;
 }
 
 void USART_send(unsigned char data){
@@ -190,69 +184,73 @@ void manual_uit(){
 	afstand_down = 5;
 }
 
-void check_input(){
-	unsigned char data= USART_receive();
-	if(data != 0){
-		switch(data){
-			// 1 = rolluik uitrollen
-			case '1':
-			
-				USART_putstring("jeej");
-				manual = 1;
-				goUp();
-				return;
-			
-			// 2 = rolluik oprollen
-			case '2':
-				manual = 1;
-				goDown();
-				return;
-			
-			// 3 = uitrol temp grens
-			case '3':
-				manual_uit();
-				temp_down = USART_receive();
-				return;
-			
-			// 4 = uitrol licht grens
-			case '4':
-				manual_uit();
-				licht_down = USART_receive();
-				return;
-			
-			// 5 = oprol temp grens
-			case '5':
-				manual_uit();
-				temp_up = USART_receive();
-				return;
-			
-			// 6 = oprol licht grens
-			case '6':
-				manual_uit();
-				licht_up = USART_receive();
-				return;
-			
-			// 7 = uit-/oprol afstand
-			case '7':
-				manual = 1;
-				int uitoprol = USART_receive();
-				afstand_up = uitoprol;
-				afstand_down = uitoprol;
-				goDown();
-				return;
-			
-			// 8 = set manual
-			case '8':
-				manual = 1;
-				return;
-			
-			default:
-				return;
-		}
-	}
+void check_input(unsigned char data){
+	USART_putstring(" jeej functie! ");
+	// USART_receive();
+	
 }
 
 void newRegel(){
 	USART_send('\r');
 	USART_send('\n');
+}
+
+ISR ( USART_RX_vect ){
+	unsigned char ReceivedByte;
+	ReceivedByte = UDR0 ; // Fetch the received byte value into the variable " ByteReceived "
+	
+	switch(ReceivedByte){
+		// 1 = rolluik uitrollen
+		case '1':
+			manual = 1;
+			goUp();
+			return;
+			
+		// 2 = rolluik oprollen
+		case '2':
+			manual = 1;
+			goDown();
+			return;
+			
+		// 3 = uitrol temp grens
+		case '3':
+			manual_uit();
+			temp_down = USART_receive();
+			return;
+			
+		// 4 = uitrol licht grens
+		case '4':
+			manual_uit();
+			licht_down = USART_receive();
+			return;
+			
+		// 5 = oprol temp grens
+		case '5':
+			manual_uit();
+			temp_up = USART_receive();
+			return;
+			
+		// 6 = oprol licht grens
+		case '6':
+			manual_uit();
+			licht_up = USART_receive();
+			return;
+			
+		// 7 = uit-/oprol afstand
+		case '7':
+			manual = 1;
+			int uitoprol = USART_receive();
+			afstand_up = uitoprol;
+			afstand_down = uitoprol;
+			goDown();
+			return;
+			
+		// 8 = set manual
+		case '8':
+			manual = 1;
+			return;
+			
+		default:
+		return;
+	}
 }

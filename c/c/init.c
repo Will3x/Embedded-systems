@@ -1,5 +1,7 @@
 #include <avr/io.h>
 #include <stdlib.h>
+#include <avr/interrupt.h>
+
 #define F_CPU 16000000UL
 #include <util/delay.h>
 
@@ -21,26 +23,28 @@ void init_lampjes();
 void init_connectie(){
 	// disable U2X mode
 	UCSR0A = 0;
-	// Enable receiver and transmitter
-	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
-	/* Set frame format: 8data, 2stop bit */
+	// Set frame format: 8data, 2stop bit 
 	UCSR0C = (1<<USBS0)|(3<<UCSZ00);
 }
 
 void init_USART(){
-	
 	UBRR0H = (uint8_t)(BAUD_PRESCALLER>>8);
 	UBRR0L = (uint8_t)(BAUD_PRESCALLER);
+	// Enable receiver and transmitter
 	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
+	
 	UCSR0C = (3<<UCSZ00);
+	
+	UCSR0B |= (1 << RXCIE0 ); // Enable the USART Recieve Complete interrupt ( USART_RXC )
+	sei (); // Enable the Global Interrupt Enable flag so that interrupts can be processed
 }
 
 void init_scheduler()
 {
 	SCH_Init_T1();
-	//SCH_Add_Task(check_input,0,1);
-	SCH_Add_Task(temperatuur,1,100);	// moet 4000 worden@@@
-	SCH_Add_Task(ldr,2,100);			// moet 3000 worden
+	//SCH_Add_Task(check_input,0,1); // kan weg straks, interrupt neemt deze op zich
+	SCH_Add_Task(temperatuur,1,100);
+	SCH_Add_Task(ldr,2,100);
 	SCH_Add_Task(afstand,3,100);
 	//SCH_Add_Task(upDown,4,10);
 	SCH_Add_Task(newRegel,6,100);

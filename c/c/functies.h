@@ -16,7 +16,8 @@ void ldr();
 void afstand();
 void newRegel();
 void upDown();
-void check_input();
+void check_input(unsigned char data);
+ISR ( USART_RX_vect );
 uint16_t read_adc(uint8_t channel);
 
 
