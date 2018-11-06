@@ -25,9 +25,9 @@ class DashboardView(Tk):
 
     def tick(self):
         self.refresh()
-        self.controller.get_values()
+        self.controller.read_from_serial()
         [x.tick() for x in self.mainview.values() if x != '']
-        self.after(3000, self.tick)
+        self.after(2000, self.tick)
 
     def set_controller_instance(self, controller):
         self.controller = controller
@@ -74,7 +74,7 @@ class DashboardView(Tk):
 
     def change_btn_state(self, state, num):
         if state == 'normal':
-            exec(f"self.button{num}.config(state=NORMAL, bg=st.btn_bg_blue, text=\"View\")")
+            exec(f"self.button{num}.config(state=NORMAL, bg=st.btn_bg_blue, text='View')")
             exec(f'self.btnopen{num}.config(state=NORMAL)')
             exec(f'self.btnclose{num}.config(state=NORMAL)')
 
@@ -85,17 +85,27 @@ class DashboardView(Tk):
 
     def change_label(self, value):
         """ Change temperature and light sensor values on Dashboard """
-        try:
-            for x in value:
-                if value[x] != ():
-                    temp = value[x]['t']
-                    light = value[x]['l']
+        for x in value:
+            if self.prev_devices[x] != '' and value[x] == ():
+                exec(f'self.temp{x}.config(text="FETCHING DATA...", fg=st.btn_bg_blue)')
+                exec(f'self.light{x}.config(text="FETCHING DATA...", fg=st.btn_bg_blue)')
+                exec(f'self.status{x}.config(text="FETCHING DATA...", fg=st.btn_bg_blue)')
+            elif self.prev_devices[x] != '' and value[x] != ():
+                temp = value[x]['t']
+                light = value[x]['l']
+                status = ''.join(['Closed' if int(value[x]['a']) < 10 else
+                                  'Open ({}cm)'.format(value[x]['a']) if 10 <= int(value[x]['a']) else None])
 
-                    exec(f'self.temp{x}.config(text="{temp}°C", fg=st.btn_bg_blue)')
-                    exec(f'self.light{x}.config(text="{light} / 100", fg=st.btn_bg_blue)')
-        except TypeError:
-            self.temp1.config(text='NO DATA', fg=st.btn_bg_grey)
-            self.light1.config(text='NO DATA', fg=st.btn_bg_grey)
+                exec(f'self.temp{x}.config(text="{temp}°C", fg=st.btn_bg_blue)')
+                exec(f'self.light{x}.config(text="{light} / 100", fg=st.btn_bg_blue)')
+                exec(f'self.status{x}.config(text="{status}")')
+                exec(f'self.status{x}.config(fg=st.btn_bg_red)') if status == 'Closed' \
+                    else exec(f'self.status{x}.config(fg=st.btn_bg_blue)')
+
+            else:
+                exec(f'self.temp{x}.config(text="NO DATA", fg=st.btn_bg_grey)')
+                exec(f'self.light{x}.config(text="NO DATA", fg=st.btn_bg_grey)')
+                exec(f'self.status{x}.config(text="NO DATA", fg=st.btn_bg_grey)')
 
     def make_panels(self):
         x_position = .2  # start position x
@@ -125,17 +135,20 @@ class DashboardView(Tk):
                               f'bg=st.btn_bg_grey, fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
             entries.insert(3, f'self.btnclose{x}.place(relx={x_position-.09}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(4, f'self.labelt{x} = Label(self, text="Temperature: ", background=st.panel_bg, fg=st.fg_white)')
-            entries.insert(5, f'self.labelt{x}.place(relx={x_position-.07}, rely={y_position-.08}, anchor=CENTER)')
+            entries.insert(5, f'self.labelt{x}.place(relx={x_position-.04}, rely={y_position-.08}, anchor=E)')
             entries.insert(6, f'self.temp{x} = Label(self, background=st.panel_bg, text="NO DATA", fg=st.btn_bg_grey)')
             entries.insert(7, f'self.temp{x}.place(relx={x_position-.04}, rely={y_position-.079}, anchor=W)')
             entries.insert(8, f'self.labell{x} = Label(self, text="Light intesity: ", background=st.panel_bg,fg=st.fg_white)')
-            entries.insert(9, f'self.labell{x}.place(relx={x_position-.07}, rely={y_position-.029}, anchor=CENTER)')
+            entries.insert(9, f'self.labell{x}.place(relx={x_position-.04}, rely={y_position-.029}, anchor=E)')
             entries.insert(10, f'self.light{x} = Label(self, background=st.panel_bg, text="NO DATA", fg=st.btn_bg_grey)')
             entries.insert(11, f'self.light{x}.place(relx={x_position-.04}, rely={y_position-.0277}, anchor=W)')
-            entries.insert(12, f'self.label{x} = Label(self, text="Status: ", background=st.panel_bg, fg=st.fg_white)')
-            entries.insert(13, f'self.label{x}.place(relx={x_position-.07:.2f}, rely={y_position+.04}, anchor=CENTER)')
-            entries.insert(14, f'self.label{x} = Label(self, text="Device {x}", background=st.panel_bg, fg=st.fg_white)')
-            entries.insert(15, f'self.label{x}.place(relx={x_position:.2f}, rely={y_position-.14}, anchor=CENTER)')
+            entries.insert(12, f'self.labels{x} = Label(self, text="Status: ", background=st.panel_bg, fg=st.fg_white)')
+            entries.insert(13, f'self.labels{x}.place(relx={x_position-.04:.2f}, rely={y_position+.04}, anchor=E)')
+            entries.insert(12, f'self.status{x} = Label(self, background=st.panel_bg, text="NO DATA", fg=st.btn_bg_grey)')
+            entries.insert(13, f'self.status{x}.place(relx={x_position-.04:.2f}, rely={y_position+.0415}, anchor=W)')
+            entries.insert(14,
+                           f'self.titel{x} = Label(self, text="Device {x}", background=st.panel_bg, fg=st.fg_white)')
+            entries.insert(15, f'self.titel{x}.place(relx={x_position:.2f}, rely={y_position-.14}, anchor=CENTER)')
 
             x_position += .3
 
@@ -164,8 +177,8 @@ class DashboardView(Tk):
         return filename
 
     def center_window(self):
-        window_width = self.winfo_screenwidth()-500
-        window_height = self.winfo_screenheight()-230
+        window_width = self.winfo_screenwidth() - 500
+        window_height = self.winfo_screenheight() - 230
 
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()

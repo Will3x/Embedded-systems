@@ -145,11 +145,11 @@ class MainView(Toplevel):
         self.manual_btn2.place(relx=.94, rely=y_pos + .14, anchor=E)
 
         self.setbtn1 = Button(self, text='Set', width=button_width, bg=st.btn_bg_blue, fg=st.fg_white,
-                              borderwidth=0, command=lambda: self.event_controller.write([3, 4, 5, 6], self.entry1.get(), self.entry2.get(), self.entry3.get(), self.entry4.get()))
+                              borderwidth=0, command=lambda: self.event_controller.write(int(self.wm_title()[7:8]), [3, 4, 5, 6], self.entry1.get(), self.entry2.get(), self.entry3.get(), self.entry4.get()))
         self.setbtn1.place(relx=0.383, rely=y_pos + .15, anchor=W)
 
         self.setbtn2 = Button(self, text='Set', width=button_width, bg=st.btn_bg_grey, fg=st.fg_white, state=DISABLED,
-                         borderwidth=0, command=lambda: self.event_controller.write(7, self.manual2.get()))
+                         borderwidth=0, command=lambda: self.event_controller.write(int(self.wm_title()[7:8]), [7], self.manual2.get()))
         self.setbtn2.place(relx=0.94, rely=y_pos + .04, anchor=E)
 
         status_label = Label(self, text='Working...', fg=st.orange,

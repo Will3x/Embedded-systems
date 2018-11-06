@@ -1,92 +1,94 @@
 from serial import *
-from model import SensordataModel
 import serial.tools.list_ports
 import re
 
 
 class SerialController:
 
-    arduino_connections = None
-    dict_values = None
-    ser = None
-    arduino_connections2 = None
-
     @classmethod
     def setup(cls):
-        cls.arduino_connections = {1: '', 2: '', 3: '', 4: '', 5: ''}
-        cls.arduino_connections2 = {1: '', 2: '', 3: '', 4: '', 5: ''}
-        cls.dict_values = {1: (), 2: (), 3: (), 4: (), 5: (), }
-        cls.sensor_model = SensordataModel.SensordataModel()
-
-        cls.open_port()
+        cls.dict_values = {1: (), 2: (), 3: (), 4: (), 5: ()}
+        cls.connections = {1: '', 2: '', 3: '', 4: '', 5: ''}
+        cls.ser = {1: '', 2: '', 3: '', 4: '', 5: ''}
 
     @classmethod
-    def open_port(cls):
-        print('Attempting to connect...')
-        try:
-            com = cls.find_ports()[0][0]
-            cls.ser = Serial(com, 9600, timeout=2)
-            cls.ser.flushInput()
-        except (SerialException, KeyError, IndexError):
-            return
-        print('Connected to {}!'.format(com))
+    def current_values(cls, values=None):
+        """ Returns all current values. If new values are added as parameter: update the values.
+        Acts as a getter for accessing values """
+        if values is None:
+            return cls.dict_values
+        cls.dict_values = values.copy()
 
+    @classmethod
+    def update_ports(cls):
+        """ Opens all COM ports that have been scanned and found. """
+        connections = cls.check_connection(cls.connections)
+        [cls.open_port(num, connections[num][0]) for num in connections if connections[num] != '']
+        return connections
+
+    @classmethod
+    def open_port(cls, num, com):
+        """ Attempts and opens port with given COM and device id (NUM).
+        Throws SerialException if port is already open. """
+        try:
+            cls.ser[num] = (Serial(com, 9600, timeout=2))
+            print('Connection to {}!'.format(com))
+            cls.ser[num].flushInput()
+        except SerialException:
+            pass
+
+    @classmethod
+    def close_port(cls, port, com):
+        print('Closing {}'.format(com))
+        port.close()
 
     @classmethod
     def read(cls):
         """ RECIEVE INCOMING DATA FROM SERIAL PORT """
-        try:
-            cls.ser.readline()
-        except (AttributeError, SerialException):
-            print("Couldn't read from serial")
-            cls.open_port()
-            return
-
-        ports = cls.arduino_connections2
-
+        ports = cls.update_ports()
         for count, port in ports.items():
             if port != '':
-                try:
-                    line = cls.ser.readline().decode('ascii')
-                    cls.ser.flushInput()
-                    print(line, end='')
+                line = cls.ser[count].readline().decode('ascii')
+                cls.ser[count].flushInput()
+                cls.dict_values = cls.filter_on_read(line, count, cls.dict_values)
 
-                    match = re.findall('(\d+)', line)
-                    cls.dict_values[count] = {'t': match[0], 'l': match[1], 'a': match[2]} if len(match) == 3 else None
-                except SerialException as e:
-                    print('SerialController.read(): {}'.format(e))
+        cls.current_values(cls.dict_values)
 
-        return cls.dict_values
+    @classmethod
+    def filter_on_read(cls, line, count, dict_values):
+        """ Filters data to single out values read from serial. """
+        match = re.findall('(\d+)', line)
+
+        if len(match) == 3:
+            dict_values[count] = {'t': match[0], 'l': match[1], 'a': match[2]}
+
+        return dict_values
 
     @classmethod
     def find_ports(cls):
+        """ Scans all ports and looks for Arduino connections. """
         return [tuple(p) for p in list(serial.tools.list_ports.comports()) if 'VID:PID=2341' in p[2]]
 
     @classmethod
-    def check_connection(cls):
+    def check_connection(cls, con_dict):
         """ Check if Arduino is connected. If so, add to dictionary.
         This function is called every 2 sec from tick(). """
         my_ports = cls.find_ports()
+        con_dict.update({id, port} for id, port in enumerate(my_ports, 1))
 
-        for id, port in enumerate(my_ports, 1):
-            cls.arduino_connections[id] = [port if port != '' else '']
-
-        cls.arduino_connections2.update(cls.arduino_connections)
-
-        return cls.arduino_connections
+        return con_dict
 
     @classmethod
-    def write(cls, instruction, value):
+    def write(cls, device, instruction, value):
         """ SEND DATA TO SERIAL PORT """
         if isinstance(value, tuple) and isinstance(instruction, list):
             for x in range(len(instruction)):
-                print('writing instruction {} with value {} to serial.'.format(instruction[x], value[x]))
-                cls.ser.write(str(instruction[x]).encode())
-                cls.ser.write(value[x].encode())
-                cls.ser.write(b'/')
-
+                print('writing instruction {} with value {} from device {} to serial.'.format(device, instruction[x], value[x]))
+                cls.ser[device].write(str(instruction[x]).encode())
+                cls.ser[device].write(value[x].encode())
+                cls.ser[device].write(b'/')
         else:
-            print('writing instruction {} with value {} to serial.'.format(instruction, value[0]))
-            cls.ser.write(str(instruction).encode())
-            cls.ser.write(value[0].encode())
-            cls.ser.write(b'/')
+            print('writing instruction {} with value {} from device {} to serial.'.format(device, instruction, value[0]))
+            cls.ser[device].write(str(instruction).encode())
+            cls.ser[device].write(value[0].encode())
+            cls.ser[device].write(b'/')

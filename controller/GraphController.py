@@ -21,7 +21,7 @@ class GraphController:
         self.view.drawGraph()
 
     def get_raw_values(self):
-        return ser.SerialController.dict_values
+        return ser.SerialController.current_values()
 
     def get_value(self):
         values = self.get_raw_values()
