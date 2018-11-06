@@ -1,21 +1,15 @@
+import Base_values as ba
+
+
 class InstructionModel:
 
-    @classmethod
-    def check_value(cls, id, value):
-        min = 0
-        max = 150
-
-        min_light = 0
-        max_light = 100
-
-        max_temp = 32
-        min_temp = 0
-
+    @staticmethod
+    def check_value(id, value):
         errors = []
 
         try:
             if id[0] == 7:
-                if not min <= int(value[0]) <= max:
+                if not ba.manual_min <= int(value[0]) <= ba.manual_max:
                     errors.append(value[0] + ' must be between {} and {}'.format(min, max))
 
             if len(value) == 4:
@@ -27,11 +21,11 @@ class InstructionModel:
                 if oprol_temp > uitrol_temp or oprol_licht > uitrol_licht:
                     errors.append('Roll up value can\'t be bigger than roll out value')
 
-                if not min_temp <= oprol_temp <= max_temp or not min_temp <= uitrol_temp <= max_temp:
-                    errors.append('Temperature must be between {} and {}'.format(min_temp, max_temp))
+                if not ba.min_temp <= oprol_temp <= ba.max_temp or not ba.min_temp <= uitrol_temp <= ba.max_temp:
+                    errors.append('Temperature must be between {} and {}'.format(ba.min_temp, ba.max_temp))
 
-                if not min_light <= oprol_licht <= max_light or not min_light <= uitrol_licht <= max_light:
-                    errors.append('Light sensitivity must be between {} and {}'.format(min_light, max_light))
+                if not ba.min_light <= oprol_licht <= ba.max_light or not ba.min_light <= uitrol_licht <= ba.max_light:
+                    errors.append('Light sensitivity must be between {} and {}'.format(ba.min_light, ba.max_light))
 
         except ValueError:
             errors.append('Please enter an integer')

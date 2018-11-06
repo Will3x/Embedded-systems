@@ -21,8 +21,8 @@ class GraphController:
         return ser.SerialController.current_values()
 
     def draw_borders(self, min, max):
-        min = self.model.calc(min, self.sensor)
-        max = self.model.calc(max, self.sensor)
+        min = self.model.calculate(min, self.sensor)
+        max = self.model.calculate(max, self.sensor)
 
         if min is not None and max is not None:
             self.view.draw_borders(self.sensor, min, max)

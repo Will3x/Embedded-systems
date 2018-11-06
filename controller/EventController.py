@@ -14,6 +14,9 @@ class EventController:
         if instr.InstructionModel.check_value(id, value):
             ser.SerialController.write(device, id, value)
 
+    def get_values(self):
+        return ser.SerialController.current_values()
+
     def buttonclick_event(self, var):
         if var.get() == 1:
             self.canv_light.place(relx=0.5, rely=0.37, anchor=CENTER)

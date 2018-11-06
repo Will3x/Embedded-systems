@@ -135,10 +135,10 @@ class DashboardView(Tk):
                               f'bg="#D60000", fg=st.fg_white, disabledforeground="white", borderwidth=0, state=DISABLED, '
                               f'command=partial(self.open_btn,{x}))')
             entries.insert(3, f'self.button{x}.place(relx={x_position+.06}, rely={y_position+.12}, anchor=CENTER)')
-            entries.insert(2, f'self.btnopen{x} = Button(self, text="Roll down", width=10, height=2,'
+            entries.insert(2, f'self.btnopen{x} = Button(self, text="Roll out", width=10, height=2,'
                               f'bg=st.btn_bg_grey, fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
             entries.insert(3, f'self.btnopen{x}.place(relx={x_position-.03}, rely={y_position+.12}, anchor=CENTER)')
-            entries.insert(2, f'self.btnclose{x} = Button(self, text="Roll up", width=10, height=2,'
+            entries.insert(2, f'self.btnclose{x} = Button(self, text="Roll in", width=10, height=2,'
                               f'bg=st.btn_bg_grey, fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
             entries.insert(3, f'self.btnclose{x}.place(relx={x_position-.09}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(4, f'self.labelt{x} = Label(self, text="Temperature: ", background=st.panel_bg, fg=st.fg_white)')
@@ -162,10 +162,10 @@ class DashboardView(Tk):
             for items in entries:
                 exec(items)
 
-        self.close_all_btn = Button(self, text="Roll all up", width=30, height=2, bg=st.btn_bg_grey,
+        self.close_all_btn = Button(self, text="Roll all in", width=30, height=2, bg=st.btn_bg_grey,
                                     fg=st.fg_white, borderwidth=0, state=NORMAL)
         self.close_all_btn.place(relx=0.42, rely=0.14, anchor=CENTER)
-        self.open_all_btn = Button(self, text="Roll all down", width=30, height=2, bg=st.btn_bg_grey,
+        self.open_all_btn = Button(self, text="Roll all out", width=30, height=2, bg=st.btn_bg_grey,
                                    fg=st.fg_white, borderwidth=0, state=NORMAL)
         self.open_all_btn.place(relx=0.58, rely=0.14, anchor=CENTER)
 

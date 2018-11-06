@@ -67,7 +67,7 @@ class GraphView:
             y1 = self.y2 if self.y2 is not None else self.controller.get_value()
             self.x2 = 50 + self.s * 50
             self.y2 = self.controller.get_value()
-            self.canvas.create_line(x1, y1, self.x2, self.y2, fill=st.orange, width=2, tags='t')
+            self.canvas.create_line(x1, y1, self.x2, [self.y2], fill=st.orange, width=2, tags='t')
             self.s += 1
 
             # if self.sensor == 'temp':
