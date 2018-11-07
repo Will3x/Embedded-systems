@@ -10,7 +10,7 @@ class InstructionModel:
         try:
             if id == 7:
                 if not ba.manual_min <= int(value[0]) <= ba.manual_max:
-                    errors.append(value[0] + ' must be between {} and {}'.format(min, max))
+                    errors.append(value[0] + ' must be between {} and {}'.format(ba.manual_min, ba.manual_max))
             if id == 3:
                 uitrol_temp = int(value[0])
                 oprol_temp = int(value[1])

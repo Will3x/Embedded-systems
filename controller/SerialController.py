@@ -103,16 +103,14 @@ class SerialController:
     @classmethod
     def write(cls, device, instruction, value):
         """ SEND DATA TO SERIAL PORT """
-        if isinstance(value, tuple):
-            # cls.ser[device].write(str(instruction).encode())
-            print('writing instruction {} with value {} from device {} to serial.'.format(instruction, value, device))
-            for num in range(len(value)):
-                int_val = [int(d) for d in value[num]]
-                if len(int_val) < 2:
-                    int_val.insert(0, 0)
-                for d in int_val:
-                    cls.ser[device].write(str(d).encode())
-        else:
-            print('writing instruction {} with value {} from device {} to serial.'.format(instruction, value[0], device))
-            cls.ser[device].write(str(instruction).encode())
-            cls.ser[device].write(value[0].encode())
+        print('writing instruction {} with value {} from device {} to serial.'.format(instruction, value, device))
+        cls.ser[device].write(str(instruction).encode())
+
+        for num in range(len(value)):
+            int_val = [int(d) for d in value[num]]
+
+            [int_val.insert(0, 0) for x in range(2 - len(int_val)) if instruction == 3]
+            [int_val.insert(0, 0) for x in range(3-len(int_val)) if instruction == 7]
+
+            for d in int_val:
+                cls.ser[device].write(str(d).encode())
