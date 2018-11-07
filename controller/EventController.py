@@ -11,7 +11,7 @@ class EventController:
         self.canv_light, self.canv_temp = view.canvas
 
     @staticmethod
-    def write(device, instruction, *value):
+    def check(device, instruction, *value):
         if instr.InstructionModel.check_value(instruction, value):
             ser.SerialController.write(device, instruction, value)
 
@@ -24,7 +24,19 @@ class EventController:
         return se.SensordataModel.status_open_closed(device, values)
 
     def buttonclick_event(self, var):
-        if var.get() == 1:
+        # Roll out.
+        if var == 5:
+            device = int(self.view.wm_title()[7:8])
+            ser.SerialController.write(device, 1)
+            return
+
+        # Roll in.
+        if var == 6:
+            device = int(self.view.wm_title()[7:8])
+            ser.SerialController.write(device, 2)
+            return
+
+        elif var.get() == 1:
             self.canv_light.place(relx=0.5, rely=0.37, anchor=CENTER)
             self.canv_temp.place_forget()
 

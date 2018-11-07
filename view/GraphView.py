@@ -18,7 +18,7 @@ class GraphView:
     def add_to_canvas(self, sensor, min, max):
         if sensor == 'l':
             count = 100
-            self.canvas.create_text((int(self.canvas['width'])/2, 25), text="Light sensitivity",
+            self.canvas.create_text((int(self.canvas['width'])/2, 25), text="Light intensity in %",
                                     fill=st.label_white)
             for y in range(min, max+25, 40):
                 self.canvas.create_line(50, y, 1050, y, width=1, fill=st.guide_lines)  # y-axis

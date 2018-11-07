@@ -133,10 +133,12 @@ class DashboardView(Tk):
                               f'command=partial(self.open_btn,{x}))')
             entries.insert(3, f'self.button{x}.place(relx={x_position+.06}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(4, f'self.btnopen{x} = Button(self, text="Roll out", width=10, height=2, bg=st.btn_bg_grey, '
-                              f'fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
+                              f'fg=st.fg_white, disabledforeground="#6B7789",  borderwidth=0, state=DISABLED, '
+                              f'command=partial(self.controller.buttonclick_event, {x}, 5))')
             entries.insert(5, f'self.btnopen{x}.place(relx={x_position-.03}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(6, f'self.btnclose{x} = Button(self, text="Roll in", width=10, height=2, bg=st.btn_bg_grey, '
-                              f'fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
+                              f'fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED, '
+                              f'command=partial(self.controller.buttonclick_event, {x}, 6))')
             entries.insert(7, f'self.btnclose{x}.place(relx={x_position-.09}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(8, f'self.labelt{x} = Label(self, text="Temperature: ", background=st.panel_bg, '
                               f'fg=st.fg_white)')

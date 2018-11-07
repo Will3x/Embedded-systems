@@ -37,6 +37,17 @@ class DashboardController:
     def status_open_closed(self, device, values):
         return self.model.status_open_closed(device, values)
 
+    def buttonclick_event(self, device, var):
+        # Roll out.
+        if var == 5:
+            ser.SerialController.write(device, 1)
+            return
+
+        # Roll in.
+        if var == 6:
+            ser.SerialController.write(device, 2)
+            return
+
 
 
 

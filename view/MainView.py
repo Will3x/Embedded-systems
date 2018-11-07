@@ -25,7 +25,7 @@ class MainView(Toplevel):
         self.center_window()
 
         self.event_controller = EventController.EventController(self)
-        self.addwidgets()
+        self.add_widgets()
 
         self.start()
 
@@ -69,7 +69,7 @@ class MainView(Toplevel):
         return canvas
 
     def button_click(self):
-        self.event_controller.write(int(self.wm_title()[7:8]), 3, self.entry1.get(), self.entry2.get(),
+        self.event_controller.check(int(self.wm_title()[7:8]), 3, self.entry1.get(), self.entry2.get(),
                                     self.entry3.get(), self.entry4.get())
         self.graph_controller.draw_borders(self.entry2.get(), self.entry1.get())
         self.graph_controller2.draw_borders(self.entry4.get(), self.entry3.get())
@@ -85,7 +85,7 @@ class MainView(Toplevel):
         else:
             self.status_label.config(fg=st.btn_bg_blue)
 
-    def addwidgets(self):
+    def add_widgets(self):
         """ Creates and adds widgets to the frame, such as buttons, labels, and input fields. """
         var1 = IntVar(self, 1)
         var2 = IntVar(self, 4)
@@ -103,14 +103,14 @@ class MainView(Toplevel):
         Button(self, width=50, disabledforeground=st.fg_white, bg=st.panel_bg, fg=st.fg_white, state=DISABLED, borderwidth=0, height=12).place(relx=0.97, rely=0.86, anchor=E)
         Button(self, text="Settings\nmanual", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg, state=DISABLED, borderwidth=0, height=12).place(relx=0.65, rely=0.86, anchor=E)
 
-        radio1 = Radiobutton(self, text="Light sensor", indicatoron=False, variable=var1, borderwidth=0,
+        radio1 = Radiobutton(self, text="Light intensity", indicatoron=False, variable=var1, borderwidth=0,
                              fg=st.fg_white,
                              command=lambda: self.event_controller.buttonclick_event(var1), height=2,
                              selectcolor=st.btn_bg_blue,
                              value=1, width=20, bg=st.btn_bg_grey)
         radio1.place(relx=0.435, rely=0.05, anchor=CENTER)
 
-        radio2 = Radiobutton(self, text="Temperature sensor", indicatoron=False, variable=var1, borderwidth=0,
+        radio2 = Radiobutton(self, text="Temperature", indicatoron=False, variable=var1, borderwidth=0,
                              command=lambda: self.event_controller.buttonclick_event(var1), height=2,
                              selectcolor=st.btn_bg_blue,
                              value=2, width=20, bg=st.btn_bg_grey, fg=st.fg_white)
@@ -130,12 +130,10 @@ class MainView(Toplevel):
         y_pos = .785  # start position
 
         entries = []
-        labels_text = ['Roll out on temperature', 'Roll in on temperature', 'Roll out on lightintensity',
-                       'Roll in on lightintensity']
+        labels_text = ['Roll out on temperature', 'Roll in on temperature', 'Roll out on light intensity',
+                       'Roll in on light intensity']
         default_values = [ba.temp_rollo, ba.temp_rolli, ba.light_rollo, ba.temp_rolli]
 
-
-        # Adding buttons dynamically.
         for x in range(1, len(labels_text)+1):
             entries.insert(0, f'self.entry{x} = Entry(self, width=33, borderwidth=0)')
             entries.insert(1, f'self.entry{x}.insert(0, default_values[{x-1}])')
@@ -159,10 +157,12 @@ class MainView(Toplevel):
         self.manual2.config(disabledbackground=st.btn_bg_grey, state=DISABLED)
         self.manual2.place(relx=0.94, rely=y_pos, anchor=E)
 
-        self.manual_btn_on = Button(self, text='Roll out', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width, height=2, borderwidth=0, state=DISABLED)
+        self.manual_btn_on = Button(self, text='Roll out', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width,
+                                    command=lambda: self.event_controller.buttonclick_event(5), height=2, borderwidth=0, state=DISABLED)
         self.manual_btn_on.place(relx=0.83, rely=y_pos + .14, anchor=E)
 
-        self.manual_btn2 = Button(self, text='Roll in', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width, height=2, borderwidth=0, state=DISABLED)
+        self.manual_btn2 = Button(self, text='Roll in', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width,
+                                  command=lambda: self.event_controller.buttonclick_event(6), height=2, borderwidth=0, state=DISABLED)
         self.manual_btn2.place(relx=.94, rely=y_pos + .14, anchor=E)
 
         self.setbtn1 = Button(self, text='Set', width=button_width, bg=st.btn_bg_blue, fg=st.fg_white,
@@ -170,7 +170,7 @@ class MainView(Toplevel):
         self.setbtn1.place(relx=0.383, rely=y_pos + .15, anchor=W)
 
         self.setbtn2 = Button(self, text='Set', width=button_width, bg=st.btn_bg_grey, fg=st.fg_white, state=DISABLED,
-                         borderwidth=0, command=lambda: self.event_controller.write(int(self.wm_title()[7:8]), 7, self.manual2.get()))
+                         borderwidth=0, command=lambda: self.event_controller.check(int(self.wm_title()[7:8]), 7, self.manual2.get()))
         self.setbtn2.place(relx=0.94, rely=y_pos + .04, anchor=E)
 
         self.status_label = Label(self, fg=st.btn_bg_blue, bg=st.panel_bg)
