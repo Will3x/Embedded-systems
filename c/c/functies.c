@@ -20,8 +20,9 @@ int temp_down = 24;
 int temp_up = 16;
 int licht_down = 60;
 int licht_up = 16;
-int afstand_up = 10;
+int afstand_up = 20;
 int afstand_down = 5;
+int afstand_manual = 20;
 int manual = 0;		// 1 is manual aan
 int teller = 0;
 
@@ -32,8 +33,6 @@ void ldr();
 void afstand();
 void newRegel();
 void upDown();
-void goDown();
-void goUp();
 void afstandStil();
 void manual_uit();
 void check_input(unsigned char data);
@@ -130,58 +129,36 @@ void afstandStil(){ // hc-sr04
 // geel = pb1 : proces naar beneden gaan knipperend lampje
 // groe = pb2 : hij is omhoog
 void upDown(){
-	int ls = 0;	// licht sensor
-	int ts = 0;	// temperatuur sensor
-	for (int i = 0; i < 10; i++){
-		ls = ls + atoi(licht_sensor); // maakt er int van en stopt het bij ls
-		ts = ts + atoi(temp_sensor);
-	}
-	ls = ls / 10;
-	ts = ts / 10;
-	if((ls >= licht_up || ts >= temp_up) && !manual){
-		goDown();				// warm/licht ga omlaag ROOD
-	}
-	else if((ls <= licht_down || ts <= temp_down) && !manual){
-		goUp();					// koud/donker ga omhoog GROEN
-	}
-}
+	int ls = atoi(licht_sensor); // maakt er int van en stopt het in ls
+	int ts = atoi(temp_sensor);
 
-void goDown(){
+	afstandStil(); // haal nieuwe afstand op
 	int as = atoi(afstand_sensor);	// afstand sensor wordt int
-	PORTB &= ~(1 << PB2); // groen lampje uit
-	if (as > afstand_down){
+	
+	afstand_up = afstand_manual; // zorgt er voor dat afstand_up de waarde krijgt die de gebruiker in manual mode heeft opgegeven
+	
+	if(((ls >= licht_down || ts >= temp_down) && !manual) || ((as > (afstand_manual+1)) && manual)){
+		PORTB &= ~(1 << PB2); // groen lampje uit
 		PORTB |= (1 << PB0); // rood lampje aan
-		_delay_ms(100);
-		PORTB |= (1 << PB1); // geel lampje aan
-		_delay_ms(100);
-		PORTB &= ~(1 << PB1); // geel lampje uit
-		
-		afstandStil();
-		as = atoi(afstand_sensor);
+			
+		if (as > afstand_down){
+			PORTB |= (1 << PB1);
+			_delay_ms(100);
+			PORTB &= ~(1 << PB1);
+			_delay_ms(100);
+		}
 	}
-	PORTB |= (1 << PB0); // rood lampje aan
-}
-
-void goUp(){
-	int as = atoi(afstand_sensor);	// afstand sensor wordt int
-	PORTB &= ~(1 << PB0); // rood lampje uit
-	if (as < afstand_up){
+	else if(((ls <= licht_up || ts <= temp_up) && !manual) || ((as < (afstand_manual-1)) && manual)){
+		PORTB &= ~(1 << PB0); // rood lampje uit
 		PORTB |= (1 << PB2); // groen lampje aan
-		_delay_ms(100);
-		PORTB |= (1 << PB1); // geel lampje aan
-		_delay_ms(100);
-		PORTB &= ~(1 << PB1); // geel lampje uit
-		
-		afstandStil();
-		as = atoi(afstand_sensor);
+			
+		if (as < afstand_up){
+			PORTB |= (1 << PB1);
+			_delay_ms(100);
+			PORTB &= ~(1 << PB1);
+			_delay_ms(100);
+		}
 	}
-	PORTB |= (1 << PB2); // groen lampje aan
-}
-
-void manual_uit(){
-	manual = 1;
-	afstand_up = 20;
-	afstand_down = 5;
 }
 
 void newRegel(){
@@ -189,12 +166,20 @@ void newRegel(){
 	USART_send('\n');
 }
 
-int unsigned combine(unsigned y, unsigned x){
-	return (x * 10) + y;
+int unsigned combine(unsigned x, unsigned y){
+	x -= 48;
+	y -= 48;
+	unsigned pow = 10;
+	return (y * pow) + x;
 }
 
-int unsigned combine3(unsigned z, unsigned y, unsigned x){
-	return (z * 100) + ((x * 10) + y);
+int unsigned combine3(unsigned x, unsigned y, unsigned z){
+	x -= 48;
+	y -= 48;
+	z -= 48;
+	unsigned pow1 = 10;
+	unsigned pow2 = 100;
+	return (z * pow2) + (y * pow1) + x;
 }
 
 ISR ( USART_RX_vect ){
@@ -205,36 +190,38 @@ ISR ( USART_RX_vect ){
 		// 1 = rolluik UITrollen // Rood
 		case '1':
 			manual = 1;
-			goDown();
+			afstand_manual = 5;
 			return;
 			
 		// 2 = rolluik OProllen // Groen
 		case '2':
 			manual = 1;
-			goUp();
+			afstand_manual = 10;
 			return;
 			
 		// 3 = set
 		case '3':
-			manual_uit();
-			temp_down = combine((int)USART_receive()-48, (int) USART_receive()-48);
-			temp_up = combine((int)USART_receive()-48, (int) USART_receive()-48);
-			licht_down = combine((int)USART_receive()-48, (int) USART_receive()-48);
-			licht_up = combine((int)USART_receive()-48, (int) USART_receive()-48);
+			manual = 0;
+			temp_down = combine((int) USART_receive(), (int) USART_receive());
+			temp_up = combine((int) USART_receive(), (int) USART_receive());
+			licht_down = combine((int) USART_receive(), (int) USART_receive());
+			licht_up = combine((int) USART_receive(), (int) USART_receive());
 			return;
 			
 		// 7 = uit-/oprol afstand
 		case '7':
 			manual = 1;
-			int uitoprol = combine3((int)USART_receive()-48, (int)USART_receive()-48, (int) USART_receive()-48);
-			afstand_up = uitoprol;
-			afstand_down = uitoprol;
-			goDown();
+			int uitoprol = combine3((int) USART_receive(), (int) USART_receive(), (int) USART_receive());
+			
+			afstand_manual = uitoprol;
 			return;
 			
 		// 8 = set manual
 		case '8':
-			manual = 1;
+			manual = (int) USART_receive() - 48;
+			if (manual == 1){
+				afstand_manual = (int) atoi(afstand_sensor);
+			}
 			return;
 			
 		default:

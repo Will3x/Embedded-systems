@@ -42,13 +42,11 @@ void init_USART(){
 void init_scheduler()
 {
 	SCH_Init_T1();
-	//SCH_Add_Task(check_input,0,1); // kan weg straks, interrupt neemt deze op zich
 	SCH_Add_Task(temperatuur,1,100);
 	SCH_Add_Task(ldr,2,100);
 	SCH_Add_Task(afstand,3,100);
-	//SCH_Add_Task(upDown,4,10);
 	SCH_Add_Task(newRegel,6,100);
-	
+	SCH_Add_Task(upDown,8,20);
 	SCH_Start();
 }
 
@@ -69,5 +67,5 @@ void init_lampjes(){
 	DDRB |= _BV(PB1);	// pin1 B = output
 	DDRB |= _BV(PB2);	// pin2 B = output
 	
-	PORTB = 0; // lampjes uitzetten
+	PORTB |= (1 << PB2); // groen lampje aan
 }
