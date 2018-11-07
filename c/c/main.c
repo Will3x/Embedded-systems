@@ -1,11 +1,12 @@
-// A0 : TMP36 (middelste van de 3)
-// A1 : LDR (min kant)
+// A0 : TMP36 (the middle pin)
+// A1 : LDR (min side)
 // PIND2 : Echo
 // PIND3 : Trig
 //
-// TMP36 rechts = min en links is plus (platte kant voor)
-// LDR plus aangesloten op 3,3 V
+// TMP36 Right pin = min and left pin is plus (flat side in front)
+// LDR : 3.3v
 // VCC : 5v
+// Refer to the setup page in manual if needed
 
 #include <avr/io.h>
 #include <stdlib.h>
@@ -20,18 +21,20 @@
 int main(void);
 void setup();
 
-int main(void){
+int main(void)
+{
 	setup();
 	while(1) {
 		SCH_Dispatch_Tasks();
 	}
 }
 
-void setup(){
+void setup()
+{
 	init_connectie();
-	init_adc();			// Setup the ADC
+	init_adc();				// Setup the ADC
 	init_USART();			// Setup the USART
-	init_dist();
-	init_scheduler();
-	init_lampjes();
+	init_dist();			// Setup distance sensor
+	init_scheduler();		// Setup scheduler
+	init_LEDS();			// Setup LED
 }

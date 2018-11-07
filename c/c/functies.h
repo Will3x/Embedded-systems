@@ -11,15 +11,13 @@
 
 void USART_send(unsigned char data);  
 void USART_putstring(char* StringPtr);
-void temperatuur();
+void temperature();
 void ldr();
-void afstand();
-void newRegel();
+void distance();
+void newLine();
 void upDown();
 void check_input(unsigned char data);
 ISR ( USART_RX_vect );
 uint16_t read_adc(uint8_t channel);
-
-
 
 #endif /* FUNCTIES_H_ */
