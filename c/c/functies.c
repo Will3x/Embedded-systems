@@ -218,7 +218,7 @@ ISR ( USART_RX_vect ){
 			
 		// 8 = set manual
 		case '8':
-			manual = (int) USART_receive();
+			manual = (int) USART_receive() - 48;
 			if (manual == 1){
 				afstand_manual = (int) atoi(afstand_sensor);
 			}
