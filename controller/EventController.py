@@ -33,7 +33,8 @@ class EventController:
             self.canv_light.place_forget()
 
         elif var.get() == 3:
-            """ TODO: CLEAN THIS MESS """
+            ser.SerialController.write(int(self.view.wm_title()[7:8]), 8, '1')
+
             self.view.manual1.config(state=NORMAL)
             self.view.manual2.config(state=NORMAL)
 
@@ -54,7 +55,8 @@ class EventController:
             self.view.entry4.config(state=DISABLED)
 
         elif var.get() == 4:
-            """ TODO: CLEAN THIS MESS """
+            ser.SerialController.write(int(self.view.wm_title()[7:8]), 8, '0')
+
             self.view.manual1.config(state=DISABLED)
             self.view.manual2.config(state=DISABLED)
 
