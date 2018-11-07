@@ -47,6 +47,9 @@ class EventController:
         elif var.get() == 3:
             ser.SerialController.write(int(self.view.wm_title()[7:8]), 8, '1')
 
+            self.view.graph_controller.view.hide_borders()
+            self.view.graph_controller2.view.hide_borders()
+
             self.view.manual1.config(state=NORMAL)
             self.view.manual2.config(state=NORMAL)
 
@@ -68,6 +71,9 @@ class EventController:
 
         elif var.get() == 4:
             ser.SerialController.write(int(self.view.wm_title()[7:8]), 8, '0')
+
+            self.view.graph_controller.view.show_borders()
+            self.view.graph_controller2.view.show_borders()
 
             self.view.manual1.config(state=DISABLED)
             self.view.manual2.config(state=DISABLED)

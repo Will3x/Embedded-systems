@@ -53,6 +53,22 @@ class GraphView:
             self.line_t = [self.canvas.create_line(50, x, 1050, x, width=1, fill=st.border_blue) for x in border.values()]
             self.txt_t = [self.canvas.create_text(1020, y - 10, text=x, fill=st.border_blue) for x, y in border.items()]
 
+    def hide_borders(self):
+        if self.sensor == 'l':
+            [self.canvas.itemconfigure(x, state='hidden') for x in self.line_l]
+            [self.canvas.itemconfigure(x, state='hidden') for x in self.txt_l]
+        if self.sensor == 't':
+            [self.canvas.itemconfigure(x, state='hidden') for x in self.line_t]
+            [self.canvas.itemconfigure(x, state='hidden') for x in self.txt_t]
+
+    def show_borders(self):
+        if self.sensor == 'l':
+            [self.canvas.itemconfigure(x, state='normal') for x in self.line_l]
+            [self.canvas.itemconfigure(x, state='normal') for x in self.txt_l]
+        if self.sensor == 't':
+            [self.canvas.itemconfigure(x, state='normal') for x in self.line_t]
+            [self.canvas.itemconfigure(x, state='normal') for x in self.txt_t]
+
     def draw_guidelines(self):
         [self.canvas.create_line(50 + x * 50, 450, 50 + x * 50, 50, width=1, fill=st.guide_lines) for x in range(21)]
 

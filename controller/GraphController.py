@@ -12,7 +12,6 @@ class GraphController:
         self.model = model.GraphModel()
         self.view = view.GraphView(canvas, sensor, self)
 
-
     def updategraph(self):
         """ Called by MainView.tick() """
         self.view.drawGraph()

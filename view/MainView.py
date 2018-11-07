@@ -92,16 +92,23 @@ class MainView(Toplevel):
 
         button_width = 15
 
-        Button(self, width=92, disabledforeground=st.fg_white, bg=st.panel_bg, state=DISABLED, borderwidth=0, height=2).place(relx=0.11, rely=0.7, anchor=W)
-        Button(self, text="Status", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg, state=DISABLED, borderwidth=0, height=2).place(relx=0.03, rely=0.7, anchor=W)
+        Button(self, width=92, disabledforeground=st.fg_white, bg=st.panel_bg, state=DISABLED, borderwidth=0,
+               height=2).place(relx=0.11, rely=0.7, anchor=W)
+        Button(self, text="Status", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg,
+               state=DISABLED, borderwidth=0, height=2).place(relx=0.03, rely=0.7, anchor=W)
 
-        Button(self, text="Manual mode", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg, state=DISABLED, borderwidth=0, height=2).place(relx=0.831, rely=0.7, anchor=E)
+        Button(self, text="Manual mode", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg,
+               state=DISABLED, borderwidth=0, height=2).place(relx=0.831, rely=0.7, anchor=E)
 
-        Button(self, width=63, disabledforeground=st.fg_white, bg=st.panel_bg, fg=st.fg_white, state=DISABLED, borderwidth=0, height=12).place(relx=0.11, rely=0.86, anchor=W)
-        Button(self, text="Settings\nauto", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg, state=DISABLED, borderwidth=0, height=12).place(relx=0.03, rely=0.86, anchor=W)
+        Button(self, width=63, disabledforeground=st.fg_white, bg=st.panel_bg, fg=st.fg_white, state=DISABLED,
+               borderwidth=0, height=12).place(relx=0.11, rely=0.86, anchor=W)
+        Button(self, text="Settings\nauto", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg,
+               state=DISABLED, borderwidth=0, height=12).place(relx=0.03, rely=0.86, anchor=W)
 
-        Button(self, width=50, disabledforeground=st.fg_white, bg=st.panel_bg, fg=st.fg_white, state=DISABLED, borderwidth=0, height=12).place(relx=0.97, rely=0.86, anchor=E)
-        Button(self, text="Settings\nmanual", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg, state=DISABLED, borderwidth=0, height=12).place(relx=0.65, rely=0.86, anchor=E)
+        Button(self, width=50, disabledforeground=st.fg_white, bg=st.panel_bg, fg=st.fg_white, state=DISABLED,
+               borderwidth=0, height=12).place(relx=0.97, rely=0.86, anchor=E)
+        Button(self, text="Settings\nmanual", width=button_width, disabledforeground=st.fg_white, bg=st.panel_title_bg,
+               state=DISABLED, borderwidth=0, height=12).place(relx=0.65, rely=0.86, anchor=E)
 
         radio1 = Radiobutton(self, text="Light intensity", indicatoron=False, variable=var1, borderwidth=0,
                              fg=st.fg_white,
@@ -123,8 +130,9 @@ class MainView(Toplevel):
         self.manual_btn_on.place(relx=0.901, rely=0.7, anchor=E)
 
         self.manual_btn2 = Radiobutton(self, text="OFF", indicatoron=False, variable=var2,
-                                   command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0,
-                                   selectcolor=st.btn_bg_blue, fg=st.fg_white, bg=st.btn_bg_grey, height=2, value=4, width=10)
+                                       command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0,
+                                       selectcolor=st.btn_bg_blue, fg=st.fg_white, bg=st.btn_bg_grey, height=2, value=4,
+                                       width=10)
         self.manual_btn2.place(relx=0.97, rely=0.7, anchor=E)
 
         y_pos = .785  # start position
@@ -134,7 +142,7 @@ class MainView(Toplevel):
                        'Roll in on light intensity']
         default_values = [ba.temp_rollo, ba.temp_rolli, ba.light_rollo, ba.temp_rolli]
 
-        for x in range(1, len(labels_text)+1):
+        for x in range(1, len(labels_text) + 1):
             entries.insert(0, f'self.entry{x} = Entry(self, width=33, borderwidth=0)')
             entries.insert(1, f'self.entry{x}.insert(0, default_values[{x-1}])')
             entries.insert(2, f'self.entry{x}.place(relx=0.3, rely={y_pos:.4f}, anchor=W)')
@@ -149,7 +157,8 @@ class MainView(Toplevel):
 
         y_pos = .785  # reset start position
 
-        self.manual1 = Label(self, text='Uitrol afstand', disabledforeground=st.btn_bg_grey, bg=st.panel_bg, fg=st.fg_white, state=DISABLED)
+        self.manual1 = Label(self, text='Uitrol afstand', disabledforeground=st.btn_bg_grey, bg=st.panel_bg,
+                             fg=st.fg_white, state=DISABLED)
         self.manual1.place(relx=0.75, rely=y_pos, anchor=E)
 
         self.manual2 = Entry(self, width=33, borderwidth=0)
@@ -158,11 +167,13 @@ class MainView(Toplevel):
         self.manual2.place(relx=0.94, rely=y_pos, anchor=E)
 
         self.manual_btn_on = Button(self, text='Roll out', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width,
-                                    command=lambda: self.event_controller.buttonclick_event(5), height=2, borderwidth=0, state=DISABLED)
+                                    command=lambda: self.event_controller.buttonclick_event(5), height=2, borderwidth=0,
+                                    state=DISABLED)
         self.manual_btn_on.place(relx=0.83, rely=y_pos + .14, anchor=E)
 
         self.manual_btn2 = Button(self, text='Roll in', bg=st.btn_bg_grey, fg=st.fg_white, width=button_width,
-                                  command=lambda: self.event_controller.buttonclick_event(6), height=2, borderwidth=0, state=DISABLED)
+                                  command=lambda: self.event_controller.buttonclick_event(6), height=2, borderwidth=0,
+                                  state=DISABLED)
         self.manual_btn2.place(relx=.94, rely=y_pos + .14, anchor=E)
 
         self.setbtn1 = Button(self, text='Set', width=button_width, bg=st.btn_bg_blue, fg=st.fg_white,
@@ -170,7 +181,8 @@ class MainView(Toplevel):
         self.setbtn1.place(relx=0.383, rely=y_pos + .15, anchor=W)
 
         self.setbtn2 = Button(self, text='Set', width=button_width, bg=st.btn_bg_grey, fg=st.fg_white, state=DISABLED,
-                         borderwidth=0, command=lambda: self.event_controller.check(int(self.wm_title()[7:8]), 7, self.manual2.get()))
+                              borderwidth=0, command=lambda: self.event_controller.check(int(self.wm_title()[7:8]), 7,
+                                                                                         self.manual2.get()))
         self.setbtn2.place(relx=0.94, rely=y_pos + .04, anchor=E)
 
         self.status_label = Label(self, fg=st.btn_bg_blue, bg=st.panel_bg)
