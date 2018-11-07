@@ -14,7 +14,7 @@ void init_adc();
 void init_USART();			
 void init_dist();
 void init_scheduler();
-void init_lampjes();
+void init_LEDS();
 
 
 #endif /* INIT_H_ */

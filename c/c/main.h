@@ -12,6 +12,4 @@
 int main(void);
 void setup();
 
-
-
 #endif /* MAIN_H_ */
