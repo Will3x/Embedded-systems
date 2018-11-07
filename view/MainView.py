@@ -76,7 +76,14 @@ class MainView(Toplevel):
 
     def update_label(self):
         values = self.event_controller.get_values()
-        self.status_label.config(text='{}cm'.format(values[int(self.wm_title()[7:8])]['a']))
+        status = self.event_controller.status_open_closed(int(self.wm_title()[7:8]), values)
+
+        self.status_label.config(text='{}'.format(status))
+
+        if 'Closed' in status:
+            self.status_label.config(fg=st.btn_bg_red)
+        else:
+            self.status_label.config(fg=st.btn_bg_blue)
 
     def addwidgets(self):
         """ Creates and adds widgets to the frame, such as buttons, labels, and input fields. """

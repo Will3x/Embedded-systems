@@ -18,7 +18,7 @@ class GraphView:
     def add_to_canvas(self, sensor, min, max):
         if sensor == 'l':
             count = 100
-            self.canvas.create_text((int(self.canvas['width'])/2, 25), text="Light sensitivity every 3s",
+            self.canvas.create_text((int(self.canvas['width'])/2, 25), text="Light sensitivity",
                                     fill=st.label_white)
             for y in range(min, max+25, 40):
                 self.canvas.create_line(50, y, 1050, y, width=1, fill=st.guide_lines)  # y-axis
@@ -27,7 +27,7 @@ class GraphView:
 
         elif sensor == 't':
             count = 32
-            self.canvas.create_text((int(self.canvas['width'])/2, 25), text="Temperature in °C every 3s",
+            self.canvas.create_text((int(self.canvas['width'])/2, 25), text="Temperature in °C",
                                     fill=st.label_white)
             for y in range(min, max+25, 25):
                 self.canvas.create_line(50, y, 1050, y, width=1, fill=st.guide_lines)  # y-axis
@@ -70,11 +70,11 @@ class GraphView:
             self.canvas.create_line(x1, y1, self.x2, [self.y2], fill=st.orange, width=2, tags='t')
             self.s += 1
 
-            # if self.sensor == 'temp':
-            #     self.mean.append(int(self.controller.get_raw_values()[1]['temp']))
+            # if self.sensor == 't':
+            #     self.mean.append(int(self.controller.get_raw_values()[1]['t']))
             #     print('Temperature mean: {0:.2f}'.format(sum(self.mean)/len(self.mean)))
-            # if self.sensor == 'ldr':
-            #     self.mean.append(int(self.controller.get_raw_values()[1]['ldr']))
+            # if self.sensor == 'l':
+            #     self.mean.append(int(self.controller.get_raw_values()[1]['l']))
             #     print('Light intensity mean: {0:.2f}'.format(sum(self.mean)/len(self.mean)))
 
         except tkinter.TclError:

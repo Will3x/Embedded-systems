@@ -34,6 +34,9 @@ class DashboardController:
         devices = ser.SerialController.current_connections()
         self.view.change_label(devices, values)
 
+    def status_open_closed(self, device, values):
+        return self.model.status_open_closed(device, values)
+
 
 
 

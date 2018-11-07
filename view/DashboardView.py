@@ -27,7 +27,7 @@ class DashboardView(Tk):
         self.controller.read_from_serial()
         self.refresh()
         [x.tick() for x in self.mainview.values() if x != '']
-        self.after(2000, self.tick)
+        self.after(1500, self.tick)
 
     def set_controller_instance(self, controller):
         self.controller = controller
@@ -72,7 +72,6 @@ class DashboardView(Tk):
     def update_instances(self, devices, prev_devices):
         for x in devices.keys():
             if devices[x] == '' and prev_devices[x] != '' and self.mainview[x] != '':
-                print('closing view...')
                 self.mainview[x].close()
                 self.mainview[x] = ''
 
@@ -101,8 +100,7 @@ class DashboardView(Tk):
             elif devices[x] != '' and value[x] != ():
                 temp = value[x]['t']
                 light = value[x]['l']
-                status = ''.join(['Closed' if int(value[x]['a']) < 10 else
-                                  'Open ({}cm)'.format(value[x]['a']) if 10 <= int(value[x]['a']) else None])
+                status = self.controller.status_open_closed(x, value)
 
                 exec(f'self.temp{x}.config(text="{temp}°C", fg=st.btn_bg_blue)')
                 exec(f'self.light{x}.config(text="{light} / 100", fg=st.btn_bg_blue)')
@@ -120,62 +118,65 @@ class DashboardView(Tk):
         y_position = .37  # start position y
 
         entries = []
-        count = 0
 
         for x in range(1, 6):
-            count += 1
-            if count == 4:
+            if x == 4:
                 x_position = .2
                 y_position = .77
 
-            entries.insert(0, f'self.labelframe{x} = LabelFrame(self, background=st.panel_bg, '
-                              f'highlightbackground=st.highlight_bg ,highlightcolor=st.highlight_bg, highlightthickness=1, '
-                              f'borderwidth=0, height=300, width=400)')
+            entries.insert(0, f'self.labelframe{x} = LabelFrame(self, background=st.panel_bg, highlightbackground='
+                              f'st.highlight_bg, highlightcolor=st.highlight_bg, highlightthickness=1, borderwidth=0, '
+                              f'height=300, width=400)')
             entries.insert(1, f'self.labelframe{x}.place(relx={x_position}, rely={y_position}, anchor=CENTER)')
-            entries.insert(2, f'self.button{x} = Button(self, text="Not connected", width=20, height=2,'
-                              f'bg="#D60000", fg=st.fg_white, disabledforeground="white", borderwidth=0, state=DISABLED, '
+            entries.insert(2, f'self.button{x} = Button(self, text="Not connected", width=20, height=2, bg="#D60000", '
+                              f'fg=st.fg_white, disabledforeground="white", borderwidth=0, state=DISABLED, '
                               f'command=partial(self.open_btn,{x}))')
             entries.insert(3, f'self.button{x}.place(relx={x_position+.06}, rely={y_position+.12}, anchor=CENTER)')
-            entries.insert(2, f'self.btnopen{x} = Button(self, text="Roll out", width=10, height=2,'
-                              f'bg=st.btn_bg_grey, fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
-            entries.insert(3, f'self.btnopen{x}.place(relx={x_position-.03}, rely={y_position+.12}, anchor=CENTER)')
-            entries.insert(2, f'self.btnclose{x} = Button(self, text="Roll in", width=10, height=2,'
-                              f'bg=st.btn_bg_grey, fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
-            entries.insert(3, f'self.btnclose{x}.place(relx={x_position-.09}, rely={y_position+.12}, anchor=CENTER)')
-            entries.insert(4, f'self.labelt{x} = Label(self, text="Temperature: ", background=st.panel_bg, fg=st.fg_white)')
-            entries.insert(5, f'self.labelt{x}.place(relx={x_position-.04}, rely={y_position-.08}, anchor=E)')
-            entries.insert(6, f'self.temp{x} = Label(self, background=st.panel_bg, text="NO DATA", fg=st.btn_bg_grey)')
-            entries.insert(7, f'self.temp{x}.place(relx={x_position-.04}, rely={y_position-.079}, anchor=W)')
-            entries.insert(8, f'self.labell{x} = Label(self, text="Light intesity: ", background=st.panel_bg,fg=st.fg_white)')
-            entries.insert(9, f'self.labell{x}.place(relx={x_position-.04}, rely={y_position-.029}, anchor=E)')
-            entries.insert(10, f'self.light{x} = Label(self, background=st.panel_bg, text="NO DATA", fg=st.btn_bg_grey)')
-            entries.insert(11, f'self.light{x}.place(relx={x_position-.04}, rely={y_position-.0277}, anchor=W)')
-            entries.insert(12, f'self.labels{x} = Label(self, text="Status: ", background=st.panel_bg, fg=st.fg_white)')
-            entries.insert(13, f'self.labels{x}.place(relx={x_position-.04:.2f}, rely={y_position+.04}, anchor=E)')
-            entries.insert(12, f'self.status{x} = Label(self, background=st.panel_bg, text="NO DATA", fg=st.btn_bg_grey)')
-            entries.insert(13, f'self.status{x}.place(relx={x_position-.04:.2f}, rely={y_position+.0415}, anchor=W)')
-            entries.insert(14,
-                           f'self.titel{x} = Label(self, text="Device {x}", background=st.panel_bg, fg=st.fg_white)')
-            entries.insert(15, f'self.titel{x}.place(relx={x_position:.2f}, rely={y_position-.14}, anchor=CENTER)')
+            entries.insert(4, f'self.btnopen{x} = Button(self, text="Roll out", width=10, height=2, bg=st.btn_bg_grey, '
+                              f'fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
+            entries.insert(5, f'self.btnopen{x}.place(relx={x_position-.03}, rely={y_position+.12}, anchor=CENTER)')
+            entries.insert(6, f'self.btnclose{x} = Button(self, text="Roll in", width=10, height=2, bg=st.btn_bg_grey, '
+                              f'fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED)')
+            entries.insert(7, f'self.btnclose{x}.place(relx={x_position-.09}, rely={y_position+.12}, anchor=CENTER)')
+            entries.insert(8, f'self.labelt{x} = Label(self, text="Temperature: ", background=st.panel_bg, '
+                              f'fg=st.fg_white)')
+            entries.insert(9, f'self.labelt{x}.place(relx={x_position-.04}, rely={y_position-.08}, anchor=E)')
+            entries.insert(10, f'self.temp{x} = Label(self, background=st.panel_bg, text="NO DATA", fg=st.btn_bg_grey)')
+            entries.insert(11, f'self.temp{x}.place(relx={x_position-.04}, rely={y_position-.079}, anchor=W)')
+            entries.insert(12, f'self.labell{x} = Label(self, text="Light intesity: ", background=st.panel_bg, '
+                               f'fg=st.fg_white)')
+            entries.insert(13, f'self.labell{x}.place(relx={x_position-.04}, rely={y_position-.029}, anchor=E)')
+            entries.insert(14, f'self.light{x} = Label(self, background=st.panel_bg, text="NO DATA", '
+                               f'fg=st.btn_bg_grey)')
+            entries.insert(15, f'self.light{x}.place(relx={x_position-.04}, rely={y_position-.0277}, anchor=W)')
+            entries.insert(16, f'self.labels{x} = Label(self, text="Status: ", background=st.panel_bg, fg=st.fg_white)')
+            entries.insert(17, f'self.labels{x}.place(relx={x_position-.04:.2f}, rely={y_position+.04}, anchor=E)')
+            entries.insert(18, f'self.status{x} = Label(self, background=st.panel_bg, text="NO DATA", '
+                               f'fg=st.btn_bg_grey)')
+            entries.insert(19, f'self.status{x}.place(relx={x_position-.04:.2f}, rely={y_position+.0415}, anchor=W)')
+            entries.insert(20, f'self.titel{x} = Label(self, text="Device {x}", background=st.panel_bg, '
+                               f'fg=st.fg_white)')
+            entries.insert(21, f'self.titel{x}.place(relx={x_position:.2f}, rely={y_position-.14}, anchor=CENTER)')
 
             x_position += .3
 
             for items in entries:
                 exec(items)
 
-        self.close_all_btn = Button(self, text="Roll all in", width=30, height=2, bg=st.btn_bg_grey,
-                                    fg=st.fg_white, borderwidth=0, state=NORMAL)
+        self.close_all_btn = Button(self, text="Roll all in", width=30, height=2, bg=st.btn_bg_grey, fg=st.fg_white,
+                                    borderwidth=0, state=NORMAL)
         self.close_all_btn.place(relx=0.42, rely=0.14, anchor=CENTER)
-        self.open_all_btn = Button(self, text="Roll all out", width=30, height=2, bg=st.btn_bg_grey,
-                                   fg=st.fg_white, borderwidth=0, state=NORMAL)
+
+        self.open_all_btn = Button(self, text="Roll all out", width=30, height=2, bg=st.btn_bg_grey, fg=st.fg_white,
+                                   borderwidth=0, state=NORMAL)
         self.open_all_btn.place(relx=0.58, rely=0.14, anchor=CENTER)
 
         self.labelframe6 = LabelFrame(self, background=st.panel_bg, highlightbackground=st.highlight_bg,
-                                      highlightcolor=st.highlight_bg, highlightthickness=1, borderwidth=0,
-                                      height=300, width=400)
-
+                                      highlightcolor=st.highlight_bg, highlightthickness=1, borderwidth=0, height=300,
+                                      width=400)
         self.labelframe6.place(relx=x_position, rely=y_position, anchor=CENTER)
-        self.label6 = Label(self, text="v1.0\n\nCreated by IT Works", background=st.panel_bg, fg=st.fg_white)
+
+        self.label6 = Label(self, text="Created by IT Works", background=st.panel_bg, fg=st.fg_white)
         self.label6.place(relx=x_position, rely=y_position, anchor=CENTER)
 
     def make_background(self):

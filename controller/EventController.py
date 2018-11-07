@@ -1,6 +1,6 @@
 from tkinter import *
 import Style as st
-from model import InstructionModel as instr
+from model import InstructionModel as instr, SensordataModel as se
 from controller import SerialController as ser
 
 
@@ -10,12 +10,18 @@ class EventController:
         self.view = view
         self.canv_light, self.canv_temp = view.canvas
 
-    def write(self, device, id, *value):
-        if instr.InstructionModel.check_value(id, value):
-            ser.SerialController.write(device, id, value)
+    @staticmethod
+    def write(device, instruction, *value):
+        if instr.InstructionModel.check_value(instruction, value):
+            ser.SerialController.write(device, instruction, value)
 
-    def get_values(self):
+    @staticmethod
+    def get_values():
         return ser.SerialController.current_values()
+
+    @staticmethod
+    def status_open_closed(device, values):
+        return se.SensordataModel.status_open_closed(device, values)
 
     def buttonclick_event(self, var):
         if var.get() == 1:
@@ -35,7 +41,7 @@ class EventController:
             self.view.manual_btn2.config(state=NORMAL)
 
             self.view.setbtn2.config(state=NORMAL, bg=st.btn_bg_blue)
-            self.view.setbtn1.config(state=DISABLED, bg="#444D5F")
+            self.view.setbtn1.config(state=DISABLED, bg=st.btn_bg_grey)
 
             self.view.label1.config(state=DISABLED)
             self.view.label2.config(state=DISABLED)
@@ -55,7 +61,7 @@ class EventController:
             self.view.manual_btn_on.config(state=DISABLED)
             self.view.manual_btn2.config(state=DISABLED)
 
-            self.view.setbtn2.config(state=DISABLED, bg="#444D5F")
+            self.view.setbtn2.config(state=DISABLED, bg=st.btn_bg_grey)
             self.view.setbtn1.config(state=NORMAL, bg=st.btn_bg_blue)
 
             self.view.label1.config(state=NORMAL)
