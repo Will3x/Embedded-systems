@@ -26,18 +26,6 @@ int distance_manual = 20;				// Manual set distance at which the sunshade closes
 int manual = 0;							// if manual is 1 manual mode is enabled
 int teller = 0;
 
-void USART_send(unsigned char data);    // Sent a char over the serial port
-void USART_putstring(char* StringPtr);  // Sent a String over the serial port
-void temperature();						// Read the temperature sensor
-void ldr();								// Read the LDR sensor
-void distance();						// Read the distance sensor
-void newLine();							// Print a new line
-void upDown();							// Opens and closes the sunshade
-void distanceStill();					// Checks if the shade is moving
-void manual_off();						// Manual mode on/off
-void check_input(unsigned char data);	// Checks the serial port on input
-ISR ( USART_RX_vect );					// Enables the ISR
-uint16_t read_adc(uint8_t channel);     // Function to read the analog pin(s)
 
 
 unsigned char USART_receive(void)

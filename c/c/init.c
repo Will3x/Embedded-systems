@@ -13,13 +13,6 @@
 #define BAUDRATE 9600
 #define BAUD_PRESCALLER (((F_CPU / (BAUDRATE * 16UL))) - 1)
 
-void init_connectie();					// Connection 
-void init_adc();						// Function to initialize/configure the ADC
-void init_USART();						// Function to initialize/configure the USART/serial
-void init_dist();						// Function to initialize/configure the distance sensor
-void init_scheduler();					// Function to initialize and add all the tasks to the scheduler
-void init_LEDS();						// Function to initialize/configure the LED's
-
 void init_connectie()
 {
 	UCSR0A = 0;							// disable U2X mode

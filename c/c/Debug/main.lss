@@ -19,7 +19,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_abbrev 00000b58  00000000  00000000  00002470  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000a67  00000000  00000000  00002fc8  2**0
+  8 .debug_line   00000a65  00000000  00000000  00002fc8  2**0
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  000002dc  00000000  00000000  00003a30  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -968,8 +968,8 @@ ISR ( USART_RX_vect )
  7c0:	18 95       	reti
 
 000007c2 <init_connectie>:
-void init_scheduler();					// Function to initialize and add all the tasks to the scheduler
-void init_LEDS();						// Function to initialize/configure the LED's
+#define BAUDRATE 9600
+#define BAUD_PRESCALLER (((F_CPU / (BAUDRATE * 16UL))) - 1)
 
 void init_connectie()
 {
