@@ -10,3 +10,5 @@ init.c
 
 main.c
 
+sensors.c
+

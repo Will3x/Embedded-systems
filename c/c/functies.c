@@ -9,13 +9,14 @@
 #include "main.h"
 #include "functies.h"
 #include "init.h"
+#include "sensors.h"
 
 // variables
 uint16_t adc_value;						// Reads the ADC value
 uint16_t adc_echo;						// Reads the ADC echo
-char temp_sensor[5];					// Value of the temperature sensor
-char LDR_sensor[5];						// Value of LDR
-char distance_sensor[5];				// Value of distance sensor
+char temp_sensor[];					// Value of the temperature sensor
+char LDR_sensor[];						// Value of LDR
+char distance_sensor[];				// Value of distance sensor
 int temp_down = 24;						// Temperature at which the sunshade closes
 int temp_up = 16;						// Temperature at which the sunshade opens
 int LDR_down = 60;						// Level of light at which the sunshade closes
@@ -54,44 +55,6 @@ uint16_t read_adc(uint8_t channel)
 	ADCSRA |= (1<<ADSC);              //Starts a new conversion
 	while(ADCSRA & (1<<ADSC));        //Wait until the conversion is done
 	return ADCW;                      //Returns the ADC value of the chosen channel
-}
-
-void temperature()
-{
-	USART_putstring("Temp : ");
-	adc_value = read_adc(0);
-	adc_value = (((((double)adc_value / 1024) * 5) - 0.5) * 100); // Calculate temperature
-	itoa(adc_value, temp_sensor, 10);							  //Convert the read value to an ascii string
-	USART_putstring(temp_sensor);								  //Send the converted value to the terminal
-	USART_putstring("  ");
-}
-
-void ldr()
-{
-	USART_putstring("LDR : ");
-	adc_value = read_adc(1);
-	adc_value = ((((double)adc_value)/1024)*100 *1.5);			  // Calculate the amount of light
-	itoa(adc_value, LDR_sensor, 10);							  // Convert the read value to an ascii string
-	USART_putstring(LDR_sensor);								  // Send the converted value to the terminal
-	USART_putstring("  ");
-}
-
-void distance()
-{
-	USART_putstring("distance : ");
-	PORTD |= _BV(PD3);
-	_delay_us(10);
-	PORTD &= ~_BV(PD3);
-	
-	loop_until_bit_is_set(PIND, PD2);
-	TCNT1 = 0;
-	loop_until_bit_is_clear(PIND, PD2);
-	uint16_t count = TCNT1;
-	float distance = ((float)count / 4);		// Calculate the distance
-
-	itoa(distance, distance_sensor, 10);        // Convert the read value to an ascii string
-	USART_putstring(distance_sensor);			// Send the converted value to the terminal
-	USART_putstring("  ");
 }
 
 void distanceStill()

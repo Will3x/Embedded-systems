@@ -9,6 +9,7 @@
 #include "main.h"
 #include "functies.h"
 #include "init.h"
+#include "sensors.h"
 
 #define BAUDRATE 9600
 #define BAUD_PRESCALLER (((F_CPU / (BAUDRATE * 16UL))) - 1)
