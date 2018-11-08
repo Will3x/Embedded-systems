@@ -36,7 +36,7 @@ class GraphView:
 
         self.draw_guidelines()
 
-    def draw_borders(self, sensor, min, max):
+    def draw_borders(self, sensor, max, min):
         if self.line_l is not None and self.txt_l is not None:
             [self.canvas.delete(x) for x in self.line_l]
             [self.canvas.delete(x) for x in self.txt_l]

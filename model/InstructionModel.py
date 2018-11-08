@@ -20,10 +20,10 @@ class InstructionModel:
                 if oprol_temp > uitrol_temp or oprol_licht > uitrol_licht:
                     errors.append('Roll up value can\'t be bigger than roll out value')
 
-                if not ba.min_temp <= oprol_temp <= ba.max_temp or not ba.min_temp <= uitrol_temp <= ba.max_temp:
+                if not ba.min_temp < oprol_temp < ba.max_temp or not ba.min_temp < uitrol_temp < ba.max_temp:
                     errors.append('Temperature must be between {} and {}'.format(ba.min_temp, ba.max_temp))
 
-                if not ba.min_light <= oprol_licht <= ba.max_light or not ba.min_light <= uitrol_licht <= ba.max_light:
+                if not ba.min_light < oprol_licht < ba.max_light or not ba.min_light < uitrol_licht < ba.max_light:
                     errors.append('Light sensitivity must be between {} and {}'.format(ba.min_light, ba.max_light))
 
         except ValueError:

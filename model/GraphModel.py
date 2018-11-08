@@ -15,11 +15,11 @@ class GraphModel:
             return False
 
         if sensor == 't':
-            if not ba.min_temp <= int(value) <= ba.max_temp:
+            if not ba.min_temp < int(value) < ba.max_temp:
                 return False
 
         if sensor == 'l':
-            if not ba.min_light <= int(value) <= ba.max_light:
+            if not ba.min_light < int(value) < ba.max_light:
                 return False
 
         return True
