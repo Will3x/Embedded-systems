@@ -32,4 +32,4 @@ class GraphController:
         try:
             return self.model.calculate(values[self.device][self.sensor], self.sensor)
         except TypeError:
-            print('waiting for values...')
+            pass

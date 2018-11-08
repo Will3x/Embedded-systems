@@ -21,6 +21,7 @@ class DashboardView(Tk):
         imageref = self.make_background()  # don't delete reference
         self.make_panels()
         self.tick()
+        self.make_topmost()
         self.mainloop()
 
     def tick(self):
@@ -33,6 +34,7 @@ class DashboardView(Tk):
         self.controller = controller
 
     def close_all(self):
+        print('calling Dashboardview.close_all')
         try:
             [exec('x.close()') for x in self.mainview.values() if x != '']
         except (TclError, AttributeError) as e:
@@ -40,29 +42,44 @@ class DashboardView(Tk):
         self.destroy()
 
     def hide_window(self):
+        print('calling Dashboardview.hide_window')
         self.wm_withdraw()
+
+    def make_topmost(self):
+        """Makes this window the topmost window"""
+        self.lift()
+        self.attributes("-topmost", 1)
+        self.attributes("-topmost", 0)
 
     def create_instance(self, index):
         """ Creates class instances and saves these in a dictionary """
         if self.mainview[index] == '':
             name = 'Device {}'.format(index)
             self.mainview[index] = MainView.MainView(self, name)
-        else:
-            try:
-                self.mainview.get(index).show_window()
-            except TclError:
-                name = 'Device {}'.format(index)
-                self.mainview[index] = MainView.MainView(self, name)
+
+    def change_manual_on(self, index):
+        print('calling Dashboardview.change_manual_state')
+        if self.mainview[index] != '':
+            self.mainview.get(index).event_controller.buttonclick_event(3)
 
     def open_btn(self, value):
-        self.create_instance(value)
+        print('calling Dashboardview.open_btn')
+        # try:
+        self.mainview.get(value).show_window()
+        # except TclError:
+        #     name = 'Device {}'.format(value)
+        #     self.mainview[value] = MainView.MainView(self, name)
 
     def refresh(self):
         """ Called from tick. Will check every x seconds if an Arduino connection has been made. """
         devices = self.controller.check_if_connected()
 
-        [self.change_btn_state('normal', key) if device != '' else self.change_btn_state('disabled', key)
-         for key, device in devices.items()]
+        for key, device in devices.items():
+            if device != '':
+                self.change_btn_state('normal', key)
+                self.create_instance(key)
+            else:
+                self.change_btn_state('disabled', key)
 
         self.update_instances(devices, self.prev_devices)
 
@@ -88,7 +105,6 @@ class DashboardView(Tk):
                 exec(f'self.btnclose{num}.config(state=DISABLED)')
         except AttributeError:
             print('buttons not found')
-            pass
 
     def change_label(self, devices, value):
         """ Change temperature and light sensor values on Dashboard """
@@ -134,28 +150,28 @@ class DashboardView(Tk):
             entries.insert(3, f'self.button{x}.place(relx={x_position+.06}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(4, f'self.btnopen{x} = Button(self, text="Roll out", width=10, height=2, bg=st.btn_bg_grey, '
                               f'fg=st.fg_white, disabledforeground="#6B7789",  borderwidth=0, state=DISABLED, '
-                              f'command=partial(self.controller.buttonclick_event, {x}, 5))')
+                              f'command=partial(self.controller.buttonclick_event, 5, {x}))')
             entries.insert(5, f'self.btnopen{x}.place(relx={x_position-.03}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(6, f'self.btnclose{x} = Button(self, text="Roll in", width=10, height=2, bg=st.btn_bg_grey, '
                               f'fg=st.fg_white, disabledforeground="#6B7789", borderwidth=0, state=DISABLED, '
-                              f'command=partial(self.controller.buttonclick_event, {x}, 6))')
+                              f'command=partial(self.controller.buttonclick_event, 6, {x}))')
             entries.insert(7, f'self.btnclose{x}.place(relx={x_position-.09}, rely={y_position+.12}, anchor=CENTER)')
             entries.insert(8, f'self.labelt{x} = Label(self, text="Temperature: ", background=st.panel_bg, '
                               f'fg=st.fg_white)')
-            entries.insert(9, f'self.labelt{x}.place(relx={x_position-.04}, rely={y_position-.08}, anchor=E)')
+            entries.insert(9, f'self.labelt{x}.place(relx={x_position-.02}, rely={y_position-.08}, anchor=E)')
             entries.insert(10, f'self.temp{x} = Label(self, background=st.panel_bg, text="NO DATA", fg=st.btn_bg_grey)')
-            entries.insert(11, f'self.temp{x}.place(relx={x_position-.04}, rely={y_position-.079}, anchor=W)')
-            entries.insert(12, f'self.labell{x} = Label(self, text="Light intesity: ", background=st.panel_bg, '
+            entries.insert(11, f'self.temp{x}.place(relx={x_position-.02}, rely={y_position-.079}, anchor=W)')
+            entries.insert(12, f'self.labell{x} = Label(self, text="Light intensity: ", background=st.panel_bg, '
                                f'fg=st.fg_white)')
-            entries.insert(13, f'self.labell{x}.place(relx={x_position-.04}, rely={y_position-.029}, anchor=E)')
+            entries.insert(13, f'self.labell{x}.place(relx={x_position-.02}, rely={y_position-.029}, anchor=E)')
             entries.insert(14, f'self.light{x} = Label(self, background=st.panel_bg, text="NO DATA", '
                                f'fg=st.btn_bg_grey)')
-            entries.insert(15, f'self.light{x}.place(relx={x_position-.04}, rely={y_position-.0277}, anchor=W)')
+            entries.insert(15, f'self.light{x}.place(relx={x_position-.02}, rely={y_position-.0277}, anchor=W)')
             entries.insert(16, f'self.labels{x} = Label(self, text="Status: ", background=st.panel_bg, fg=st.fg_white)')
-            entries.insert(17, f'self.labels{x}.place(relx={x_position-.04:.2f}, rely={y_position+.04}, anchor=E)')
+            entries.insert(17, f'self.labels{x}.place(relx={x_position-.02:.2f}, rely={y_position+.04}, anchor=E)')
             entries.insert(18, f'self.status{x} = Label(self, background=st.panel_bg, text="NO DATA", '
                                f'fg=st.btn_bg_grey)')
-            entries.insert(19, f'self.status{x}.place(relx={x_position-.04:.2f}, rely={y_position+.0415}, anchor=W)')
+            entries.insert(19, f'self.status{x}.place(relx={x_position-.02:.2f}, rely={y_position+.0415}, anchor=W)')
             entries.insert(20, f'self.titel{x} = Label(self, text="Device {x}", background=st.panel_bg, '
                                f'fg=st.fg_white)')
             entries.insert(21, f'self.titel{x}.place(relx={x_position:.2f}, rely={y_position-.14}, anchor=CENTER)')
@@ -166,11 +182,11 @@ class DashboardView(Tk):
                 exec(items)
 
         self.close_all_btn = Button(self, text="Roll all in", width=30, height=2, bg=st.btn_bg_grey, fg=st.fg_white,
-                                    borderwidth=0, state=NORMAL)
+                                    borderwidth=0, command=partial(self.controller.buttonclick_event, 7), state=NORMAL)
         self.close_all_btn.place(relx=0.42, rely=0.14, anchor=CENTER)
 
         self.open_all_btn = Button(self, text="Roll all out", width=30, height=2, bg=st.btn_bg_grey, fg=st.fg_white,
-                                   borderwidth=0, state=NORMAL)
+                                   borderwidth=0, command=partial(self.controller.buttonclick_event, 8), state=NORMAL)
         self.open_all_btn.place(relx=0.58, rely=0.14, anchor=CENTER)
 
         self.labelframe6 = LabelFrame(self, background=st.panel_bg, highlightbackground=st.highlight_bg,

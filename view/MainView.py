@@ -8,9 +8,10 @@ class MainView(Toplevel):
 
     def __init__(self, dashboard, name):
         Toplevel.__init__(self)
+        self.center_window()
+        self.hide_window()
         self.title(name)
         self.resizable(False, False)
-        self.make_topmost()
 
         self.dashboard = dashboard
 
@@ -21,8 +22,6 @@ class MainView(Toplevel):
 
         self.graph_controller = GraphController.GraphController(self.canv_temp, 't', name)
         self.graph_controller2 = GraphController.GraphController(self.canv_light, 'l', name)
-
-        self.center_window()
 
         self.event_controller = EventController.EventController(self)
         self.add_widgets()
@@ -36,22 +35,26 @@ class MainView(Toplevel):
         self.update_label()
 
     def minimize_window(self):
+        print('calling Mainview.minimize')
         self.iconify()
 
     def hide_window(self):
+        print('calling Mainview.hide_window')
         self.wm_withdraw()
 
     def close(self):
+        print('calling Mainview.close')
         self.destroy()
 
     def show_window(self):
+        print('calling Mainview.show_window')
+        self.make_topmost()
         self.deiconify()
 
     def start(self):
         self.graph_controller.draw_borders(self.entry2.get(), self.entry1.get())
         self.graph_controller2.draw_borders(self.entry4.get(), self.entry3.get())
         self.protocol("WM_DELETE_WINDOW", self.hide_window)
-        # self.wm_withdraw()
 
     def make_topmost(self):
         """Makes this window the topmost window"""
@@ -76,19 +79,20 @@ class MainView(Toplevel):
 
     def update_label(self):
         values = self.event_controller.get_values()
-        status = self.event_controller.status_open_closed(int(self.wm_title()[7:8]), values)
 
-        self.status_label.config(text='{}'.format(status))
+        if self.event_controller.status_open_closed(int(self.wm_title()[7:8]), values) is not None:
+            status = self.event_controller.status_open_closed(int(self.wm_title()[7:8]), values)
+            self.status_label.config(text='{}'.format(status))
 
-        if 'Closed' in status:
-            self.status_label.config(fg=st.btn_bg_red)
-        else:
-            self.status_label.config(fg=st.btn_bg_blue)
+            if 'Closed' in status:
+                self.status_label.config(fg=st.btn_bg_red)
+            else:
+                self.status_label.config(fg=st.btn_bg_blue)
 
     def add_widgets(self):
         """ Creates and adds widgets to the frame, such as buttons, labels, and input fields. """
         var1 = IntVar(self, 1)
-        var2 = IntVar(self, 4)
+        self.var2 = IntVar(self, 4)
 
         button_width = 15
 
@@ -123,14 +127,14 @@ class MainView(Toplevel):
                              value=2, width=20, bg=st.btn_bg_grey, fg=st.fg_white)
         radio2.place(relx=0.565, rely=0.05, anchor=CENTER)
 
-        self.manual_btn_on = Radiobutton(self, text="ON", indicatoron=False, variable=var2,
-                                         command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0,
+        self.manual_btn_on = Radiobutton(self, text="ON", indicatoron=False, variable=self.var2,
+                                         command=lambda: self.event_controller.buttonclick_event(self.var2), borderwidth=0,
                                          selectcolor=st.btn_bg_blue, fg=st.fg_white, bg=st.btn_bg_grey, height=2,
                                          value=3, width=10)
         self.manual_btn_on.place(relx=0.901, rely=0.7, anchor=E)
 
-        self.manual_btn2 = Radiobutton(self, text="OFF", indicatoron=False, variable=var2,
-                                       command=lambda: self.event_controller.buttonclick_event(var2), borderwidth=0,
+        self.manual_btn2 = Radiobutton(self, text="OFF", indicatoron=False, variable=self.var2,
+                                       command=lambda: self.event_controller.buttonclick_event(self.var2), borderwidth=0,
                                        selectcolor=st.btn_bg_blue, fg=st.fg_white, bg=st.btn_bg_grey, height=2, value=4,
                                        width=10)
         self.manual_btn2.place(relx=0.97, rely=0.7, anchor=E)

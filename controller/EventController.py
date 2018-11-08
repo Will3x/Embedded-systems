@@ -24,6 +24,9 @@ class EventController:
         return se.SensordataModel.status_open_closed(device, values)
 
     def buttonclick_event(self, var):
+        if var == 3:
+            self.view.var2.set(3)
+
         # Roll out.
         if var == 5:
             device = int(self.view.wm_title()[7:8])
@@ -36,15 +39,15 @@ class EventController:
             ser.SerialController.write(device, 2)
             return
 
-        elif var.get() == 1:
+        if var == 1 or not isinstance(var, int) and var.get() == 1:
             self.canv_light.place(relx=0.5, rely=0.37, anchor=CENTER)
             self.canv_temp.place_forget()
 
-        elif var.get() == 2:
+        if var == 2 or not isinstance(var, int) and var.get() == 2:
             self.canv_temp.place(relx=0.5, rely=0.37, anchor=CENTER)
             self.canv_light.place_forget()
 
-        elif var.get() == 3:
+        if var == 3 or not isinstance(var, int) and var.get() == 3:
             ser.SerialController.write(int(self.view.wm_title()[7:8]), 8, '1')
 
             self.view.graph_controller.view.hide_borders()
@@ -69,7 +72,7 @@ class EventController:
             self.view.entry3.config(state=DISABLED)
             self.view.entry4.config(state=DISABLED)
 
-        elif var.get() == 4:
+        if var == 4 or not isinstance(var, int) and var.get() == 4:
             ser.SerialController.write(int(self.view.wm_title()[7:8]), 8, '0')
 
             self.view.graph_controller.view.show_borders()
