@@ -15,7 +15,7 @@
 
 #include "AVR_TTC_scheduler.h"
 #include "main.h"
-#include "functies.h"
+#include "sunshade.h"
 #include "init.h"
 
 int main(void);

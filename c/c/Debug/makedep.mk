@@ -4,7 +4,9 @@
 
 AVR_TTC_scheduler.c
 
-functies.c
+serial.c
+
+sunshade.c
 
 init.c
 

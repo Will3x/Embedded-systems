@@ -9,8 +9,9 @@
 #ifndef SENSORS_H_
 #define SENSORS_H_
 
-
-
-
+// Sensors
+void temperature();						// Read the temperature sensor
+void ldr();								// Read the light sensor
+void distance();						// Read the distance sensor
 
 #endif /* SENSORS_H_ */

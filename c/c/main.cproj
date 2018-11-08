@@ -139,10 +139,16 @@
     <Compile Include="AVR_TTC_scheduler.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="functies.c">
+    <Compile Include="serial.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="functies.h">
+    <Compile Include="serial.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sunshade.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sunshade.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="init.c">

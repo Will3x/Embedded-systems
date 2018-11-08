@@ -7,16 +7,17 @@
 
 #include "AVR_TTC_scheduler.h"
 #include "main.h"
-#include "functies.h"
+#include "sunshade.h"
 #include "init.h"
 #include "sensors.h"
+#include "serial.h"
 
 // variables
 uint16_t adc_value;						// Reads the ADC value
 uint16_t adc_echo;						// Reads the ADC echo
-char temp_sensor[];					// Value of the temperature sensor
+char temp_sensor[];						// Value of the temperature sensor
 char LDR_sensor[];						// Value of LDR
-char distance_sensor[];				// Value of distance sensor
+char distance_sensor[];					// Value of distance sensor
 int temp_down = 24;						// Temperature at which the sunshade closes
 int temp_up = 16;						// Temperature at which the sunshade opens
 int LDR_down = 60;						// Level of light at which the sunshade closes
@@ -25,37 +26,7 @@ int distance_up = 20;					// Distance at which the sunshade opens
 int distance_down = 5;					// Distance at which the sunshade closes
 int distance_manual = 20;				// Manual set distance at which the sunshade closes
 int manual = 0;							// if manual is 1 manual mode is enabled
-int teller = 0;
-
-
-
-unsigned char USART_receive(void)
-{
-	while(!(UCSR0A & (1<<RXC0)));
-	return UDR0;
-}
-
-void USART_send(unsigned char data)
-{
-	while(!(UCSR0A & (1<<UDRE0)));
-	UDR0 = data;
-}
-
-void USART_putstring(char* StringPtr)
-{
-	while(*StringPtr != 0x00){
-		USART_send(*StringPtr);
-	StringPtr++;}
-}
-
-uint16_t read_adc(uint8_t channel)
-{
-	ADMUX &= 0xF0;                    //Clear the older channel that was read
-	ADMUX |= channel;                 //Defines the new ADC channel to be read
-	ADCSRA |= (1<<ADSC);              //Starts a new conversion
-	while(ADCSRA & (1<<ADSC));        //Wait until the conversion is done
-	return ADCW;                      //Returns the ADC value of the chosen channel
-}
+int teller = 0;	
 
 void distanceStill()
 {
@@ -110,11 +81,7 @@ void upDown()
 	}
 }
 
-void newLine()
-{
-	USART_send('\r');
-	USART_send('\n');
-}
+
 
 int unsigned combine(unsigned x, unsigned y)
 {

@@ -11,9 +11,10 @@
 
 #include "AVR_TTC_scheduler.h"
 #include "main.h"
-#include "functies.h"
+#include "sunshade.h"
 #include "init.h"
 #include "sensors.h"
+#include "serial.h"
 
 void temperature()
 {
