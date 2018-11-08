@@ -21,8 +21,8 @@ class SerialController:
 
     @classmethod
     def current_connections(cls, values=None):
-        """ Returns all current values. If new values are added as parameter: update the values.
-        Acts as a getter for accessing values """
+        """ Returns all current connections. If new values are added as parameter: update the values.
+        Acts as a getter for accessing connections """
         if values is None:
             return cls.connections
         cls.connections = values.copy()
@@ -51,7 +51,7 @@ class SerialController:
         Throws SerialException if port is already open. """
         try:
             cls.ser[num] = (Serial(com, 9600, timeout=2))
-            print('Connection to {}!'.format(com))
+            print('Connected to {}!'.format(com))
             cls.ser[num].flushInput()
         except SerialException:
             pass
@@ -101,16 +101,17 @@ class SerialController:
         cls.current_connections(con_dict)
 
     @classmethod
-    def write(cls, device, instruction, value):
+    def write(cls, device, instruction, value=None):
         """ SEND DATA TO SERIAL PORT """
-        print('writing instruction {} with value {} from device {} to serial.'.format(instruction, value, device))
+        print('writing instruction {} with value(s) {} to device {}.'.format(instruction, value, device))
         cls.ser[device].write(str(instruction).encode())
 
-        for num in range(len(value)):
-            int_val = [int(d) for d in value[num]]
+        if value is not None:
+            for num in range(len(value)):
+                int_val = [int(d) for d in value[num]]
 
-            [int_val.insert(0, 0) for x in range(2 - len(int_val)) if instruction == 3]
-            [int_val.insert(0, 0) for x in range(3-len(int_val)) if instruction == 7]
+                [int_val.insert(0, 0) for x in range(2 - len(int_val)) if instruction == 3]
+                [int_val.insert(0, 0) for x in range(3-len(int_val)) if instruction == 7]
 
-            for d in int_val:
-                cls.ser[device].write(str(d).encode())
+                for d in int_val:
+                    cls.ser[device].write(str(d).encode())

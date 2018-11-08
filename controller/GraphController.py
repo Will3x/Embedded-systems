@@ -12,7 +12,6 @@ class GraphController:
         self.model = model.GraphModel()
         self.view = view.GraphView(canvas, sensor, self)
 
-
     def updategraph(self):
         """ Called by MainView.tick() """
         self.view.drawGraph()
@@ -20,11 +19,11 @@ class GraphController:
     def get_raw_values(self):
         return ser.SerialController.current_values()
 
-    def draw_borders(self, min, max):
+    def draw_borders(self, max, min):
         min = self.model.calculate(min, self.sensor)
         max = self.model.calculate(max, self.sensor)
 
-        if min is not None and max is not None:
+        if min is not None and max is not None and min < max:
             self.view.draw_borders(self.sensor, min, max)
 
     def get_value(self):
@@ -33,4 +32,4 @@ class GraphController:
         try:
             return self.model.calculate(values[self.device][self.sensor], self.sensor)
         except TypeError:
-            print('waiting for values...')
+            pass

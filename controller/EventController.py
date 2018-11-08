@@ -1,6 +1,6 @@
 from tkinter import *
 import Style as st
-from model import InstructionModel as instr
+from model import InstructionModel as instr, SensordataModel as se
 from controller import SerialController as ser
 
 
@@ -10,24 +10,49 @@ class EventController:
         self.view = view
         self.canv_light, self.canv_temp = view.canvas
 
-    def write(self, device, id, *value):
-        if instr.InstructionModel.check_value(id, value):
-            ser.SerialController.write(device, id, value)
+    @staticmethod
+    def check(device, instruction, *value):
+        if instr.InstructionModel.check_value(instruction, value):
+            ser.SerialController.write(device, instruction, value)
 
-    def get_values(self):
+    @staticmethod
+    def get_values():
         return ser.SerialController.current_values()
 
+    @staticmethod
+    def status_open_closed(device, values):
+        return se.SensordataModel.status_open_closed(device, values)
+
     def buttonclick_event(self, var):
-        if var.get() == 1:
+        if var == 3:
+            self.view.var2.set(3)
+
+        # Roll out.
+        if var == 5:
+            device = int(self.view.wm_title()[7:8])
+            ser.SerialController.write(device, 1)
+            return
+
+        # Roll in.
+        if var == 6:
+            device = int(self.view.wm_title()[7:8])
+            ser.SerialController.write(device, 2)
+            return
+
+        if var == 1 or not isinstance(var, int) and var.get() == 1:
             self.canv_light.place(relx=0.5, rely=0.37, anchor=CENTER)
             self.canv_temp.place_forget()
 
-        elif var.get() == 2:
+        if var == 2 or not isinstance(var, int) and var.get() == 2:
             self.canv_temp.place(relx=0.5, rely=0.37, anchor=CENTER)
             self.canv_light.place_forget()
 
-        elif var.get() == 3:
-            """ TODO: CLEAN THIS MESS """
+        if var == 3 or not isinstance(var, int) and var.get() == 3:
+            ser.SerialController.write(int(self.view.wm_title()[7:8]), 8, '1')
+
+            self.view.graph_controller.view.hide_borders()
+            self.view.graph_controller2.view.hide_borders()
+
             self.view.manual1.config(state=NORMAL)
             self.view.manual2.config(state=NORMAL)
 
@@ -35,7 +60,7 @@ class EventController:
             self.view.manual_btn2.config(state=NORMAL)
 
             self.view.setbtn2.config(state=NORMAL, bg=st.btn_bg_blue)
-            self.view.setbtn1.config(state=DISABLED, bg="#444D5F")
+            self.view.setbtn1.config(state=DISABLED, bg=st.btn_bg_grey)
 
             self.view.label1.config(state=DISABLED)
             self.view.label2.config(state=DISABLED)
@@ -47,15 +72,19 @@ class EventController:
             self.view.entry3.config(state=DISABLED)
             self.view.entry4.config(state=DISABLED)
 
-        elif var.get() == 4:
-            """ TODO: CLEAN THIS MESS """
+        if var == 4 or not isinstance(var, int) and var.get() == 4:
+            ser.SerialController.write(int(self.view.wm_title()[7:8]), 8, '0')
+
+            self.view.graph_controller.view.show_borders()
+            self.view.graph_controller2.view.show_borders()
+
             self.view.manual1.config(state=DISABLED)
             self.view.manual2.config(state=DISABLED)
 
             self.view.manual_btn_on.config(state=DISABLED)
             self.view.manual_btn2.config(state=DISABLED)
 
-            self.view.setbtn2.config(state=DISABLED, bg="#444D5F")
+            self.view.setbtn2.config(state=DISABLED, bg=st.btn_bg_grey)
             self.view.setbtn1.config(state=NORMAL, bg=st.btn_bg_blue)
 
             self.view.label1.config(state=NORMAL)

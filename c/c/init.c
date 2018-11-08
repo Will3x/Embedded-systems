@@ -13,59 +13,51 @@
 #define BAUDRATE 9600
 #define BAUD_PRESCALLER (((F_CPU / (BAUDRATE * 16UL))) - 1)
 
-void init_connectie();		// Connection 
-void init_adc();			// Function to initialize/configure the ADC
-void init_USART();			// Function to initialize and configure the USART/serial
-void init_dist();
-void init_scheduler();
-void init_lampjes();
-
-void init_connectie(){
-	// disable U2X mode
-	UCSR0A = 0;
-	// Set frame format: 8data, 2stop bit 
-	UCSR0C = (1<<USBS0)|(3<<UCSZ00);
+void init_connectie()
+{
+	UCSR0A = 0;							// disable U2X mode
+	UCSR0C = (1<<USBS0)|(3<<UCSZ00);	// Set frame format: 8data, 2stop bit 
 }
 
-void init_USART(){
+void init_USART()
+{
 	UBRR0H = (uint8_t)(BAUD_PRESCALLER>>8);
 	UBRR0L = (uint8_t)(BAUD_PRESCALLER);
-	// Enable receiver and transmitter
-	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
-	
+	UCSR0B = (1<<RXEN0)|(1<<TXEN0);		// Enable receiver and transmitter
 	UCSR0C = (3<<UCSZ00);
-	
-	UCSR0B |= (1 << RXCIE0 ); // Enable the USART Recieve Complete interrupt ( USART_RXC )
-	sei (); // Enable the Global Interrupt Enable flag so that interrupts can be processed
+	UCSR0B |= (1 << RXCIE0 );			// Enable the USART Receive Complete interrupt ( USART_RXC )
+	sei ();								// Enable the Global Interrupt Enable flag so that interrupts can be processed
 }
 
 void init_scheduler()
 {
 	SCH_Init_T1();
-	SCH_Add_Task(temperatuur,1,100);
+	SCH_Add_Task(temperature,1,100);
 	SCH_Add_Task(ldr,2,100);
-	SCH_Add_Task(afstand,3,100);
-	SCH_Add_Task(newRegel,6,100);
+	SCH_Add_Task(distance,3,100);
+	SCH_Add_Task(newLine,6,100);
 	SCH_Add_Task(upDown,8,20);
 	SCH_Start();
 }
 
-void init_adc(){
+void init_adc()
+{
 	ADCSRA |= ((1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0));    //16Mhz/128 = 125Khz the ADC reference clock
-	ADMUX |= (1<<REFS0);                //Voltage reference from Avcc (5v)
-	ADCSRA |= (1<<ADEN);                //Turn on ADC
-	ADCSRA |= (1<<ADSC);                //Do an initial conversion because this one is the slowest and to ensure that everything is up and running
+	ADMUX |= (1<<REFS0);							 //Voltage reference from AVCC (5v)
+	ADCSRA |= (1<<ADEN);							 //Turn on ADC
+	ADCSRA |= (1<<ADSC);							 //Do an initial conversion because this one is the slowest and to ensure that everything is up and running
 }
 
-void init_dist(){
-	DDRD |= _BV(PD3); // Pin 3 Trigger Output
-	DDRD &= ~_BV(PD2); // Pin 2 Echo Input
+void init_dist()
+{
+	DDRD |= _BV(PD3);			// Pin 3 Trigger Output
+	DDRD &= ~_BV(PD2);			// Pin 2 Echo Input
 }
 
-void init_lampjes(){
-	DDRB |= _BV(PB0);	// pin0 B = output
-	DDRB |= _BV(PB1);	// pin1 B = output
-	DDRB |= _BV(PB2);	// pin2 B = output
-	
-	PORTB |= (1 << PB2); // groen lampje aan
+void init_LEDS()
+{ 
+	DDRB |= _BV(PB0);			// pin0 B = output
+	DDRB |= _BV(PB1);			// pin1 B = output
+	DDRB |= _BV(PB2);			// pin2 B = output
+	PORTB |= (1 << PB2);		// Green LED on
 }
