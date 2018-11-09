@@ -92,7 +92,7 @@ ISR ( USART_RX_vect )
 			
 		case '2':								// 2 = Open the sunshade // Green
 			manual = 1;
-			distance_manual = 10;
+			distance_manual = distance_up;
 			return;
 			
 		case '3':								// 3 = set
