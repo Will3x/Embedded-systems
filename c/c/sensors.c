@@ -9,10 +9,7 @@
 #define F_CPU 16000000UL
 #include <util/delay.h>
 
-#include "AVR_TTC_scheduler.h"
-#include "main.h"
 #include "sunshade.h"
-#include "init.h"
 #include "sensors.h"
 #include "serial.h"
 
@@ -38,10 +35,11 @@ void ldr()
 
 void distance()
 {
+	OCR1A = 0x640;								// Max length = 400 cm * 4 = Dec.1600 == Hex 640
 	USART_putstring("distance : ");
 	PORTD |= _BV(PD3);
 	_delay_us(10);
-	PORTD &= ~_BV(PD3);
+	PORTD &= ~_BV(PD3);							// Give pulse from 10ms
 	
 	loop_until_bit_is_set(PIND, PD2);
 	TCNT1 = 0;
@@ -52,4 +50,19 @@ void distance()
 	itoa(distance, distance_sensor, 10);        // Convert the read value to an ascii string
 	USART_putstring(distance_sensor);			// Send the converted value to the terminal
 	USART_putstring("  ");
+}
+
+void distanceStill()
+{
+	OCR1A = 0x640;								// Max length = 400 cm * 4 = Dec.1600 == Hex 640
+	
+	PORTD |= _BV(PD3);
+	_delay_us(10);
+	PORTD &= ~_BV(PD3);							// Give pulse from 10ms
+	loop_until_bit_is_set(PIND, PD2);
+	TCNT1 = 0;
+	loop_until_bit_is_clear(PIND, PD2);
+	uint16_t count = TCNT1;
+	float distance = ((float)count / 4);		// Calculate the distance
+	itoa(distance, distance_sensor, 10);        // Convert the read value to an ASCII string
 }

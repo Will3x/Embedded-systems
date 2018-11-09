@@ -10,17 +10,10 @@
 #define F_CPU 16000000UL
 #include <util/delay.h>
 
-#include "AVR_TTC_scheduler.h"
-#include "main.h"
-#include "sunshade.h"
-#include "init.h"
-#include "sensors.h"
-#include "serial.h"
-
 unsigned char USART_receive(void)
 {
 	while(!(UCSR0A & (1<<RXC0)));
-	return UDR0;
+	return UDR0 - 48;
 }
 
 void USART_send(unsigned char data)

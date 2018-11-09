@@ -13,5 +13,6 @@
 void temperature();						// Read the temperature sensor
 void ldr();								// Read the light sensor
 void distance();						// Read the distance sensor
+void distanceStill();					// Read the distance sensor output notting
 
 #endif /* SENSORS_H_ */

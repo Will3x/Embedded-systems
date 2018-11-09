@@ -7,27 +7,17 @@
 // LDR : 3.3v
 // VCC : 5v
 // Refer to the setup page in manual if needed
+//
+// PIN8 : Red LED
+// PIN9 : Yellow LED
+// PIN10 : Green LED
 
-#include <avr/io.h>
-#include <stdlib.h>
 #define F_CPU 16000000UL
 #include <util/delay.h>
 
 #include "AVR_TTC_scheduler.h"
-#include "main.h"
-#include "sunshade.h"
 #include "init.h"
 
-int main(void);
-void setup();
-
-int main(void)
-{
-	setup();
-	while(1) {
-		SCH_Dispatch_Tasks();
-	}
-}
 
 void setup()
 {
@@ -37,4 +27,13 @@ void setup()
 	init_dist();			// Setup distance sensor
 	init_scheduler();		// Setup scheduler
 	init_LEDS();			// Setup LED
+	_delay_ms(500);			// Half second delay to initialize everything
+}
+
+int main(void)
+{
+	setup();
+	while(1) {
+		SCH_Dispatch_Tasks();
+	}
 }

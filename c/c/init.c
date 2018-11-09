@@ -1,14 +1,9 @@
-#include <avr/io.h>
 #include <stdlib.h>
 #include <avr/interrupt.h>
-
 #define F_CPU 16000000UL
-#include <util/delay.h>
 
 #include "AVR_TTC_scheduler.h"
-#include "main.h"
 #include "sunshade.h"
-#include "init.h"
 #include "sensors.h"
 #include "serial.h"
 
@@ -44,10 +39,10 @@ void init_scheduler()
 
 void init_adc()
 {
-	ADCSRA |= ((1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0));    //16Mhz/128 = 125Khz the ADC reference clock
-	ADMUX |= (1<<REFS0);							 //Voltage reference from AVCC (5v)
-	ADCSRA |= (1<<ADEN);							 //Turn on ADC
-	ADCSRA |= (1<<ADSC);							 //Do an initial conversion because this one is the slowest and to ensure that everything is up and running
+	ADCSRA |= ((1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0));    // 16Mhz/128 = 125Khz the ADC reference clock
+	ADMUX |= (1<<REFS0);							 // Voltage reference from AVCC (5v)
+	ADCSRA |= (1<<ADEN);							 // Turn on ADC
+	ADCSRA |= (1<<ADSC);							 // Do an initial conversion because this one is the slowest and to ensure that everything is up and running
 }
 
 void init_dist()
