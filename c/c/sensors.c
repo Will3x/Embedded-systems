@@ -35,6 +35,7 @@ void ldr()
 
 void distance()
 {
+	OCR1A = 0x640;								// Max length = 400 cm * 4 = Dec.1600 == Hex 640
 	USART_putstring("distance : ");
 	PORTD |= _BV(PD3);
 	_delay_us(10);
@@ -53,6 +54,8 @@ void distance()
 
 void distanceStill()
 {
+	OCR1A = 0x640;								// Max length = 400 cm * 4 = Dec.1600 == Hex 640
+	
 	PORTD |= _BV(PD3);
 	_delay_us(10);
 	PORTD &= ~_BV(PD3);							// Give pulse from 10ms

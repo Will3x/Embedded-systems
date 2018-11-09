@@ -12,7 +12,7 @@ uint16_t adc_value;						// Reads the ADC value
 uint16_t adc_echo;						// Reads the ADC echo
 char temp_sensor[5];					// Value of the temperature sensor
 char LDR_sensor[5];						// Value of LDR
-char distance_sensor[5];				// Value of distance sensor
+char distance_sensor[10];				// Value of distance sensor
 
 int temp_down = 24;						// Temperature at which the sunshade closes
 int temp_up = 16;						// Temperature at which the sunshade opens
