@@ -7,9 +7,8 @@ class SerialController:
 
     @classmethod
     def setup(cls):
-        cls.dict_values = {1: (), 2: (), 3: (), 4: (), 5: ()}
-        cls.connections = {1: '', 2: '', 3: '', 4: '', 5: ''}
-        cls.ser = {1: '', 2: '', 3: '', 4: '', 5: ''}
+        cls.dict_values = {1: None, 2: None, 3: None, 4: None, 5: None}
+        cls.connections, cls.ser = cls.dict_values.copy(), cls.dict_values.copy()
 
     @classmethod
     def current_values(cls, values=None):
@@ -17,33 +16,33 @@ class SerialController:
         Acts as a getter for accessing values """
         if values is None:
             return cls.dict_values
+
         cls.dict_values = values.copy()
 
     @classmethod
-    def current_connections(cls, values=None):
+    def current_connections(cls, new_con=None):
         """ Returns all current connections. If new values are added as parameter: update the values.
         Acts as a getter for accessing connections """
-        if values is None:
+        if new_con is None:
             return cls.connections
-        cls.connections = values.copy()
+
+        cls.connections = new_con.copy()
 
     @classmethod
     def update_ports(cls):
         """ Opens all COM ports that have been scanned and found and closes all that do not respond,
         thus lost connection. """
-        cls.check_connection(cls.connections)
+        cls.check_connection()
         connections = cls.current_connections()
 
         for num, con in cls.ser.items():
             try:
-                [con.read() if con != '' else None]
+                [con.read() if con is not None else None]
             except serial.serialutil.SerialException:
-                cls.ser[num] = ''
+                cls.ser[num] = None
                 cls.close_port(con)
 
-        [cls.open_port(num, connections[num][0]) for num in connections if connections[num] != '']
-
-        return connections
+        [cls.open_port(index, connections[index][0]) for index in connections if connections[index] is not None]
 
     @classmethod
     def open_port(cls, num, com):
@@ -65,9 +64,11 @@ class SerialController:
     @classmethod
     def read(cls):
         """ RECIEVE INCOMING DATA FROM SERIAL PORT """
-        ports = cls.update_ports()
-        for count, port in ports.items():
-            if port != '':
+        cls.update_ports()
+        connections = cls.current_connections()
+
+        for count, connection in connections.items():
+            if connection is not None:
                 line = cls.ser[count].readline().decode('ascii')
                 cls.ser[count].flushInput()
                 cls.dict_values = cls.filter_on_read(line, count, cls.dict_values)
@@ -87,16 +88,17 @@ class SerialController:
     @classmethod
     def find_ports(cls):
         """ Scans all ports and looks for Arduino connections. """
-        return [tuple(p) for p in list(serial.tools.list_ports.comports()) if 'VID:PID=2341' in p[2]]
+        return [tuple(p) for p in serial.tools.list_ports.comports() if 'VID:PID=2341' in p[2]]
 
     @classmethod
-    def check_connection(cls, con_dict):
+    def check_connection(cls):
         """ Check if Arduino is connected. If so, add to dictionary.
         This function is called every 2 sec from tick(). """
         my_ports = cls.find_ports()
+        con_dict = {1: None, 2: None, 3: None, 4: None, 5: None}
 
-        for id, port in enumerate(my_ports, 1):
-            con_dict[id] = port
+        for index, port in enumerate(my_ports, 1):
+            con_dict[index] = port
 
         cls.current_connections(con_dict)
 

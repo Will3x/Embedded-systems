@@ -35,19 +35,15 @@ class MainView(Toplevel):
         self.update_label()
 
     def minimize_window(self):
-        print('calling Mainview.minimize')
         self.iconify()
 
     def hide_window(self):
-        print('calling Mainview.hide_window')
         self.wm_withdraw()
 
     def close(self):
-        print('calling Mainview.close')
         self.destroy()
 
     def show_window(self):
-        print('calling Mainview.show_window')
         self.make_topmost()
         self.deiconify()
 
