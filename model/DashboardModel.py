@@ -64,6 +64,6 @@ class DashboardModel:
         try:
             if not all(x == () for x in values.values()):
                 return ''.join(['Closed' if int(values[index]['a']) < 10 else 'Open {}cm'.format(values[index]['a'])])
-        except TypeError as e:
-            print('DashboardModel.get_status: Something went wrong with reading: {}'.format(values))
-        return None
+        except TypeError:
+            return None
+

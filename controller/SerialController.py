@@ -36,13 +36,16 @@ class SerialController:
         connections = cls.current_connections()
 
         for num, con in cls.ser.items():
-            try:
-                [con.read() if con is not None else None]
-            except serial.serialutil.SerialException:
-                cls.ser[num] = None
-                cls.close_port(con)
+            if con is not None:
+                try:
+                    con.read()
+                except serial.serialutil.SerialException:
+                    cls.ser[num] = None
+                    cls.close_port(con)
 
-        [cls.open_port(index, connections[index][0]) for index in connections if connections[index] is not None]
+        for index in connections:
+            if connections[index] is not None and cls.ser[index] is None:
+                cls.open_port(index, connections[index][0])
 
     @classmethod
     def open_port(cls, num, com):

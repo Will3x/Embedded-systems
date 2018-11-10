@@ -9,6 +9,6 @@ if __name__ == '__main__':
 
     dashboard_model.setup()
     se.SerialController.setup()
-    dashboard_view.setup(2000)
+    dashboard_view.setup(3000)
 
     dashboard_view.start()

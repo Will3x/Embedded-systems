@@ -28,7 +28,7 @@ class DashboardController:
         """ Creates class instances and saves these in a dictionary """
         if self.model.mv_empty(index):
             name = 'Device {}'.format(index)
-            self.model.add_mv(index, mv.MainView(self, name))
+            self.model.add_mv(index, mv.MainView(name))
 
     def show_mv(self, index):
         """ Show specific MainView called from button: View. """
@@ -44,7 +44,7 @@ class DashboardController:
         """ Switches manual button of specific MainView object to ON. Called after pressing a button with a manual
         action on Dashboard. """
         if not self.model.mv_empty(index):
-            self.model.get_mv_dict(index).event_controller.buttonclick_event(3)
+            self.model.get_mv_dict(index).controllers[1].btn_click(3)
 
     def get_status(self, device, values):
         """ Returns 'Open' or 'Closed' based on distance sensor data if values are valid. """
