@@ -4,3 +4,4 @@ Project Embedded systems
 - Rick
 - Tim
 - Willem
+- Daniël
