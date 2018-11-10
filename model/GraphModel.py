@@ -17,8 +17,10 @@ class GraphModel:
     @classmethod
     def calculate_mean(cls, sensor):
         if sensor == 't':
+            print('Average temperature: {}'.format(sum(cls.mean_t) / len(cls.mean_t)))
             return cls.calculate(sum(cls.mean_t) / len(cls.mean_t), sensor)
         if sensor == 'l':
+            print('Average light intensity: {}'.format(sum(cls.mean_l) / len(cls.mean_l)))
             return cls.calculate(sum(cls.mean_l) / len(cls.mean_l), sensor)
 
     @classmethod

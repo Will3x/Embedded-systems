@@ -27,10 +27,12 @@ class GraphController:
         self.count += 1
         self.model.add_value_mean(self.sensor, self.get_values(), self.device)
 
-        self.view.draw_graph() if self.sensor == 't' and self.count % 9 == 0 else None
-        self.view.draw_graph() if self.sensor == 'l' and self.count % 6 == 0 else None
-
-        self.model.reset_mean(self.sensor)
+        if self.sensor == 't' and self.count % 20 == 0:
+            self.view.draw_graph()
+            self.model.reset_mean(self.sensor)
+        if self.sensor == 'l' and self.count % 6 == 0:
+            self.view.draw_graph()
+            self.model.reset_mean(self.sensor)
 
     def get_mean(self):
         return self.model.calculate_mean(self.sensor)
