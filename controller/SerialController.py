@@ -1,6 +1,7 @@
 from serial import *
 import serial.tools.list_ports
 import re
+import sys
 
 
 class SerialController:
@@ -72,7 +73,11 @@ class SerialController:
 
         for count, connection in connections.items():
             if connection is not None:
-                line = cls.ser[count].readline().decode('ascii')
+                try:
+                    line = cls.ser[count].readline().decode('ascii')
+                except AttributeError:
+                    sys.exit('Error: another process might already be running.')
+
                 cls.ser[count].flushInput()
                 cls.dict_values = cls.filter_on_read(line, count, cls.dict_values)
 

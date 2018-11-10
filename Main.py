@@ -15,7 +15,7 @@ except ImportError:
 
 if __name__ == '__main__':
 
-    print(pyfiglet.figlet_format("POWERED BY\nIT WORKS"))
+    print(pyfiglet.figlet_format("POWERED BY\nIT - WORKS"))
 
     while 1:
         try:
@@ -24,7 +24,7 @@ if __name__ == '__main__':
             print('Error: please enter an integer.')
             continue
 
-        if 1 <= speed <= 10:
+        if 1 <= speed <= 5:
             break
 
         print('Error: speed should be between 1 and 5.\n')
