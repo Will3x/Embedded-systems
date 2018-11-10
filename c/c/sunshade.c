@@ -20,7 +20,7 @@ int LDR_down = 60;						// Level of light at which the sunshade closes
 int LDR_up = 16;						// Level of light at which the sunshade opens
 int distance_up = 20;					// Distance at which the sunshade opens
 int distance_down = 5;					// Distance at which the sunshade closes
-int distance_manual = 20;				// Manual set distance at which the sunshade closes
+int distance_manual = 10;				// Manual set distance at which the sunshade closes
 int manual = 0;							// if manual is 1 manual mode is enabled
 
 
@@ -40,7 +40,7 @@ void upDown()
 	{
 		PORTB &= ~(1 << PB2);					// Green LED off
 		PORTB |= (1 << PB0);					// Red LED on
-			
+		
 		if (as > distance_down)					// Makes yellow LED blink
 		{
 			PORTB |= (1 << PB1);

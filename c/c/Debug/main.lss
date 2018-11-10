@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 00000168  00000000  00000000  00000dbc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000186a  00000000  00000000  00000f24  2**0
+  6 .debug_info   00001866  00000000  00000000  00000f24  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000d73  00000000  00000000  0000278e  2**0
+  7 .debug_abbrev 00000d73  00000000  00000000  0000278a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000d13  00000000  00000000  00003501  2**0
+  8 .debug_line   00000d13  00000000  00000000  000034fd  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000304  00000000  00000000  00004214  2**2
+  9 .debug_frame  00000304  00000000  00000000  00004210  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000669  00000000  00000000  00004518  2**0
+ 10 .debug_str    00000669  00000000  00000000  00004514  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000008da  00000000  00000000  00004b81  2**0
+ 11 .debug_loc    000008da  00000000  00000000  00004b7d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000108  00000000  00000000  0000545b  2**0
+ 12 .debug_ranges 00000108  00000000  00000000  00005457  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -1022,42 +1022,42 @@ void init_scheduler()
 {
 	SCH_Init_T1();
  62e:	0e 94 bc 00 	call	0x178	; 0x178 <SCH_Init_T1>
-	SCH_Add_Task(temperature,1,100);
- 632:	44 e6       	ldi	r20, 0x64	; 100
+	SCH_Add_Task(temperature,1,25);
+ 632:	49 e1       	ldi	r20, 0x19	; 25
  634:	50 e0       	ldi	r21, 0x00	; 0
  636:	61 e0       	ldi	r22, 0x01	; 1
  638:	70 e0       	ldi	r23, 0x00	; 0
  63a:	88 e7       	ldi	r24, 0x78	; 120
  63c:	93 e0       	ldi	r25, 0x03	; 3
  63e:	0e 94 53 00 	call	0xa6	; 0xa6 <SCH_Add_Task>
-	SCH_Add_Task(ldr,2,100);
- 642:	44 e6       	ldi	r20, 0x64	; 100
+	SCH_Add_Task(ldr,2,25);
+ 642:	49 e1       	ldi	r20, 0x19	; 25
  644:	50 e0       	ldi	r21, 0x00	; 0
  646:	62 e0       	ldi	r22, 0x02	; 2
  648:	70 e0       	ldi	r23, 0x00	; 0
  64a:	82 eb       	ldi	r24, 0xB2	; 178
  64c:	93 e0       	ldi	r25, 0x03	; 3
  64e:	0e 94 53 00 	call	0xa6	; 0xa6 <SCH_Add_Task>
-	SCH_Add_Task(distance,3,100);
- 652:	44 e6       	ldi	r20, 0x64	; 100
+	SCH_Add_Task(distance,3,25);
+ 652:	49 e1       	ldi	r20, 0x19	; 25
  654:	50 e0       	ldi	r21, 0x00	; 0
  656:	63 e0       	ldi	r22, 0x03	; 3
  658:	70 e0       	ldi	r23, 0x00	; 0
  65a:	86 ee       	ldi	r24, 0xE6	; 230
  65c:	93 e0       	ldi	r25, 0x03	; 3
  65e:	0e 94 53 00 	call	0xa6	; 0xa6 <SCH_Add_Task>
-	SCH_Add_Task(newLine,6,100);
- 662:	44 e6       	ldi	r20, 0x64	; 100
+	SCH_Add_Task(newLine,4,25);
+ 662:	49 e1       	ldi	r20, 0x19	; 25
  664:	50 e0       	ldi	r21, 0x00	; 0
- 666:	66 e0       	ldi	r22, 0x06	; 6
+ 666:	64 e0       	ldi	r22, 0x04	; 4
  668:	70 e0       	ldi	r23, 0x00	; 0
  66a:	8c e2       	ldi	r24, 0x2C	; 44
  66c:	91 e0       	ldi	r25, 0x01	; 1
  66e:	0e 94 53 00 	call	0xa6	; 0xa6 <SCH_Add_Task>
-	SCH_Add_Task(upDown,8,20);
- 672:	44 e1       	ldi	r20, 0x14	; 20
+	SCH_Add_Task(upDown,0,10);
+ 672:	4a e0       	ldi	r20, 0x0A	; 10
  674:	50 e0       	ldi	r21, 0x00	; 0
- 676:	68 e0       	ldi	r22, 0x08	; 8
+ 676:	60 e0       	ldi	r22, 0x00	; 0
  678:	70 e0       	ldi	r23, 0x00	; 0
  67a:	88 e4       	ldi	r24, 0x48	; 72
  67c:	91 e0       	ldi	r25, 0x01	; 1
@@ -1310,7 +1310,7 @@ void distance()
  7e6:	f1 f7       	brne	.-4      	; 0x7e4 <distance+0x18>
  7e8:	00 00       	nop
 	_delay_us(10);
-	PORTD &= ~_BV(PD3);							// Give pulse from 10ms
+	PORTD &= ~_BV(PD3);							// Give pulse from 10us
  7ea:	5b 98       	cbi	0x0b, 3	; 11
 	
 	loop_until_bit_is_set(PIND, PD2);
@@ -1363,7 +1363,6 @@ void distanceStill()
  83e:	96 e0       	ldi	r25, 0x06	; 6
  840:	90 93 89 00 	sts	0x0089, r25	; 0x800089 <__TEXT_REGION_LENGTH__+0x7e0089>
  844:	80 93 88 00 	sts	0x0088, r24	; 0x800088 <__TEXT_REGION_LENGTH__+0x7e0088>
-	
 	PORTD |= _BV(PD3);
  848:	5b 9a       	sbi	0x0b, 3	; 11
  84a:	85 e3       	ldi	r24, 0x35	; 53
@@ -1371,7 +1370,7 @@ void distanceStill()
  84e:	f1 f7       	brne	.-4      	; 0x84c <distanceStill+0x10>
  850:	00 00       	nop
 	_delay_us(10);
-	PORTD &= ~_BV(PD3);							// Give pulse from 10ms
+	PORTD &= ~_BV(PD3);							// Give pulse from 10us
  852:	5b 98       	cbi	0x0b, 3	; 11
 	loop_until_bit_is_set(PIND, PD2);
  854:	4a 9b       	sbis	0x09, 2	; 9
