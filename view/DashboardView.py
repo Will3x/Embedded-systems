@@ -1,7 +1,7 @@
-from tkinter import *
 from controller import SerialController as ser
-from functools import partial
 import Style as st
+from tkinter import *
+from functools import partial
 
 
 class DashboardView(Tk):
