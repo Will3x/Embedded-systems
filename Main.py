@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     while 1:
         try:
-            speed = int(input('Set speed in seconds (1 - 5): '))
+            speed = int(input('Set read speed in seconds (1 - 5): '))
         except ValueError:
             print('Error: please enter an integer.')
             continue
