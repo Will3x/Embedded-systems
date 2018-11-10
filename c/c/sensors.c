@@ -39,7 +39,7 @@ void distance()
 	USART_putstring("distance : ");
 	PORTD |= _BV(PD3);
 	_delay_us(10);
-	PORTD &= ~_BV(PD3);							// Give pulse from 10ms
+	PORTD &= ~_BV(PD3);							// Give pulse from 10us
 	
 	loop_until_bit_is_set(PIND, PD2);
 	TCNT1 = 0;
@@ -55,10 +55,9 @@ void distance()
 void distanceStill()
 {
 	OCR1A = 0x640;								// Max length = 400 cm * 4 = Dec.1600 == Hex 640
-	
 	PORTD |= _BV(PD3);
 	_delay_us(10);
-	PORTD &= ~_BV(PD3);							// Give pulse from 10ms
+	PORTD &= ~_BV(PD3);							// Give pulse from 10us
 	loop_until_bit_is_set(PIND, PD2);
 	TCNT1 = 0;
 	loop_until_bit_is_clear(PIND, PD2);

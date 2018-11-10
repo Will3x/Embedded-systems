@@ -29,11 +29,11 @@ void init_USART()
 void init_scheduler()
 {
 	SCH_Init_T1();
-	SCH_Add_Task(temperature,1,100);
-	SCH_Add_Task(ldr,2,100);
-	SCH_Add_Task(distance,3,100);
-	SCH_Add_Task(newLine,6,100);
-	SCH_Add_Task(upDown,8,20);
+	SCH_Add_Task(temperature,1,25);
+	SCH_Add_Task(ldr,2,25);
+	SCH_Add_Task(distance,3,25);
+	SCH_Add_Task(newLine,4,25);
+	SCH_Add_Task(upDown,0,10);
 	SCH_Start();
 }
 
