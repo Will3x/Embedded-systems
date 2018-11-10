@@ -1,6 +1,7 @@
 from serial import *
 import serial.tools.list_ports
 import re
+import sys
 
 
 class SerialController:
@@ -36,13 +37,16 @@ class SerialController:
         connections = cls.current_connections()
 
         for num, con in cls.ser.items():
-            try:
-                [con.read() if con is not None else None]
-            except serial.serialutil.SerialException:
-                cls.ser[num] = None
-                cls.close_port(con)
+            if con is not None:
+                try:
+                    con.read()
+                except serial.serialutil.SerialException:
+                    cls.ser[num] = None
+                    cls.close_port(con)
 
-        [cls.open_port(index, connections[index][0]) for index in connections if connections[index] is not None]
+        for index in connections:
+            if connections[index] is not None and cls.ser[index] is None:
+                cls.open_port(index, connections[index][0])
 
     @classmethod
     def open_port(cls, num, com):
@@ -69,7 +73,11 @@ class SerialController:
 
         for count, connection in connections.items():
             if connection is not None:
-                line = cls.ser[count].readline().decode('ascii')
+                try:
+                    line = cls.ser[count].readline().decode('ascii')
+                except AttributeError:
+                    sys.exit('Error: another process might already be running.')
+
                 cls.ser[count].flushInput()
                 cls.dict_values = cls.filter_on_read(line, count, cls.dict_values)
 
