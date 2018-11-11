@@ -65,5 +65,5 @@ class DashboardModel:
             if not all(x == () for x in values.values()):
                 return ''.join(['Closed' if int(values[index]['a']) < 10 else 'Open {}cm'.format(values[index]['a'])])
         except TypeError:
-            return None
+            return
 

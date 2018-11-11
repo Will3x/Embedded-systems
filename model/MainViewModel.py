@@ -14,10 +14,11 @@ class MainViewModel:
             if not all(x == () for x in values.values()):
                 return ''.join(['Closed' if int(values[index]['a']) < 10 else 'Open {}cm'.format(values[index]['a'])])
         except TypeError:
-            return None
+            return
 
     @classmethod
     def check_value(cls, instruction, value):
+        """ Checks input value from entry fields after clicking the 'Set' button. """
         if not cls.check_if_int(value):
             return cls.print_errors()
 
@@ -29,6 +30,9 @@ class MainViewModel:
             roll_in_t = int(value[1])
             roll_out_l = int(value[2])
             roll_in_l = int(value[3])
+
+            if any(len(x) > 2 for x in value):
+                cls.errors.append('All values must be 1 or 2 characters long.')
 
             if roll_in_t > roll_out_t or roll_in_l > roll_out_l:
                 cls.errors.append('Roll up value can\'t be bigger than roll out value')
