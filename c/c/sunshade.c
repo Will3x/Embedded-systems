@@ -18,10 +18,11 @@ int temp_down = 24;						// Temperature at which the sunshade closes
 int temp_up = 16;						// Temperature at which the sunshade opens
 int LDR_down = 60;						// Level of light at which the sunshade closes
 int LDR_up = 16;						// Level of light at which the sunshade opens
-int distance_up = 20;					// Distance at which the sunshade opens
+int distance_up = 40;					// Distance at which the sunshade opens
 int distance_down = 5;					// Distance at which the sunshade closes
-int distance_manual = 10;				// Manual set distance at which the sunshade closes
+int distance_manual = 40;				// Manual set distance at which the sunshade closes
 int manual = 0;							// if manual is 1 manual mode is enabled
+int middle = 1;							// 0 = red AND 1 = Green
 
 
 // Red = pb0 : Down
@@ -40,6 +41,7 @@ void upDown()
 	{
 		PORTB &= ~(1 << PB2);					// Green LED off
 		PORTB |= (1 << PB0);					// Red LED on
+		middle = 0;
 		
 		if (as > distance_down)					// Makes yellow LED blink
 		{
@@ -53,9 +55,24 @@ void upDown()
 	{
 		PORTB &= ~(1 << PB0);					// Red LED off
 		PORTB |= (1 << PB2);					// Green LED on
+		middle = 1;
 			
 		if (as < distance_up)					// Makes yellow LED blink
 		{
+			PORTB |= (1 << PB1);
+			_delay_ms(100);
+			PORTB &= ~(1 << PB1);
+			_delay_ms(100);
+		}
+	}
+	else{ // midden klasse
+		if(middle && as < distance_up){ // = 1 Green
+			PORTB |= (1 << PB1);
+			_delay_ms(100);
+			PORTB &= ~(1 << PB1);
+			_delay_ms(100);
+		}
+		else if(!middle && as > distance_down){ // = 0 Red
 			PORTB |= (1 << PB1);
 			_delay_ms(100);
 			PORTB &= ~(1 << PB1);
