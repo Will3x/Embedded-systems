@@ -21,18 +21,18 @@ if __name__ == '__main__':
 
     while 1:
         try:
-            read_speed = int(input('Set read speed in seconds (1 - 5): '))
-            update_speed = int(input('Set update speed for the graphs in seconds (1 - 60): '))
+            read_speed = int(input('Set read speed in seconds (1 - 3): '))
+            update_speed = int(input(f'Set update speed for the graphs in seconds (6 - 60): '))
         except ValueError:
-            print('Error: please enter an integer.\n')
+            print('Error: please enter integers only.\n')
             continue
 
-        if 1 <= read_speed <= 5 and 1 <= update_speed <= 60:
+        if 1 <= read_speed <= 3 and 6 <= update_speed <= 60:
             break
-        if not 1 <= read_speed <= 5:
-            print('Error: read speed should be between 1 and 5.\n')
-        if not 1 <= update_speed <= 60:
-            print('Error: update speed should be between 1 and 60\n')
+        if not 1 <= read_speed <= 3:
+            print('Error: read speed should be between 1 and 3.\n')
+        if not 6 <= update_speed <= 60:
+            print('Error: update speed should be between 3 and 60\n')
 
     print('\nRead speed: {} seconds.\nUpdate speed: {} seconds.\n\nStarting program.\nAttempting to connect...\n'
           .format(read_speed, update_speed))
