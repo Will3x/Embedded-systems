@@ -22,7 +22,7 @@ if __name__ == '__main__':
         try:
             read_speed = int(input('Set read speed in seconds (1 - 5): '))
         except ValueError:
-            print('Error: please enter an integer.')
+            print('Error: please enter an integer.\n')
             continue
 
         if 1 <= read_speed <= 5:

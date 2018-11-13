@@ -19,9 +19,11 @@ class MainViewModel:
     @classmethod
     def check_value(cls, instruction, value):
         """ Checks input value from entry fields after clicking the 'Set' button. """
+        # Check if integer
         if not cls.check_if_int(value):
             return cls.print_errors()
 
+        # Check if not too many characters in int value. Needed to filter: 001 -> 1.
         if len(value) > 1 and any(int(x) < 0 for x in value) or int(value[0]) < 0:
             cls.errors.append('All values must be greater than 0.')
 
