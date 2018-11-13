@@ -14,3 +14,5 @@ light_rollo = 60
 light_rolli = 20
 
 roll_out_dist = 0
+
+graph_update = 0

@@ -1,6 +1,7 @@
 from view import DashboardView as dv
 from controller import DashboardController as dc, SerialController as se
 from model import DashboardModel as dm
+import Base_values as ba
 import sys
 try:
     import pyfiglet
@@ -21,15 +22,22 @@ if __name__ == '__main__':
     while 1:
         try:
             read_speed = int(input('Set read speed in seconds (1 - 5): '))
+            update_speed = int(input('Set update speed for the graphs in seconds (1 - 60): '))
         except ValueError:
             print('Error: please enter an integer.\n')
             continue
 
-        if 1 <= read_speed <= 5:
+        if 1 <= read_speed <= 5 and 1 <= update_speed <= 60:
             break
-        print('Error: speed should be between 1 and 5.\n')
+        if not 1 <= read_speed <= 5:
+            print('Error: read speed should be between 1 and 5.\n')
+        if not 1 <= update_speed <= 60:
+            print('Error: update speed should be between 1 and 60\n')
 
-    print('Speed set to: {} seconds.\n\nStarting program.\nAttempting to connect...\n'.format(read_speed))
+    print('\nRead speed: {} seconds.\nUpdate speed: {} seconds.\n\nStarting program.\nAttempting to connect...\n'
+          .format(read_speed, update_speed))
+
+    ba.graph_update = round(update_speed / read_speed)
 
     dashboard_view = dv.DashboardView()
     dashboard_model = dm.DashboardModel()

@@ -2,6 +2,7 @@ from view import GraphView as view
 from model import GraphModel as model
 from controller import SerialController as ser
 from tkinter import CENTER
+import Base_values as ba
 import re
 
 
@@ -24,7 +25,7 @@ class GraphController:
         self.count += 1
         self.model.add_value_mean(self.sensor, ser.SerialController.current_values(), self.device)
 
-        if self.sensor == 't' and self.count % 10 == 0 or self.sensor == 'l' and self.count % 5 == 0:
+        if self.count % ba.graph_update == 0:
             self.view.draw_graph()
             self.model.reset_mean(self.sensor)
 
