@@ -21,8 +21,7 @@ int LDR_up = 16;						// Level of light at which the sunshade opens
 int distance_up = 40;					// Distance at which the sunshade opens
 int distance_down = 5;					// Distance at which the sunshade closes
 int distance_manual = 40;				// Manual set distance at which the sunshade closes
-int openclose = 2;
-int onoff = 0;
+int onoff = 0;							// Check if open or close is pressed in manual mode
 int manual = 0;							// if manual is 1 manual mode is enabled
 int middle = 1;							// 0 = red AND 1 = Green
 
