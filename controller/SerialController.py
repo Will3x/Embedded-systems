@@ -104,17 +104,18 @@ class SerialController:
         my_ports = cls.find_ports()
         con_dict = {1: None, 2: None, 3: None, 4: None, 5: None}
 
-        for index, port in enumerate(my_ports, 1):
-            if port in cls.prev_cons.values():
-                for key, value in cls.prev_cons.items():
-                    if port == value:
-                        con_dict[key] = port
-                        break
-            else:
-                for v in con_dict.values():
-                    if v is None:
-                        con_dict[index] = port
-                        break
+        for index, port in enumerate(my_ports):
+            for key, value in cls.prev_cons.items():
+                if port == value:
+                    con_dict[key] = port
+                    del my_ports[index]
+                    break
+
+        for port in my_ports:
+            for key, value in con_dict.items():
+                if value is None:
+                    con_dict[key] = port
+                    break
 
         cls.current_connections(con_dict)
         cls.prev_cons = cls.current_connections().copy()
