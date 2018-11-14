@@ -32,7 +32,7 @@ if __name__ == '__main__':
         if not 1 <= read_speed <= 3:
             print('Error: read speed should be between 1 and 3.\n')
         if not 6 <= update_speed <= 60:
-            print('Error: update speed should be between 3 and 60\n')
+            print('Error: update speed should be between 6 and 60\n')
 
     print('\nRead speed: {} seconds.\nUpdate speed: {} seconds.\n\nStarting program.\nAttempting to connect...\n'
           .format(read_speed, update_speed))
