@@ -19,12 +19,13 @@ class GraphModel:
     @classmethod
     def calculate_mean(cls, sensor):
         """ Returns mean value for values in mean_t or mean_l list based on sensor. """
-        if sensor == 't':
-            print('Average temperature: {}'.format(sum(cls.mean_t) / len(cls.mean_t)))
-            return cls.calculate_y_pos(sum(cls.mean_t) / len(cls.mean_t), sensor)
-        if sensor == 'l':
-            print('Average light intensity: {}'.format(sum(cls.mean_l) / len(cls.mean_l)))
-            return cls.calculate_y_pos(sum(cls.mean_l) / len(cls.mean_l), sensor)
+        try:
+            if sensor == 't':
+                return cls.calculate_y_pos(sum(cls.mean_t) / len(cls.mean_t), sensor)
+            if sensor == 'l':
+                return cls.calculate_y_pos(sum(cls.mean_l) / len(cls.mean_l), sensor)
+        except ZeroDivisionError:
+            return None
 
     @classmethod
     def add_value_mean(cls, sensor, values, device_id):

@@ -159,7 +159,7 @@ class MainView(Toplevel):
 
         y_pos = .785  # reset start position
 
-        self.la_man_roll_out = Label(self, text='Uitrol afstand', disabledforeground=st.btn_bg_grey, bg=st.panel_bg,
+        self.la_man_roll_out = Label(self, text='Window length', disabledforeground=st.btn_bg_grey, bg=st.panel_bg,
                                      fg=st.fg_white, state=DISABLED)
         self.la_man_roll_out.place(relx=0.75, rely=y_pos, anchor=E)
 

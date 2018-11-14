@@ -9,7 +9,7 @@ class SerialController:
     @classmethod
     def setup(cls):
         cls.dict_values = {1: None, 2: None, 3: None, 4: None, 5: None}
-        cls.connections, cls.ser = cls.dict_values.copy(), cls.dict_values.copy()
+        cls.connections, cls.prev_cons, cls.ser = cls.dict_values.copy(), cls.dict_values.copy(), cls.dict_values.copy()
 
     @classmethod
     def current_values(cls, values=None):
@@ -35,7 +35,6 @@ class SerialController:
         thus lost connection. """
         cls.check_connection()
         connections = cls.current_connections()
-
         for num, con in cls.ser.items():
             if con is not None:
                 try:
@@ -67,7 +66,7 @@ class SerialController:
 
     @classmethod
     def read(cls):
-        """ RECIEVE INCOMING DATA FROM SERIAL PORT """
+        """ RECEIVE INCOMING DATA FROM SERIAL PORT """
         cls.update_ports()
         connections = cls.current_connections()
 
@@ -106,9 +105,19 @@ class SerialController:
         con_dict = {1: None, 2: None, 3: None, 4: None, 5: None}
 
         for index, port in enumerate(my_ports, 1):
-            con_dict[index] = port
+            if port in cls.prev_cons.values():
+                for key, value in cls.prev_cons.items():
+                    if port == value:
+                        con_dict[key] = port
+                        break
+            else:
+                for v in con_dict.values():
+                    if v is None:
+                        con_dict[index] = port
+                        break
 
         cls.current_connections(con_dict)
+        cls.prev_cons = cls.current_connections().copy()
 
     @classmethod
     def write(cls, device, instruction, value=None):

@@ -13,6 +13,6 @@ temp_rolli = 16
 light_rollo = 60
 light_rolli = 20
 
-roll_out_dist = 0
+roll_out_dist = 40
 
 graph_update = 0
