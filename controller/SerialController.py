@@ -35,13 +35,14 @@ class SerialController:
         thus lost connection. """
         cls.check_connection()
         connections = cls.current_connections()
+
         for num, con in cls.ser.items():
             if con is not None:
                 try:
                     con.read()
                 except serial.serialutil.SerialException:
                     cls.ser[num] = None
-                    cls.close_port(con)
+                    cls.close_port(con, com=str(con)[42:46])
 
         for index in connections:
             if connections[index] is not None and cls.ser[index] is None:
@@ -60,8 +61,7 @@ class SerialController:
 
     @classmethod
     def close_port(cls, port, com='COM'):
-        print("Lost connection!")
-        print('Closing {}'.format(com))
+        print('Closing {}...'.format(com))
         port.close()
 
     @classmethod
@@ -103,15 +103,17 @@ class SerialController:
         This function is called every 2 sec from tick(). """
         my_ports = cls.find_ports()
         con_dict = {1: None, 2: None, 3: None, 4: None, 5: None}
+        new_ports = []
 
         for index, port in enumerate(my_ports):
             for key, value in cls.prev_cons.items():
                 if port == value:
                     con_dict[key] = port
-                    del my_ports[index]
                     break
+            else:
+                new_ports.append(port)
 
-        for port in my_ports:
+        for port in new_ports:
             for key, value in con_dict.items():
                 if value is None:
                     con_dict[key] = port
