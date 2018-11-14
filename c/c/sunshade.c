@@ -18,9 +18,11 @@ int temp_down = 24;						// Temperature at which the sunshade closes
 int temp_up = 16;						// Temperature at which the sunshade opens
 int LDR_down = 60;						// Level of light at which the sunshade closes
 int LDR_up = 16;						// Level of light at which the sunshade opens
-int distance_up = 40;					// Distance at which the sunshade opens
+int distance_up = 20;					// Distance at which the sunshade opens
 int distance_down = 5;					// Distance at which the sunshade closes
-int distance_manual = 40;				// Manual set distance at which the sunshade closes
+int distance_manual = 20;				// Manual set distance at which the sunshade closes
+int openclose = 2;
+int onoff = 0;
 int manual = 0;							// if manual is 1 manual mode is enabled
 int middle = 1;							// 0 = red AND 1 = Green
 
@@ -35,9 +37,9 @@ void upDown()
 	int ts = atoi(temp_sensor);					// Convert temperature sensor value to int and set ts
 	distanceStill();							// Get distance
 	int as = atoi(distance_sensor);				// Convert distance sensor value to int
-	distance_up = distance_manual;				// Set distance_up to the value the user inputs in manual mode
+	//distance_up = distance_manual;				// Set distance_up to the value the user inputs in manual mode
 	
-	if(((ls >= LDR_down || ts >= temp_down) && !manual) || ((as > (distance_manual+1)) && manual))
+	if(((ls >= LDR_down || ts >= temp_down) && !manual) || ( !distance_manual && onoff && manual)) // Go down as > (distance_manual+1)) &&
 	{
 		PORTB &= ~(1 << PB2);					// Green LED off
 		PORTB |= (1 << PB0);					// Red LED on
@@ -51,7 +53,7 @@ void upDown()
 			_delay_ms(100);						
 		}
 	}
-	else if(((ls <= LDR_up || ts <= temp_up) && !manual) || ((as < (distance_manual-1)) && manual))
+	else if(((ls <= LDR_up || ts <= temp_up) && !manual) || ( distance_manual && onoff && manual)) // Go up as < (distance_manual-1)) && 
 	{
 		PORTB &= ~(1 << PB0);					// Red LED off
 		PORTB |= (1 << PB2);					// Green LED on
@@ -65,7 +67,7 @@ void upDown()
 			_delay_ms(100);
 		}
 	}
-	else{ // midden klasse
+	else if(!manual){ // midden klasse
 		if(middle && as < distance_up){ // = 1 Green
 			PORTB |= (1 << PB1);
 			_delay_ms(100);
@@ -104,12 +106,14 @@ ISR ( USART_RX_vect )
 	{
 		case '1':								// 1 = Shut the sunshade // Red
 			manual = 1;
-			distance_manual = 5;
+			onoff = 1;
+			distance_manual = 0;
 			return;
 			
 		case '2':								// 2 = Open the sunshade // Green
 			manual = 1;
-			distance_manual = distance_up;
+			onoff = 1;
+			distance_manual = 1;
 			return;
 			
 		case '3':								// 3 = set
@@ -122,15 +126,17 @@ ISR ( USART_RX_vect )
 			
 		case '7':								// 7 = open/closing distance
 			manual = 1;
+			onoff = 0;
 			int closeopen = combine3((int) USART_receive(), (int) USART_receive(), (int) USART_receive());
-			distance_manual = closeopen;
+			distance_up = closeopen;
 			return;
 			
 		case '8':								// 8 = set manual ON / OFF
-			manual = (int) USART_receive();
-			if (manual == 1)
+			onoff = 0;
+			manual = (int) USART_receive();		// 1/0
+			if (manual == 1)					// manual mode on
 			{
-				distance_manual = (int) atoi(distance_sensor);
+				distance_manual = (int)atoi(distance_sensor);
 			}
 			return;
 		
