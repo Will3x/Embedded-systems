@@ -1,5 +1,5 @@
 # Project Embedded-systems
-A school project to analyse and use weather data to autonomously control connected shutters or home sunshades. All with a beautiful GUI including a dashboard.
+A school project to analyse and use weather data to autonomously control connected shutters or home sunshades.
 
 ## Authors
 ![IT-WORKS](https://image.ibb.co/ejw7aL/Capture.jpg)
